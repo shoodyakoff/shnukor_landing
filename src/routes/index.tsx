@@ -1,26 +1,26 @@
 import { createFileRoute } from "@tanstack/react-router";
+import Flow from "@/components/shnurok/Flow";
 
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Шнурок — умный подбор кроссовок под твой стиль и задачу" },
+      {
+        name: "description",
+        content:
+          "Ответь на несколько вопросов, выбери визуальный стиль и получи персональную подборку кроссовок: по размеру, цвету, бюджету и задаче.",
+      },
+      { property: "og:title", content: "Шнурок — умный подбор кроссовок" },
+      {
+        property: "og:description",
+        content:
+          "Сервис умного подбора кроссовок: размер, цвет, цена, задача, визуальный стиль — и точная подборка моделей.",
+      },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. For sites with multiple pages (About, Services, Contact, etc.),
-// create separate route files (about.tsx, services.tsx, contact.tsx) — don't put all pages in this file.
-function PlaceholderIndex() {
-  return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
-  );
-}
-
 function Index() {
-  return <PlaceholderIndex />;
+  return <Flow />;
 }
