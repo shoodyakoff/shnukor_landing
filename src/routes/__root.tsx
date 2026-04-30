@@ -29,15 +29,15 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "sh" },
+      { title: "Lovable App" },
       { name: "description", content: "Shnurok Style Finder creates a visual prototype for smart sneaker matching." },
       { name: "author", content: "Lovable" },
-      { property: "og:title", content: "sh" },
+      { property: "og:title", content: "Lovable App" },
       { property: "og:description", content: "Shnurok Style Finder creates a visual prototype for smart sneaker matching." },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
       { name: "twitter:site", content: "@Lovable" },
-      { name: "twitter:title", content: "sh" },
+      { name: "twitter:title", content: "Lovable App" },
       { name: "twitter:description", content: "Shnurok Style Finder creates a visual prototype for smart sneaker matching." },
     ],
     links: [
