@@ -1,4 +1,3 @@
-import heroImg from "@/assets/hero-sneaker.jpg";
 import { BigButton } from "./ui";
 
 export function Hero({ onStart }: { onStart: () => void }) {
@@ -55,7 +54,7 @@ export function Hero({ onStart }: { onStart: () => void }) {
           {/* Sneaker */}
           <div className="relative z-10 w-full max-w-[520px] aspect-square animate-pop-in">
             <img
-              src={heroImg}
+              src="/hero-sneaker.jpg"
               alt="Кроссовок крупным планом"
               width={1280}
               height={1280}

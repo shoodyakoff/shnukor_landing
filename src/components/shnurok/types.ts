@@ -53,16 +53,10 @@ export const SPORTS = [
   "Бег","Фитнес / зал","Футбол","Баскетбол","Теннис","Трейл / outdoor","Скейтбординг","Универсальные для спорта",
 ];
 
-import chunky from "@/assets/style-chunky.jpg";
-import retro from "@/assets/style-retro.jpg";
-import basket from "@/assets/style-basket.jpg";
-import puffy from "@/assets/style-puffy.jpg";
-import running from "@/assets/style-running.jpg";
-
 export const STYLES = [
-  { id: "chunky",  title: "Массивные",        desc: "Крупная подошва, заметный силуэт, сильный акцент в образе.", image: chunky,  bg: "#ff2a00", fg: "#fff" },
-  { id: "retro",   title: "Ретро низкие",     desc: "Низкие классические модели, которые легко носить каждый день.", image: retro,   bg: "#facc15", fg: "#111" },
-  { id: "basket",  title: "Ретро-баскетбол",  desc: "Плотная форма, спортивный вайб и отсылка к баскетбольной классике.", image: basket,  bg: "#0044ff", fg: "#fff" },
-  { id: "puffy",   title: "Дутые",            desc: "Объёмные мягкие формы, расслабленный и заметный силуэт.", image: puffy,   bg: "#ccff00", fg: "#111" },
-  { id: "running", title: "Беговые",          desc: "Динамичная форма, лёгкость и спортивная технологичность.", image: running, bg: "#fb923c", fg: "#111" },
+  { id: "chunky",  title: "Массивные",        desc: "Крупная подошва, заметный силуэт, сильный акцент в образе.", image: "/style-chunky.jpg",  bg: "#ff2a00", fg: "#fff" },
+  { id: "retro",   title: "Ретро низкие",     desc: "Низкие классические модели, которые легко носить каждый день.", image: "/style-retro.jpg",   bg: "#facc15", fg: "#111" },
+  { id: "basket",  title: "Ретро-баскетбол",  desc: "Плотная форма, спортивный вайб и отсылка к баскетбольной классике.", image: "/style-basket.jpg",  bg: "#0044ff", fg: "#fff" },
+  { id: "puffy",   title: "Дутые",            desc: "Объёмные мягкие формы, расслабленный и заметный силуэт.", image: "/style-puffy.jpg",   bg: "#ccff00", fg: "#111" },
+  { id: "running", title: "Беговые",          desc: "Динамичная форма, лёгкость и спортивная технологичность.", image: "/style-running.jpg", bg: "#fb923c", fg: "#111" },
 ];

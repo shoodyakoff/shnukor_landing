@@ -1,7 +1,4 @@
 import { useEffect, useState } from "react";
-import result1 from "@/assets/result-1.jpg";
-import result2 from "@/assets/result-2.jpg";
-import result3 from "@/assets/result-3.jpg";
 import { Hero } from "./Hero";
 import { ProgressBar, BigButton, StepShell, Pill } from "./ui";
 import {
@@ -501,7 +498,7 @@ function Results({ sel, onReset, onWiden }: { sel: Selections; onReset: () => vo
       sub: "Размер, цена, цвет и стиль — всё в плюс.",
       bg: "bg-volt",
       items: [
-        { brand: "Halcyon", name: "Tread 02", price: "13 990 ₽", sizes: ["41","42","43","44"], why: "Массивная подошва, нейтральный белый, попадает в бюджет.", img: result1 },
+        { brand: "Halcyon", name: "Tread 02", price: "13 990 ₽", sizes: ["41","42","43","44"], why: "Массивная подошва, нейтральный белый, попадает в бюджет.", img: "/result-1.jpg" },
       ],
     },
     {
@@ -509,7 +506,7 @@ function Results({ sel, onReset, onWiden }: { sel: Selections; onReset: () => vo
       sub: "+10–15% к бюджету за материалы и силуэт.",
       bg: "bg-cobalt text-white",
       items: [
-        { brand: "Northbound", name: "Trail Cut", price: "16 490 ₽", sizes: ["42","43","44"], why: "Беговой силуэт с прочной подошвой, серый — универсален.", img: result2 },
+        { brand: "Northbound", name: "Trail Cut", price: "16 490 ₽", sizes: ["42","43","44"], why: "Беговой силуэт с прочной подошвой, серый — универсален.", img: "/result-2.jpg" },
       ],
     },
     {
@@ -517,7 +514,7 @@ function Results({ sel, onReset, onWiden }: { sel: Selections; onReset: () => vo
       sub: "Другой силуэт, но матчится по вайбу.",
       bg: "bg-card",
       items: [
-        { brand: "Studio K", name: "Court Low", price: "11 990 ₽", sizes: ["42","43"], why: "Низкий ретро-силуэт, тонкий и лёгкий — для городских образов.", img: result3 },
+        { brand: "Studio K", name: "Court Low", price: "11 990 ₽", sizes: ["42","43"], why: "Низкий ретро-силуэт, тонкий и лёгкий — для городских образов.", img: "/result-3.jpg" },
       ],
     },
   ];
