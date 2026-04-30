@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import result1 from "../../assets/result-1.jpg";
-import result2 from "../../assets/result-2.jpg";
-import result3 from "../../assets/result-3.jpg";
+import result1 from "@/assets/result-1.jpg";
+import result2 from "@/assets/result-2.jpg";
+import result3 from "@/assets/result-3.jpg";
 import { Hero } from "./Hero";
 import { ProgressBar, BigButton, StepShell, Pill } from "./ui";
 import {
