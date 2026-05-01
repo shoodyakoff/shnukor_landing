@@ -1,28 +1,197 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Hero } from "./Hero";
-import { ProgressBar, BigButton, StepShell, Pill } from "./ui";
+import { BigButton, Pill, ProgressBar, StepShell } from "./ui";
 import {
-  COLORS, PRICES, SIZES, SPORTS, STYLES,
-  type Selections, type Step, type Task,
+  COLORS,
+  PRICES,
+  SIZES,
+  SPORTS,
+  STYLES,
+  type Selections,
+  type Step,
+  type StyleVote,
+  type Task,
 } from "./types";
 
-const FLOW_LABELS = ["Размер", "Цвет", "Цена", "Задача", "Стиль", "Подборка"];
+const INTRO_STEPS = [
+  {
+    id: "01",
+    title: "Что ищешь",
+    text: "Размер, цвет, бюджет и задачу соберём за пару экранов.",
+  },
+  {
+    id: "02",
+    title: "Какой стиль",
+    text: "Покажешь, какие силуэты реально нравятся визуально.",
+  },
+  {
+    id: "03",
+    title: "Твоя подборка",
+    text: "Покажем curated-выдачу с теми моделями, которые ближе всего тебе.",
+    accent: true,
+  },
+];
 
-function stepIndex(step: Step, sel: Selections): { current: number; total: number; label: string } {
-  // 4 base questions + style cards
+const RESULT_GROUPS = [
+  {
+    title: "Точное попадание",
+    sub: "Самые близкие по вайбу и фильтрам.",
+    badge: "bg-volt text-ink",
+    items: [
+      {
+        brand: "Nike",
+        name: "Zoom Vomero 5",
+        price: "14 990 ₽",
+        sizes: ["41", "42", "43", "44"],
+        why: "Техничный силуэт, спокойная палитра и сильный everyday матч.",
+        img: "/result-nike-vomero-5.png",
+      },
+      {
+        brand: "ASICS",
+        name: "GEL-1130",
+        price: "12 490 ₽",
+        sizes: ["40", "41", "42", "43"],
+        why: "Лёгкий беговой вайб, носибельность каждый день, хороший баланс цены.",
+        img: "/result-asics-gel-1130.png",
+      },
+      {
+        brand: "New Balance",
+        name: "990v6",
+        price: "18 990 ₽",
+        sizes: ["41", "42", "43", "44"],
+        why: "Премиальные материалы и массивный, но универсальный силуэт.",
+        img: "/result-new-balance-990v6.png",
+      },
+    ],
+  },
+  {
+    title: "Чуть дороже, но стоит",
+    sub: "Больше технологий и более дорогой силуэт.",
+    badge: "bg-flame text-white",
+    items: [
+      {
+        brand: "Mizuno",
+        name: "Wave Prophecy Moc",
+        price: "26 490 ₽",
+        sizes: ["42", "43", "44"],
+        why: "Сильная футуристичная подошва и очень выразительная tech-подача.",
+        img: "/result-mizuno-wave-prophecy-moc.png",
+      },
+      {
+        brand: "Nike",
+        name: "Kobe 6 Protro",
+        price: "29 990 ₽",
+        sizes: ["41", "42", "43"],
+        why: "Агрессивный баскетбольный силуэт и заметный премиальный акцент.",
+        img: "/result-nike-kobe-6-protro.png",
+      },
+      {
+        brand: "New Balance",
+        name: "204L",
+        price: "22 990 ₽",
+        sizes: ["41", "42", "43", "44"],
+        why: "Более модная и тонкая альтернатива с дорогим fashion-tech ощущением.",
+        img: "/result-new-balance-204l.png",
+      },
+    ],
+  },
+  {
+    title: "Альтернатива",
+    sub: "Чуть другой характер, но всё ещё попадает в настроение.",
+    badge: "bg-card text-ink",
+    items: [
+      {
+        brand: "adidas",
+        name: "Samba OG",
+        price: "11 990 ₽",
+        sizes: ["40", "41", "42", "43"],
+        why: "Низкий ретро-силуэт и чистый городской образ без перегруза.",
+        img: "/result-adidas-samba-og.png",
+      },
+      {
+        brand: "New Balance",
+        name: "740",
+        price: "13 490 ₽",
+        sizes: ["41", "42", "43", "44"],
+        why: "Ретро-runner настроение и более мягкий, носибельный контур.",
+        img: "/result-new-balance-740.png",
+      },
+      {
+        brand: "Nike",
+        name: "Total 90 III",
+        price: "15 490 ₽",
+        sizes: ["41", "42", "43"],
+        why: "Футбольный Y2K вайб, если хочется более резкий и необычный силуэт.",
+        img: "/result-nike-total-90-iii.png",
+      },
+    ],
+  },
+];
+
+function stepIndex(step: Step): { current: number; total: number; label: string } {
   const total = 4;
   if (step === "size") return { current: 1, total, label: "Шаг 1 из 4" };
   if (step === "color") return { current: 2, total, label: "Шаг 2 из 4" };
   if (step === "price") return { current: 3, total, label: "Шаг 3 из 4" };
-  if (step === "task") return { current: 4, total, label: "Шаг 4 из 4" };
-  if (step === "sport") return { current: 4, total, label: "Шаг 4 из 4 · спорт" };
+  if (step === "task" || step === "sport") return { current: 4, total, label: "Шаг 4 из 4" };
   return { current: 0, total, label: "" };
+}
+
+function choiceCardClass(active: boolean, accent?: "volt" | "flame") {
+  const accentClass =
+    accent === "flame"
+      ? "bg-flame text-white"
+      : accent === "volt"
+        ? "bg-volt text-ink"
+        : "bg-card text-ink";
+
+  return `relative rounded-[2rem] border-[4px] border-ink transition-all duration-150 shadow-[8px_8px_0_var(--ink)] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[4px_4px_0_var(--ink)] ${
+    active ? `${accentClass} -translate-y-1` : "bg-card text-ink"
+  }`;
+}
+
+function selectedNames(ids: string[]) {
+  return ids.map((id) => COLORS.find((item) => item.id === id)?.name).filter(Boolean).join(", ");
+}
+
+function voteSummary(styleVotes: Record<string, StyleVote>) {
+  const liked = STYLES.filter((style) => styleVotes[style.id] === "like").map((style) => style.title.toLowerCase());
+  const disliked = STYLES.filter((style) => styleVotes[style.id] === "dislike").map((style) => style.title.toLowerCase());
+
+  return {
+    liked,
+    disliked,
+    text: `${liked.length ? `нравятся ${liked.join(", ")}` : "без явных предпочтений"}${
+      disliked.length ? `, не нравятся ${disliked.join(", ")}` : ""
+    }`,
+  };
+}
+
+function getTaskCopy(task?: Task) {
+  if (task === "sport") return "Для спорта";
+  if (task === "daily") return "На каждый день";
+  return "";
+}
+
+function useFlowSummary(sel: Selections) {
+  return useMemo(() => {
+    const style = voteSummary(sel.styleVotes);
+    return [
+      { k: "Размер", v: sel.size ?? "" },
+      { k: "Цвет", v: selectedNames(sel.colors) || "" },
+      { k: "Цена", v: PRICES.find((item) => item.id === sel.price)?.label ?? "" },
+      { k: "Задача", v: getTaskCopy(sel.task).toLowerCase() },
+      ...(sel.sport ? [{ k: "Спорт", v: sel.sport }] : []),
+      { k: "Стиль", v: style.text },
+    ];
+  }, [sel]);
 }
 
 export default function Flow() {
   const [step, setStep] = useState<Step>("hero");
   const [sel, setSel] = useState<Selections>({ colors: [], styleVotes: {} });
   const [styleIdx, setStyleIdx] = useState(0);
+  const summaryLines = useFlowSummary(sel);
 
   const reset = () => {
     setSel({ colors: [], styleVotes: {} });
@@ -31,108 +200,134 @@ export default function Flow() {
   };
 
   const goAfterTask = (task: Task) => {
-    setSel((s) => ({ ...s, task }));
+    setSel((prev) => ({ ...prev, task, sport: task === "daily" ? undefined : prev.sport }));
     setStep(task === "sport" ? "sport" : "style");
   };
 
-  // Selected summary chips bar (always visible during flow)
-  const ChipsBar = () => {
-    const items: { k: string; v: string }[] = [];
-    if (sel.size) items.push({ k: "Размер", v: sel.size });
-    if (sel.colors.length) {
-      const names = sel.colors
-        .map((id) => COLORS.find((c) => c.id === id)?.name ?? "")
-        .join(", ");
-      items.push({ k: "Цвет", v: names });
-    }
-    if (sel.price) items.push({ k: "Цена", v: PRICES.find((p) => p.id === sel.price)?.label ?? "" });
-    if (sel.task) items.push({ k: "Задача", v: sel.task === "daily" ? "На каждый день" : "Для спорта" });
-    if (sel.sport) items.push({ k: "Спорт", v: sel.sport });
-    if (!items.length) return null;
-    return (
-      <div className="flex flex-wrap gap-2">
-        {items.map((it) => (
-          <span key={it.k} className="inline-flex items-center gap-2 bg-card border-[3px] border-ink rounded-full px-3 py-1.5 text-xs font-bold uppercase tracking-tight shadow-[3px_3px_0_var(--ink)]">
-            <span className="opacity-60">{it.k}:</span>
-            <span>{it.v}</span>
-          </span>
-        ))}
-      </div>
-    );
-  };
+  const currentStep = stepIndex(step);
+  const styleMeta = step === "style" ? { current: styleIdx + 1, total: STYLES.length } : null;
 
-  const Eyebrow = () => {
-    const meta = stepIndex(step, sel);
-    const isStyle = step === "style";
-    return (
-      <div className="flex flex-col gap-6">
-        <div className="flex items-center justify-between flex-wrap gap-4">
-          <div className="font-display text-xl md:text-2xl font-black uppercase tracking-tighter">
-            Шнурок<span className="text-flame">.</span>
-          </div>
-          <button onClick={reset} className="font-mono text-xs uppercase tracking-widest underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100">
-            начать заново
-          </button>
+  const Eyebrow = () => (
+    <div className="flex flex-col gap-3">
+      <div className="flex items-center justify-between gap-4">
+        <div className="font-display text-xl font-black uppercase tracking-tighter">
+          Шнурок<span className="text-flame">.</span>
         </div>
-        {meta.label && <ProgressBar current={meta.current} total={meta.total} label={meta.label} />}
-        {isStyle && (
-          <ProgressBar current={styleIdx + 1} total={STYLES.length} label={`Стиль ${styleIdx + 1} из ${STYLES.length}`} />
-        )}
-        <ChipsBar />
+        <button
+          onClick={reset}
+          className="font-mono text-[11px] uppercase tracking-[0.24em] underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100"
+        >
+          начать заново
+        </button>
       </div>
-    );
-  };
+      {styleMeta ? (
+        <ProgressBar
+          current={styleMeta.current}
+          total={styleMeta.total}
+          label={`Стиль ${styleMeta.current} из ${styleMeta.total}`}
+        />
+      ) : currentStep.label ? (
+        <ProgressBar current={currentStep.current} total={currentStep.total} label={currentStep.label} />
+      ) : null}
+      <ChipsBar sel={sel} />
+    </div>
+  );
 
-  // ---- HERO ----
   if (step === "hero") return <Hero onStart={() => setStep("intro")} />;
 
-  // ---- INTRO ----
   if (step === "intro") {
     return (
       <StepShell
         eyebrow={<Eyebrow />}
         title={<>Сейчас соберём<br />твою подборку.</>}
-        subtitle="Шесть шагов. Никаких пропусков. На каждом — крупные карточки, минимум текста."
+        subtitle="Три коротких этапа. Никаких лишних экранов, только самое важное."
+        footer={
+          <BigButton onClick={() => setStep("size")} variant="primary">
+            Начать →
+          </BigButton>
+        }
       >
-        <div className="grid grid-cols-2 md:grid-cols-6 gap-3 md:gap-4 mb-10">
-          {FLOW_LABELS.map((l, i) => (
-            <div key={l} className="brutal-card p-5 md:p-6 flex flex-col gap-2">
-              <span className="font-mono text-xs uppercase opacity-60">шаг {i + 1}</span>
-              <span className="font-display font-black text-lg md:text-2xl uppercase tracking-tight">{l}</span>
+        <div className="grid items-start gap-8 xl:grid-cols-[minmax(0,0.95fr)_minmax(360px,0.85fr)]">
+          <div className="grid gap-4">
+            {INTRO_STEPS.map((item) => (
+              <div
+                key={item.id}
+                className={`flex items-center justify-between rounded-[2rem] border-[4px] border-ink px-6 py-5 shadow-[8px_8px_0_var(--ink)] ${
+                  item.accent ? "bg-flame text-white" : "bg-card text-ink"
+                }`}
+              >
+                <div className="flex items-start gap-4">
+                  <div className="font-mono text-xs uppercase tracking-[0.22em] opacity-60">{item.id}</div>
+                  <div>
+                    <div className="font-display text-[1.75rem] font-black uppercase leading-none">{item.title}</div>
+                    <p className="mt-2 max-w-xl text-sm opacity-80">{item.text}</p>
+                  </div>
+                </div>
+                <div className="size-12 rounded-full border-[4px] border-ink bg-card text-center font-display text-2xl font-black leading-[2.45rem] text-ink">
+                  →
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid gap-4">
+            <div className="max-h-[560px] overflow-hidden rounded-[2.25rem] border-[4px] border-ink bg-cobalt shadow-[10px_10px_0_var(--ink)]">
+              <img
+                src="/result-nike-vomero-5.png"
+                alt="Пример карточки подборки"
+                className="aspect-[4/5] w-full object-cover"
+              />
             </div>
-          ))}
+            <div className="rounded-[2rem] border-[4px] border-ink bg-card p-5 shadow-[8px_8px_0_var(--ink)]">
+              <div className="font-mono text-[11px] uppercase tracking-[0.24em] opacity-60">пример выдачи</div>
+              <div className="mt-3 flex items-baseline justify-between gap-3">
+                <div>
+                  <div className="font-mono text-[11px] uppercase tracking-[0.2em] opacity-60">Nike</div>
+                  <div className="font-display text-2xl font-black uppercase leading-none">Zoom Vomero 5</div>
+                </div>
+                <div className="font-display text-xl font-black">14 990 ₽</div>
+              </div>
+            </div>
+          </div>
         </div>
-        <BigButton onClick={() => setStep("size")} variant="primary">Начать →</BigButton>
       </StepShell>
     );
   }
 
-  // ---- SIZE ----
   if (step === "size") {
-    const canNext = !!sel.size;
+    const canNext = Boolean(sel.size);
     return (
       <StepShell
         eyebrow={<Eyebrow />}
-        title={<>Выбери свой<br />размер ноги.</>}
+        title={<>Выбери свой размер ноги.</>}
         subtitle="Один размер. Без него подбор не запустится."
         footer={
           <>
-            <button onClick={() => setStep("intro")} className="font-mono text-sm uppercase tracking-widest underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100">← назад</button>
-            <BigButton onClick={() => setStep("color")} variant="primary" disabled={!canNext}>Дальше →</BigButton>
+            <button
+              onClick={() => setStep("intro")}
+              className="font-mono text-[11px] uppercase tracking-[0.24em] underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100"
+            >
+              ← назад
+            </button>
+            <BigButton onClick={() => setStep("color")} variant="primary" disabled={!canNext}>
+              Дальше →
+            </BigButton>
           </>
         }
       >
-        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 gap-3 md:gap-4 pb-32">
-          {SIZES.map((s) => {
-            const active = sel.size === s;
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 2xl:grid-cols-6">
+          {SIZES.map((size) => {
+            const active = sel.size === size;
             return (
               <button
-                key={s}
-                onClick={() => setSel((p) => ({ ...p, size: s }))}
-                className={`aspect-[5/4] rounded-3xl border-[4px] border-ink font-display font-black text-2xl md:text-4xl uppercase tracking-tight transition-all duration-150 shadow-[6px_6px_0_var(--ink)] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[3px_3px_0_var(--ink)] ${active ? "bg-volt -translate-y-1" : "bg-card"}`}
+                key={size}
+                onClick={() => setSel((prev) => ({ ...prev, size }))}
+                className={`${choiceCardClass(active, "volt")} h-36 p-4 md:h-40`}
               >
-                {s.replace("EU ", "")}
-                <div className="font-mono text-[10px] opacity-60 normal-case mt-1">EU</div>
+                <div className="flex h-full flex-col items-center justify-center">
+                  <div className="font-display text-4xl font-black leading-none">{size.replace("EU ", "")}</div>
+                  <div className="mt-2 font-mono text-[11px] uppercase tracking-[0.22em] opacity-60">EU</div>
+                </div>
               </button>
             );
           })}
@@ -141,128 +336,167 @@ export default function Flow() {
     );
   }
 
-  // ---- COLOR ----
   if (step === "color") {
     const toggle = (id: string) => {
-      setSel((p) => {
-        if (id === "any") return { ...p, colors: ["any"] };
-        const without = p.colors.filter((c) => c !== "any");
+      setSel((prev) => {
+        if (id === "any") return { ...prev, colors: ["any"] };
+        const withoutAny = prev.colors.filter((color) => color !== "any");
         return {
-          ...p,
-          colors: without.includes(id) ? without.filter((c) => c !== id) : [...without, id],
+          ...prev,
+          colors: withoutAny.includes(id)
+            ? withoutAny.filter((color) => color !== id)
+            : [...withoutAny, id],
         };
       });
     };
-    const canNext = sel.colors.length > 0;
-    return (
-      <StepShell
-        eyebrow={<Eyebrow />}
-        title={<>Какие цвета тебе<br />больше нравятся?</>}
-        subtitle="Кликни на прямоугольники для выбора цвета. Если без разницы — выбери явно."
-        footer={
-          <>
-            <button onClick={() => setStep("size")} className="font-mono text-sm uppercase tracking-widest underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100">← назад</button>
-            <BigButton onClick={() => setStep("price")} variant="primary" disabled={!canNext}>Дальше →</BigButton>
-          </>
-        }
-      >
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-4 md:gap-5 pb-32">
-          {COLORS.map((c) => {
-            const active = sel.colors.includes(c.id);
-            const isAny = c.id === "any";
-            return (
-              <button
-                key={c.id}
-                onClick={() => toggle(c.id)}
-                className={`group relative aspect-[4/5] rounded-3xl border-[4px] border-ink overflow-hidden text-left transition-all duration-150 shadow-[8px_8px_0_var(--ink)] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[4px_4px_0_var(--ink)] ${active ? "ring-[6px] ring-ink ring-offset-4 ring-offset-concrete -translate-y-1" : ""}`}
-                style={{ background: isAny ? "repeating-linear-gradient(45deg,#fff,#fff 12px,#e7e5e4 12px,#e7e5e4 24px)" : c.hex }}
-              >
-                <div className="absolute inset-0 flex flex-col justify-end p-4">
-                  <div className="brutal-pill bg-card text-ink text-xs md:text-sm self-start" style={{ boxShadow: "3px 3px 0 var(--ink)" }}>
-                    {c.name}
-                  </div>
-                </div>
-                {active && (
-                  <div className="absolute top-3 right-3 size-10 bg-volt border-[3px] border-ink rounded-full flex items-center justify-center font-display font-black text-xl">✓</div>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </StepShell>
-    );
-  }
 
-  // ---- PRICE ----
-  if (step === "price") {
-    const canNext = !!sel.price;
     return (
       <StepShell
         eyebrow={<Eyebrow />}
-        title={<>Выбери цену,<br />которая ОК.</>}
-        subtitle="Один диапазон. Если бюджет не важен — отметь явно «Без разницы»."
+        title={<>Какие цвета нравятся?</>}
+        subtitle="Выбирай несколько. Если не важно — отмечай «Без разницы»."
         footer={
           <>
-            <button onClick={() => setStep("color")} className="font-mono text-sm uppercase tracking-widest underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100">← назад</button>
-            <BigButton onClick={() => setStep("task")} variant="primary" disabled={!canNext}>Дальше →</BigButton>
-          </>
-        }
-      >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5 pb-32">
-          {PRICES.map((p, i) => {
-            const active = sel.price === p.id;
-            const colors = ["bg-card", "bg-card", "bg-volt", "bg-card", "bg-card", "bg-flame text-white", "bg-cobalt text-white"];
-            return (
-              <button
-                key={p.id}
-                onClick={() => setSel((s) => ({ ...s, price: p.id }))}
-                className={`relative rounded-3xl border-[4px] border-ink p-6 md:p-8 text-left transition-all duration-150 shadow-[8px_8px_0_var(--ink)] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[4px_4px_0_var(--ink)] ${active ? "ring-[6px] ring-ink ring-offset-4 ring-offset-concrete -translate-y-1" : ""} ${colors[i]}`}
-              >
-                <div className="font-mono text-xs uppercase tracking-widest opacity-70">{p.sub}</div>
-                <div className="font-display font-black text-2xl md:text-4xl uppercase tracking-tight mt-2">{p.label}</div>
-                {active && (
-                  <div className="absolute top-4 right-4 size-10 bg-volt border-[3px] border-ink rounded-full flex items-center justify-center font-display font-black text-xl text-ink">✓</div>
-                )}
-              </button>
-            );
-          })}
-        </div>
-      </StepShell>
-    );
-  }
-
-  // ---- TASK ----
-  if (step === "task") {
-    return (
-      <StepShell
-        eyebrow={<Eyebrow />}
-        title={<>Для чего нужны<br />кроссовки?</>}
-        subtitle="Это определит, какие модели и какая механика подбора подключатся дальше."
-        footer={
-          <>
-            <button onClick={() => setStep("price")} className="font-mono text-sm uppercase tracking-widest underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100">← назад</button>
-            <span className="font-mono text-xs opacity-60 uppercase">выбери одну карточку</span>
-          </>
-        }
-      >
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8 pb-32">
-          {[
-            { id: "daily" as Task, title: "На каждый день", sub: "Город · прогулки · учёба · работа · повседневные образы.", bg: "bg-volt", chip: "lifestyle" },
-            { id: "sport" as Task, title: "Для спорта",     sub: "Тренировки · бег · зал · игра · активное движение.",   bg: "bg-flame text-white", chip: "performance" },
-          ].map((t) => (
             <button
-              key={t.id}
-              onClick={() => goAfterTask(t.id)}
-              className={`group relative rounded-[2.5rem] border-[5px] border-ink p-8 md:p-10 text-left min-h-[340px] md:min-h-[420px] flex flex-col justify-between transition-all duration-150 shadow-[12px_12px_0_var(--ink)] hover:translate-x-[5px] hover:translate-y-[5px] hover:shadow-[6px_6px_0_var(--ink)] ${t.bg}`}
+              onClick={() => setStep("size")}
+              className="font-mono text-[11px] uppercase tracking-[0.24em] underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100"
             >
-              <div className="brutal-pill bg-card text-ink text-xs self-start" style={{ boxShadow: "3px 3px 0 var(--ink)" }}>
-                {t.chip}
+              ← назад
+            </button>
+            <BigButton onClick={() => setStep("price")} variant="primary" disabled={!sel.colors.length}>
+              Дальше →
+            </BigButton>
+          </>
+        }
+      >
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
+          {COLORS.map((color) => {
+            const active = sel.colors.includes(color.id);
+            const isAny = color.id === "any";
+            return (
+              <button
+                key={color.id}
+                onClick={() => toggle(color.id)}
+                className={`${choiceCardClass(active, active ? "volt" : undefined)} overflow-hidden p-3 text-left`}
+              >
+                <div
+                  className="flex h-full min-h-[120px] flex-col justify-between rounded-[1.25rem] border-[3px] border-ink p-4"
+                  style={{
+                    background: isAny
+                      ? "repeating-linear-gradient(45deg,#fff,#fff 12px,#efefef 12px,#efefef 24px)"
+                      : color.hex,
+                    color: color.text,
+                  }}
+                >
+                  <div className="font-mono text-[11px] uppercase tracking-[0.2em] opacity-70">
+                    {active ? "выбрано" : "выбор"}
+                  </div>
+                  <div className="font-display text-2xl font-black uppercase leading-none">{color.name}</div>
+                </div>
+              </button>
+            );
+          })}
+        </div>
+      </StepShell>
+    );
+  }
+
+  if (step === "price") {
+    const accents: Array<"volt" | "flame" | undefined> = [undefined, undefined, "volt", undefined, undefined, "flame", undefined];
+    return (
+      <StepShell
+        eyebrow={<Eyebrow />}
+        title={<>Выбери цену, которая ок.</>}
+        subtitle="Один диапазон. Без акцентной радуги: только спокойная база и два сильных выделения."
+        footer={
+          <>
+            <button
+              onClick={() => setStep("color")}
+              className="font-mono text-[11px] uppercase tracking-[0.24em] underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100"
+            >
+              ← назад
+            </button>
+            <BigButton onClick={() => setStep("task")} variant="primary" disabled={!sel.price}>
+              Дальше →
+            </BigButton>
+          </>
+        }
+      >
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {PRICES.map((price, index) => {
+            const active = sel.price === price.id;
+            return (
+              <button
+                key={price.id}
+                onClick={() => setSel((prev) => ({ ...prev, price: price.id }))}
+                className={`${choiceCardClass(active, accents[index])} min-h-[150px] p-5 text-left`}
+              >
+                <div className="font-mono text-[11px] uppercase tracking-[0.22em] opacity-60">{price.sub}</div>
+                <div className="mt-3 font-display text-[2rem] font-black uppercase leading-none">{price.label}</div>
+              </button>
+            );
+          })}
+        </div>
+      </StepShell>
+    );
+  }
+
+  if (step === "task") {
+    const taskCards = [
+      {
+        id: "daily" as Task,
+        title: "На каждый день",
+        sub: "Город, прогулки, учёба, работа и повседневные образы.",
+        image: "/result-new-balance-990v6.png",
+        accent: "bg-volt text-ink",
+      },
+      {
+        id: "sport" as Task,
+        title: "Для спорта",
+        sub: "Тренировки, бег, зал, игра и активное движение.",
+        image: "/result-nike-kobe-6-protro.png",
+        accent: "bg-flame text-white",
+      },
+    ];
+
+    return (
+      <StepShell
+        eyebrow={<Eyebrow />}
+        title={<>Для чего нужны кроссовки?</>}
+        subtitle="Одна задача — один сценарий подбора."
+        footer={
+          <button
+            onClick={() => setStep("price")}
+            className="font-mono text-[11px] uppercase tracking-[0.24em] underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100"
+          >
+            ← назад
+          </button>
+        }
+      >
+        <div className="grid gap-6 lg:grid-cols-2">
+          {taskCards.map((card) => (
+            <button
+              key={card.id}
+              onClick={() => goAfterTask(card.id)}
+              className={`group grid min-h-[360px] grid-cols-[1.1fr_0.9fr] overflow-hidden rounded-[2.25rem] border-[4px] border-ink text-left shadow-[10px_10px_0_var(--ink)] transition-all duration-150 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[5px_5px_0_var(--ink)] ${card.accent}`}
+            >
+              <div className="flex flex-col justify-between p-6">
+                <Pill>{card.id === "daily" ? "lifestyle" : "performance"}</Pill>
+                <div>
+                  <div className="font-display text-[3.25rem] font-black uppercase leading-[0.88]">{card.title}</div>
+                  <p className="mt-4 max-w-md text-base opacity-85">{card.sub}</p>
+                </div>
+                <div className="mt-4 flex items-center gap-3 font-mono text-[11px] uppercase tracking-[0.22em]">
+                  выбрать
+                  <span className="flex size-11 items-center justify-center rounded-full border-[4px] border-ink bg-card text-xl text-ink">
+                    →
+                  </span>
+                </div>
               </div>
-              <div>
-                <div className="font-display font-black text-4xl md:text-6xl uppercase tracking-tight leading-[0.95]">{t.title}</div>
-                <p className="mt-4 text-base md:text-lg max-w-md opacity-90">{t.sub}</p>
+              <div className="relative">
+                <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
+                <div className="absolute inset-0 bg-gradient-to-l from-transparent to-black/20" />
               </div>
-              <div className="self-end size-16 md:size-20 bg-card border-[4px] border-ink rounded-full flex items-center justify-center font-display font-black text-3xl group-hover:bg-ink group-hover:text-volt transition-colors text-ink">→</div>
             </button>
           ))}
         </div>
@@ -270,33 +504,39 @@ export default function Flow() {
     );
   }
 
-  // ---- SPORT ----
   if (step === "sport") {
-    const canNext = !!sel.sport;
     return (
       <StepShell
         eyebrow={<Eyebrow />}
         title={<>Какой именно спорт?</>}
-        subtitle="Выбери один вид. От него зависит подошва, амортизация и стиль."
+        subtitle="Один вид спорта. От него зависят амортизация, сцепление и силуэт."
         footer={
           <>
-            <button onClick={() => setStep("task")} className="font-mono text-sm uppercase tracking-widest underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100">← назад</button>
-            <BigButton onClick={() => setStep("style")} variant="primary" disabled={!canNext}>К стилю →</BigButton>
+            <button
+              onClick={() => setStep("task")}
+              className="font-mono text-[11px] uppercase tracking-[0.24em] underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100"
+            >
+              ← назад
+            </button>
+            <BigButton onClick={() => setStep("style")} variant="primary" disabled={!sel.sport}>
+              К стилю →
+            </BigButton>
           </>
         }
       >
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-5 pb-32">
-          {SPORTS.map((s, i) => {
-            const active = sel.sport === s;
-            const accents = ["bg-card", "bg-volt", "bg-card", "bg-cobalt text-white", "bg-card", "bg-flame text-white", "bg-card", "bg-volt"];
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {SPORTS.map((sport, index) => {
+            const active = sel.sport === sport;
             return (
               <button
-                key={s}
-                onClick={() => setSel((p) => ({ ...p, sport: s }))}
-                className={`rounded-3xl border-[4px] border-ink p-6 text-left min-h-[140px] flex flex-col justify-between transition-all duration-150 shadow-[8px_8px_0_var(--ink)] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[4px_4px_0_var(--ink)] ${active ? "ring-[6px] ring-ink ring-offset-4 ring-offset-concrete -translate-y-1" : ""} ${accents[i]}`}
+                key={sport}
+                onClick={() => setSel((prev) => ({ ...prev, sport }))}
+                className={`${choiceCardClass(active, index % 3 === 0 ? "volt" : undefined)} flex min-h-[118px] flex-col justify-between p-4 text-left`}
               >
-                <span className="font-mono text-xs uppercase opacity-70">0{i + 1}</span>
-                <span className="font-display font-black text-xl md:text-2xl uppercase tracking-tight leading-tight">{s}</span>
+                <div className="font-mono text-[11px] uppercase tracking-[0.2em] opacity-60">
+                  {String(index + 1).padStart(2, "0")}
+                </div>
+                <div className="font-display text-2xl font-black uppercase leading-none">{sport}</div>
               </button>
             );
           })}
@@ -305,277 +545,337 @@ export default function Flow() {
     );
   }
 
-  // ---- STYLE (visual cards) ----
   if (step === "style") {
     const card = STYLES[styleIdx];
-    const vote = (v: "like" | "dislike") => {
-      setSel((p) => ({ ...p, styleVotes: { ...p.styleVotes, [card.id]: v } }));
-      if (styleIdx < STYLES.length - 1) setStyleIdx((i) => i + 1);
-      else setStep("summary");
+    const vote = (value: StyleVote) => {
+      setSel((prev) => ({ ...prev, styleVotes: { ...prev.styleVotes, [card.id]: value } }));
+      if (styleIdx < STYLES.length - 1) {
+        setStyleIdx((prev) => prev + 1);
+      } else {
+        setStep("summary");
+      }
     };
+
     return (
       <StepShell
         eyebrow={<Eyebrow />}
-        title={<>Что заходит<br />визуально?</>}
-        subtitle="Только «нравится» или «не нравится». Пройди все 5 карточек — это обязательно."
-      >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center pb-40">
-          <div className="lg:col-span-8 lg:col-start-3">
-            <div
-              key={card.id}
-              className="relative rounded-[2.5rem] border-[6px] border-ink overflow-hidden shadow-[16px_16px_0_var(--ink)] animate-pop-in"
-              style={{ background: card.bg, color: card.fg }}
+        title={<>Что заходит визуально?</>}
+        subtitle="Только нравится или не нравится. Пройти нужно все пять карточек."
+        footer={
+          <div className="ml-auto flex items-center gap-4">
+            <button
+              onClick={() => vote("dislike")}
+              className="inline-flex items-center gap-3 rounded-full border-[4px] border-ink bg-card px-6 py-3 font-display text-lg font-black uppercase shadow-[6px_6px_0_var(--ink)] transition-all hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[3px_3px_0_var(--ink)]"
             >
-              {/* Top label */}
-              <div className="absolute top-5 left-5 z-20 brutal-pill bg-card text-ink text-xs md:text-sm" style={{ boxShadow: "3px 3px 0 var(--ink)" }}>
-                Стиль {styleIdx + 1} / {STYLES.length}
-              </div>
-              <div className="absolute top-5 right-5 z-20 brutal-pill bg-ink text-volt text-xs md:text-sm" style={{ boxShadow: "3px 3px 0 var(--ink)" }}>
-                #{card.id}
-              </div>
-
-              <div className="aspect-[4/3] md:aspect-[16/10] w-full overflow-hidden">
-                <img
-                  src={card.image}
-                  alt={card.title}
-                  width={1024}
-                  height={1024}
-                  loading="lazy"
-                  className="w-full h-full object-cover mix-blend-multiply"
-                />
-              </div>
-
-              <div className="p-6 md:p-10 border-t-[5px] border-ink bg-card text-ink">
-                <div className="font-display font-black text-4xl md:text-6xl uppercase tracking-tight leading-[0.95]">
-                  {card.title}
-                </div>
-                <p className="mt-3 text-base md:text-xl max-w-2xl opacity-80">{card.desc}</p>
-              </div>
-            </div>
-
-            {/* Actions */}
-            <div className="mt-8 flex items-center justify-center gap-4 md:gap-6 flex-wrap">
-              <button
-                onClick={() => vote("dislike")}
-                className="group inline-flex items-center gap-3 bg-card text-ink border-[5px] border-ink rounded-full px-7 md:px-10 py-5 md:py-6 font-display font-black text-lg md:text-2xl uppercase tracking-tight shadow-[8px_8px_0_var(--ink)] hover:translate-x-[5px] hover:translate-y-[5px] hover:shadow-[3px_3px_0_var(--ink)] transition-all"
-              >
-                <span className="size-8 md:size-10 bg-flame border-[3px] border-ink rounded-full flex items-center justify-center text-white">✕</span>
-                Не нравится
-              </button>
-              <button
-                onClick={() => vote("like")}
-                className="group inline-flex items-center gap-3 bg-volt text-ink border-[5px] border-ink rounded-full px-7 md:px-10 py-5 md:py-6 font-display font-black text-lg md:text-2xl uppercase tracking-tight shadow-[8px_8px_0_var(--ink)] hover:translate-x-[5px] hover:translate-y-[5px] hover:shadow-[3px_3px_0_var(--ink)] transition-all"
-              >
-                <span className="size-8 md:size-10 bg-ink border-[3px] border-ink rounded-full flex items-center justify-center text-volt">♥</span>
-                Нравится
-              </button>
-            </div>
+              <span className="flex size-8 items-center justify-center rounded-full border-[3px] border-ink bg-flame text-white">✕</span>
+              Не нравится
+            </button>
+            <button
+              onClick={() => vote("like")}
+              className="inline-flex items-center gap-3 rounded-full border-[4px] border-ink bg-volt px-6 py-3 font-display text-lg font-black uppercase shadow-[6px_6px_0_var(--ink)] transition-all hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[3px_3px_0_var(--ink)]"
+            >
+              <span className="flex size-8 items-center justify-center rounded-full border-[3px] border-ink bg-ink text-volt">♥</span>
+              Нравится
+            </button>
           </div>
-        </div>
-      </StepShell>
-    );
-  }
-
-  // ---- SUMMARY ----
-  if (step === "summary") {
-    const liked = STYLES.filter((s) => sel.styleVotes[s.id] === "like").map((s) => s.title.toLowerCase());
-    const disliked = STYLES.filter((s) => sel.styleVotes[s.id] === "dislike").map((s) => s.title.toLowerCase());
-
-    const lines: { k: string; v: string }[] = [
-      { k: "Размер", v: sel.size ?? "" },
-      { k: "Цвет", v: sel.colors.map((c) => COLORS.find((x) => x.id === c)?.name).join(" / ") },
-      { k: "Цена", v: PRICES.find((p) => p.id === sel.price)?.label ?? "" },
-      { k: "Задача", v: sel.task === "daily" ? "на каждый день" : "для спорта" },
-    ];
-    if (sel.sport) lines.push({ k: "Вид спорта", v: sel.sport });
-    lines.push({
-      k: "Стиль",
-      v: `${liked.length ? `нравятся ${liked.join(", ")}` : "без явных предпочтений"}${disliked.length ? `, не нравятся ${disliked.join(", ")}` : ""}`,
-    });
-
-    return (
-      <StepShell
-        eyebrow={<Eyebrow />}
-        title={<>Вот что<br />мы ищем.</>}
-        subtitle="Проверь параметры. Если всё ок — запускаем матчинг."
+        }
       >
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 pb-32">
-          <div className="lg:col-span-8 brutal-card p-6 md:p-10">
-            <div className="font-mono text-xs uppercase tracking-widest opacity-60 mb-6">профиль подбора</div>
-            <div className="divide-y-[3px] divide-ink/10">
-              {lines.map((l) => (
-                <div key={l.k} className="py-4 md:py-5 flex flex-col md:flex-row md:items-baseline gap-1 md:gap-6">
-                  <div className="md:w-44 font-mono text-xs uppercase tracking-widest opacity-60">{l.k}</div>
-                  <div className="font-display font-black text-xl md:text-3xl uppercase tracking-tight">{l.v || "—"}</div>
+        <div className="grid gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+          <div className="flex flex-col justify-between rounded-[2rem] border-[4px] border-ink bg-card p-6 shadow-[8px_8px_0_var(--ink)]">
+            <div>
+              <Pill>стиль {styleIdx + 1} / {STYLES.length}</Pill>
+              <div className="mt-6 font-display text-[4rem] font-black uppercase leading-[0.88]">{card.title}</div>
+              <p className="mt-4 max-w-lg text-lg opacity-80">{card.desc}</p>
+            </div>
+            <div className="grid grid-cols-2 gap-3">
+              {STYLES.map((style, index) => (
+                <div
+                  key={style.id}
+                  className={`rounded-[1.25rem] border-[3px] border-ink px-4 py-3 font-mono text-[11px] uppercase tracking-[0.22em] ${
+                    index === styleIdx ? "bg-volt" : "bg-concrete"
+                  }`}
+                >
+                  {String(index + 1).padStart(2, "0")} · {style.title}
                 </div>
               ))}
             </div>
           </div>
-          <div className="lg:col-span-4 flex flex-col gap-4">
-            <div className="brutal-card bg-volt p-6 md:p-8">
-              <div className="font-mono text-xs uppercase tracking-widest opacity-70">готовность</div>
-              <div className="font-display font-black text-5xl md:text-6xl mt-2">100%</div>
-              <div className="font-mono text-xs uppercase tracking-widest mt-1 opacity-70">все шаги пройдены</div>
+
+          <div
+            className="grid overflow-hidden rounded-[2.25rem] border-[4px] border-ink bg-card shadow-[10px_10px_0_var(--ink)]"
+            style={{ gridTemplateRows: "minmax(0,1fr) auto" }}
+          >
+            <div className="relative overflow-hidden" style={{ background: card.bg }}>
+              <img src={card.image} alt={card.title} className="max-h-[520px] w-full object-cover mix-blend-multiply" />
+              <div className="absolute left-4 top-4">
+                <Pill>#{card.id}</Pill>
+              </div>
             </div>
-            <BigButton onClick={() => setStep("search")} variant="primary">Искать кроссовки →</BigButton>
-            <button onClick={reset} className="font-mono text-xs uppercase tracking-widest underline decoration-2 underline-offset-4 opacity-70 self-start hover:opacity-100">начать заново</button>
+            <div className="border-t-[4px] border-ink p-5">
+              <div className="font-mono text-[11px] uppercase tracking-[0.22em] opacity-60">силуэт</div>
+              <div className="mt-2 font-display text-4xl font-black uppercase leading-none">{card.title}</div>
+            </div>
           </div>
         </div>
       </StepShell>
     );
   }
 
-  // ---- SEARCH ----
-  if (step === "search") return <SearchScreen onDone={(empty) => setStep(empty ? "empty" : "results")} />;
+  if (step === "summary") {
+    const style = voteSummary(sel.styleVotes);
+    const featured =
+      RESULT_GROUPS[0].items.find((item) => item.sizes.includes((sel.size ?? "").replace("EU ", ""))) ?? RESULT_GROUPS[0].items[0];
 
-  // ---- RESULTS ----
+    return (
+      <StepShell
+        eyebrow={<Eyebrow />}
+        title={<>Вот что мы ищем.</>}
+        subtitle="Проверь профиль. Если всё ок, запускаем матчинг."
+        footer={
+          <>
+            <button
+              onClick={reset}
+              className="font-mono text-[11px] uppercase tracking-[0.24em] underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100"
+            >
+              начать заново
+            </button>
+            <BigButton onClick={() => setStep("search")} variant="primary">
+              Искать кроссовки →
+            </BigButton>
+          </>
+        }
+      >
+        <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
+          <div className="rounded-[2rem] border-[4px] border-ink bg-card p-6 shadow-[8px_8px_0_var(--ink)]">
+            <div className="font-mono text-[11px] uppercase tracking-[0.22em] opacity-60">профиль подбора</div>
+            <div className="mt-4 grid gap-3">
+              {summaryLines.map((line) => (
+                <div key={line.k} className="grid grid-cols-[110px_minmax(0,1fr)] gap-4 border-t-[2px] border-ink/10 pt-3 first:border-t-0 first:pt-0">
+                  <div className="font-mono text-[11px] uppercase tracking-[0.22em] opacity-60">{line.k}</div>
+                  <div className="font-display text-[2rem] font-black uppercase leading-[0.95]">{line.v || "—"}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="grid grid-rows-[auto_1fr] gap-4">
+            <div className="rounded-[2rem] border-[4px] border-ink bg-volt p-5 shadow-[8px_8px_0_var(--ink)]">
+              <div className="font-mono text-[11px] uppercase tracking-[0.22em] opacity-60">готовность</div>
+              <div className="mt-2 font-display text-[4.5rem] font-black leading-none">100%</div>
+              <div className="font-mono text-[11px] uppercase tracking-[0.22em] opacity-70">все шаги пройдены</div>
+            </div>
+            <div className="grid overflow-hidden rounded-[2rem] border-[4px] border-ink bg-card shadow-[8px_8px_0_var(--ink)]">
+              <div className="overflow-hidden border-b-[4px] border-ink">
+                <img src={featured.img} alt={featured.name} className="h-full w-full object-cover" />
+              </div>
+              <div className="p-4">
+                <div className="font-mono text-[11px] uppercase tracking-[0.22em] opacity-60">первый кандидат</div>
+                <div className="mt-2 font-display text-2xl font-black uppercase leading-none">
+                  {featured.brand} {featured.name}
+                </div>
+                <p className="mt-2 text-sm opacity-75">{style.liked.length ? `Ближе к стилям: ${style.liked.join(", ")}.` : featured.why}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </StepShell>
+    );
+  }
+
+  if (step === "search") return <SearchScreen sel={sel} onDone={(empty) => setStep(empty ? "empty" : "results")} />;
   if (step === "results") return <Results sel={sel} onReset={reset} onWiden={() => setStep("empty")} />;
-
-  // ---- EMPTY ----
   if (step === "empty") return <EmptyState onReset={reset} onResults={() => setStep("results")} />;
 
   return null;
 }
 
-// ---- Sub: Search ----
-function SearchScreen({ onDone }: { onDone: (empty: boolean) => void }) {
-  const statuses = [
-    "Проверяем размер в наличии",
-    "Сверяем бюджет",
-    "Учитываем выбранные цвета",
-    "Сравниваем стиль",
-    "Собираем лучшие совпадения",
-  ];
-  const [idx, setIdx] = useState(0);
+function ChipsBar({ sel }: { sel: Selections }) {
+  const items: Array<{ k: string; v: string }> = [];
+  if (sel.size) items.push({ k: "Размер", v: sel.size });
+  if (sel.colors.length) items.push({ k: "Цвет", v: selectedNames(sel.colors) });
+  if (sel.price) items.push({ k: "Цена", v: PRICES.find((item) => item.id === sel.price)?.label ?? "" });
+  if (sel.task) items.push({ k: "Задача", v: getTaskCopy(sel.task) });
+  if (sel.sport) items.push({ k: "Спорт", v: sel.sport });
 
-  useEffect(() => {
-    const t = setInterval(() => setIdx((i) => i + 1), 900);
-    return () => clearInterval(t);
-  }, []);
-
-  useEffect(() => {
-    if (idx >= statuses.length) {
-      const t = setTimeout(() => onDone(false), 600);
-      return () => clearTimeout(t);
-    }
-  }, [idx, onDone, statuses.length]);
+  if (!items.length) return null;
 
   return (
-    <div className="min-h-dvh flex items-center justify-center px-6 py-16">
-      <div className="max-w-3xl w-full text-center">
-        <div className="brutal-pill bg-card text-ink mx-auto mb-8 animate-wiggle">
-          <span className="size-2 bg-flame border border-ink rounded-full mr-2 animate-pulse" />
-          matching engine
-        </div>
-        <h1 className="font-display font-black uppercase text-5xl md:text-7xl leading-[0.95] tracking-tighter">
-          Ищем для тебя<br />кроссовки
-        </h1>
-
-        <div className="mt-12 brutal-card p-6 md:p-8 text-left">
-          {statuses.map((s, i) => {
-            const done = i < idx;
-            const active = i === idx;
-            return (
-              <div key={s} className={`flex items-center gap-4 py-3 border-b-[2px] last:border-b-0 border-ink/10 transition-opacity ${i > idx ? "opacity-30" : "opacity-100"}`}>
-                <div className={`size-8 md:size-10 rounded-full border-[3px] border-ink flex items-center justify-center font-display font-black ${done ? "bg-volt" : active ? "bg-flame text-white animate-pulse" : "bg-card"}`}>
-                  {done ? "✓" : i + 1}
-                </div>
-                <span className="font-display font-black text-lg md:text-2xl uppercase tracking-tight">{s}</span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+    <div className="flex flex-wrap gap-2">
+      {items.map((item) => (
+        <Pill key={item.k}>
+          <span className="opacity-60">{item.k}:</span> {item.v}
+        </Pill>
+      ))}
     </div>
   );
 }
 
-// ---- Sub: Results ----
-function Results({ sel, onReset, onWiden }: { sel: Selections; onReset: () => void; onWiden: () => void }) {
-  const groups = [
-    {
-      title: "Точное попадание",
-      sub: "Размер, цена, цвет и стиль — всё в плюс.",
-      bg: "bg-volt",
-      items: [
-        { brand: "Halcyon", name: "Tread 02", price: "13 990 ₽", sizes: ["41","42","43","44"], why: "Массивная подошва, нейтральный белый, попадает в бюджет.", img: "/result-1.jpg" },
-      ],
-    },
-    {
-      title: "Чуть дороже, но стоит",
-      sub: "+10–15% к бюджету за материалы и силуэт.",
-      bg: "bg-cobalt text-white",
-      items: [
-        { brand: "Northbound", name: "Trail Cut", price: "16 490 ₽", sizes: ["42","43","44"], why: "Беговой силуэт с прочной подошвой, серый — универсален.", img: "/result-2.jpg" },
-      ],
-    },
-    {
-      title: "Альтернатива",
-      sub: "Другой силуэт, но матчится по вайбу.",
-      bg: "bg-card",
-      items: [
-        { brand: "Studio K", name: "Court Low", price: "11 990 ₽", sizes: ["42","43"], why: "Низкий ретро-силуэт, тонкий и лёгкий — для городских образов.", img: "/result-3.jpg" },
-      ],
-    },
+function SearchScreen({ sel, onDone }: { sel: Selections; onDone: (empty: boolean) => void }) {
+  const statuses = [
+    "Проверяем размер",
+    "Сверяем бюджет",
+    "Смотрим палитру",
+    "Сопоставляем стиль",
+    "Собираем лучшие пары",
   ];
+  const [idx, setIdx] = useState(0);
+  const allItems = RESULT_GROUPS.flatMap((group) => group.items);
+
+  useEffect(() => {
+    const timer = setInterval(() => setIdx((prev) => prev + 1), 850);
+    return () => clearInterval(timer);
+  }, []);
+
+  useEffect(() => {
+    if (idx >= statuses.length) {
+      const timer = setTimeout(() => onDone(false), 700);
+      return () => clearTimeout(timer);
+    }
+    return undefined;
+  }, [idx, onDone, statuses.length]);
 
   return (
-    <div className="min-h-dvh">
-      <div className="max-w-[1600px] mx-auto px-6 md:px-10 pt-10 pb-24">
-        <div className="flex items-center justify-between mb-8 flex-wrap gap-4">
-          <div className="font-display text-xl md:text-2xl font-black uppercase tracking-tighter">
+    <StepShell
+      eyebrow={
+        <div className="flex items-center justify-between gap-4">
+          <div className="font-display text-xl font-black uppercase tracking-tighter">
             Шнурок<span className="text-flame">.</span>
           </div>
-          <button onClick={onReset} className="font-mono text-xs uppercase tracking-widest underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100">подобрать заново</button>
+          <ChipsBar sel={sel} />
         </div>
-
-        <h1 className="font-display font-black uppercase text-5xl md:text-7xl leading-[0.95] tracking-tighter max-w-4xl">
-          Нашли модели<br />под твой запрос.
-        </h1>
-        <p className="mt-5 text-base md:text-xl opacity-80 max-w-2xl">
-          Учли размер, цвет, цену, задачу и стиль. Ниже — три группы совпадений.
-        </p>
-
-        <div className="mt-10 flex flex-wrap gap-2">
-          {sel.size && <Pill>Размер: {sel.size}</Pill>}
-          {sel.price && <Pill color="volt">{PRICES.find((p) => p.id === sel.price)?.label}</Pill>}
-          {sel.task && <Pill color="ink">{sel.task === "daily" ? "на каждый день" : "для спорта"}</Pill>}
-          {sel.sport && <Pill color="flame">{sel.sport}</Pill>}
-        </div>
-
-        <div className="mt-14 flex flex-col gap-12">
-          {groups.map((g) => (
-            <section key={g.title}>
-              <div className="flex items-end justify-between mb-6 flex-wrap gap-3">
-                <div>
-                  <div className={`inline-block px-5 py-2 rounded-full border-[4px] border-ink font-display font-black uppercase text-sm md:text-base shadow-[4px_4px_0_var(--ink)] ${g.bg}`}>
-                    {g.title}
+      }
+      title={<>Ищем для тебя кроссовки.</>}
+      subtitle="Матчинг идёт по размеру, задаче, палитре и стилевым реакциям."
+    >
+      <div className="grid gap-6 lg:grid-cols-[0.88fr_1.12fr]">
+        <div className="rounded-[2rem] border-[4px] border-ink bg-card p-6 shadow-[8px_8px_0_var(--ink)]">
+          <div className="font-mono text-[11px] uppercase tracking-[0.22em] opacity-60">progress</div>
+          <div className="mt-4 grid gap-3">
+            {statuses.map((status, index) => {
+              const done = index < idx;
+              const active = index === idx;
+              return (
+                <div
+                  key={status}
+                  className={`flex items-center gap-4 rounded-[1.2rem] border-[3px] border-ink px-4 py-3 ${
+                    done ? "bg-volt" : active ? "bg-flame text-white" : "bg-concrete"
+                  }`}
+                >
+                  <div className="flex size-10 items-center justify-center rounded-full border-[3px] border-ink bg-card font-display text-lg font-black text-ink">
+                    {done ? "✓" : index + 1}
                   </div>
-                  <p className="mt-3 font-mono text-xs md:text-sm uppercase tracking-widest opacity-60">{g.sub}</p>
+                  <div className="font-display text-2xl font-black uppercase leading-none">{status}</div>
                 </div>
+              );
+            })}
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-3">
+          {allItems.map((item, index) => (
+            <div
+              key={item.name}
+              className={`h-48 overflow-hidden rounded-[1.8rem] border-[4px] border-ink bg-card shadow-[8px_8px_0_var(--ink)] transition-all duration-300 ${
+                index <= idx ? "translate-y-0 opacity-100" : "translate-y-6 opacity-50"
+              }`}
+            >
+              <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
+            </div>
+          ))}
+        </div>
+      </div>
+    </StepShell>
+  );
+}
+
+function Results({
+  sel,
+  onReset,
+  onWiden,
+}: {
+  sel: Selections;
+  onReset: () => void;
+  onWiden: () => void;
+}) {
+  return (
+    <div className="min-h-dvh px-6 py-6 md:px-10">
+      <div className="mx-auto grid max-w-[1600px] gap-6">
+        <div className="flex items-center justify-between gap-4">
+          <div className="font-display text-xl font-black uppercase tracking-tighter">
+            Шнурок<span className="text-flame">.</span>
+          </div>
+          <button
+            onClick={onReset}
+            className="font-mono text-[11px] uppercase tracking-[0.24em] underline decoration-2 underline-offset-4 opacity-70 hover:opacity-100"
+          >
+            подобрать заново
+          </button>
+        </div>
+
+        <div className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-6">
+          <div>
+            <h1 className="max-w-4xl font-display text-5xl font-black uppercase leading-[0.88] tracking-tight">
+              Нашли модели под твой запрос.
+            </h1>
+            <p className="mt-2 max-w-2xl text-base opacity-75">
+              Учли размер, цвет, цену, задачу и стиль. Ниже три группы по девяти товарам.
+            </p>
+          </div>
+          <div className="flex flex-wrap justify-end gap-2">
+            {sel.size && <Pill>Размер: {sel.size}</Pill>}
+            {sel.price && <Pill color="volt">{PRICES.find((item) => item.id === sel.price)?.label}</Pill>}
+            {sel.task && <Pill color="flame">{getTaskCopy(sel.task)}</Pill>}
+          </div>
+        </div>
+
+        <div className="grid gap-8">
+          {RESULT_GROUPS.map((group) => (
+            <section key={group.title} className="grid gap-4 lg:grid-cols-[220px_1fr]">
+              <div className="rounded-[1.8rem] border-[4px] border-ink bg-card p-4 shadow-[8px_8px_0_var(--ink)]">
+                <div className={`inline-flex rounded-full border-[3px] border-ink px-3 py-1 font-mono text-[11px] uppercase tracking-[0.22em] ${group.badge}`}>
+                  {group.title}
+                </div>
+                <p className="mt-3 text-sm opacity-75">{group.sub}</p>
+                {group.title === "Альтернатива" && (
+                  <button
+                    onClick={onWiden}
+                    className="mt-4 font-mono text-[11px] uppercase tracking-[0.24em] underline decoration-2 underline-offset-4 opacity-80 hover:opacity-100"
+                  >
+                    нет мэтча? →
+                  </button>
+                )}
               </div>
 
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                {g.items.map((it) => (
-                  <div key={it.name} className="brutal-card overflow-hidden flex flex-col group">
-                    <div className="aspect-[4/3] overflow-hidden bg-cream border-b-[4px] border-ink">
-                      <img src={it.img} alt={it.name} loading="lazy" width={1024} height={1024} className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" />
+              <div className="grid gap-4 md:grid-cols-3">
+                {group.items.map((item) => (
+                  <div
+                    key={item.name}
+                    className="grid overflow-hidden rounded-[1.8rem] border-[4px] border-ink bg-card shadow-[8px_8px_0_var(--ink)]"
+                    style={{ gridTemplateRows: "auto auto" }}
+                  >
+                    <div className="aspect-[16/10] overflow-hidden border-b-[4px] border-ink">
+                      <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
                     </div>
-                    <div className="p-6 flex-1 flex flex-col gap-4">
-                      <div className="flex items-baseline justify-between">
+                    <div className="grid gap-2 p-3">
+                      <div className="flex items-start justify-between gap-3">
                         <div>
-                          <div className="font-mono text-xs uppercase tracking-widest opacity-60">{it.brand}</div>
-                          <div className="font-display font-black text-2xl md:text-3xl uppercase tracking-tight leading-tight">{it.name}</div>
+                          <div className="font-mono text-[10px] uppercase tracking-[0.22em] opacity-60">{item.brand}</div>
+                          <div className="font-display text-xl font-black uppercase leading-none">{item.name}</div>
                         </div>
-                        <div className="font-display font-black text-xl md:text-2xl">{it.price}</div>
+                        <div className="font-display text-lg font-black">{item.price}</div>
                       </div>
-                      <div className="flex flex-wrap gap-1.5">
-                        {it.sizes.map((s) => (
-                          <span key={s} className="font-mono text-xs font-bold uppercase border-2 border-ink rounded-full px-2.5 py-1">{s}</span>
+                      <div className="flex flex-wrap gap-1">
+                        {item.sizes.map((size) => (
+                          <span
+                            key={size}
+                            className="rounded-full border-[2px] border-ink px-2 py-0.5 font-mono text-[10px] uppercase tracking-[0.16em]"
+                          >
+                            {size}
+                          </span>
                         ))}
                       </div>
-                      <p className="text-sm opacity-80 border-l-[3px] border-volt pl-3">{it.why}</p>
-                      <button className="mt-auto self-start brutal-pill bg-ink text-volt hover:bg-flame hover:text-white transition-colors text-sm">
+                      <p className="line-clamp-2 text-xs opacity-75">{item.why}</p>
+                      <button className="inline-flex items-center gap-2 rounded-full border-[3px] border-ink bg-ink px-3 py-2 font-mono text-[11px] uppercase tracking-[0.18em] text-volt transition-colors hover:bg-flame hover:text-white">
                         Перейти в магазин →
                       </button>
                     </div>
@@ -585,54 +885,54 @@ function Results({ sel, onReset, onWiden }: { sel: Selections; onReset: () => vo
             </section>
           ))}
         </div>
-
-        <div className="mt-16 brutal-card p-6 md:p-8 flex items-center justify-between flex-wrap gap-4">
-          <div>
-            <div className="font-display font-black text-xl md:text-2xl uppercase">Хочешь шире?</div>
-            <p className="opacity-70 text-sm md:text-base">Показать вариант, когда ничего не нашлось — расширим запрос.</p>
-          </div>
-          <button onClick={onWiden} className="font-mono text-xs uppercase tracking-widest underline decoration-2 underline-offset-4 opacity-80 hover:opacity-100">смоделировать «ничего не найдено» →</button>
-        </div>
       </div>
     </div>
   );
 }
 
-// ---- Sub: Empty ----
 function EmptyState({ onReset, onResults }: { onReset: () => void; onResults: () => void }) {
   const actions = [
-    { label: "Поднять цену", c: "bg-volt" },
-    { label: "Убрать ограничение по цвету", c: "bg-card" },
-    { label: "Смягчить стиль", c: "bg-cobalt text-white" },
-    { label: "Изменить задачу", c: "bg-card" },
-    { label: "Выбрать другой размер", c: "bg-card" },
+    { label: "Поднять цену", accent: "bg-volt" },
+    { label: "Убрать цвет", accent: "bg-card" },
+    { label: "Смягчить стиль", accent: "bg-flame text-white" },
+    { label: "Изменить задачу", accent: "bg-card" },
+    { label: "Другой размер", accent: "bg-card" },
   ];
-  return (
-    <div className="min-h-dvh flex items-center justify-center px-6 py-16">
-      <div className="max-w-4xl w-full">
-        <div className="brutal-pill bg-flame text-white mb-8">
-          <span className="font-mono text-xs">no_match.exe</span>
-        </div>
-        <h1 className="font-display font-black uppercase text-5xl md:text-7xl leading-[0.95] tracking-tighter">
-          По текущему запросу<br />ничего не нашли.
-        </h1>
-        <p className="mt-5 text-base md:text-xl opacity-80 max-w-2xl">
-          Похоже, ограничения слишком узкие. Можно быстро расширить поиск — мы сохраним то, что уже выбрано.
-        </p>
 
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 gap-3 md:gap-4">
-          {actions.map((a) => (
+  return (
+    <div className="min-h-dvh px-6 py-8 md:px-10">
+      <div className="mx-auto grid max-w-[1400px] gap-6 lg:grid-cols-[0.85fr_1.15fr]">
+        <div className="flex flex-col justify-between rounded-[2rem] border-[4px] border-ink bg-card p-6 shadow-[8px_8px_0_var(--ink)]">
+          <div>
+            <Pill color="flame">ничего не найдено</Pill>
+            <h1 className="mt-6 font-display text-5xl font-black uppercase leading-[0.9]">
+              По текущему запросу ничего не нашли.
+            </h1>
+            <p className="mt-4 max-w-xl text-lg opacity-75">
+              Ограничения слишком узкие. Быстро расширим поиск и сохраним то, что уже выбрано.
+            </p>
+          </div>
+          <button
+            onClick={onReset}
+            className="self-start font-mono text-[11px] uppercase tracking-[0.24em] underline decoration-2 underline-offset-4 opacity-80 hover:opacity-100"
+          >
+            начать заново
+          </button>
+        </div>
+
+        <div className="grid grid-cols-2 gap-4">
+          {actions.map((action) => (
             <button
-              key={a.label}
+              key={action.label}
               onClick={onResults}
-              className={`rounded-3xl border-[4px] border-ink p-5 md:p-6 text-left font-display font-black text-lg md:text-2xl uppercase tracking-tight shadow-[8px_8px_0_var(--ink)] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[4px_4px_0_var(--ink)] transition-all ${a.c}`}
+              className={`rounded-[1.8rem] border-[4px] border-ink p-5 text-left font-display text-3xl font-black uppercase leading-[0.92] shadow-[8px_8px_0_var(--ink)] transition-all hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[4px_4px_0_var(--ink)] ${action.accent}`}
             >
-              {a.label} →
+              {action.label} →
             </button>
           ))}
           <button
             onClick={onReset}
-            className="rounded-3xl border-[4px] border-ink p-5 md:p-6 text-left font-display font-black text-lg md:text-2xl uppercase tracking-tight shadow-[8px_8px_0_var(--ink)] hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[4px_4px_0_var(--ink)] transition-all bg-ink text-volt sm:col-span-2"
+            className="rounded-[1.8rem] border-[4px] border-ink bg-ink p-5 text-left font-display text-3xl font-black uppercase leading-[0.92] text-volt shadow-[8px_8px_0_var(--ink)] transition-all hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[4px_4px_0_var(--ink)]"
           >
             Начать заново ↺
           </button>
