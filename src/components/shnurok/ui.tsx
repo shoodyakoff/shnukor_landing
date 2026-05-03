@@ -1,24 +1,18 @@
 import type { ReactNode } from "react";
 
+import { cn } from "@/lib/utils";
+
 export function Pill({
   children,
-  color = "white",
+  color: _color = "default",
 }: {
   children: ReactNode;
-  color?: "white" | "volt" | "flame" | "cobalt" | "ink";
+  color?: "default" | "active" | "dark" | "muted" | "white" | "volt" | "flame" | "cobalt" | "ink";
 }) {
-  const map: Record<string, string> = {
-    white: "bg-card text-ink",
-    volt: "bg-volt text-ink",
-    flame: "bg-flame text-white",
-    cobalt: "bg-cobalt text-white",
-    ink: "bg-ink text-concrete",
-  };
+  void _color;
 
   return (
-    <span
-      className={`inline-flex items-center gap-2 rounded-full border-[3px] border-ink px-3 py-1 font-mono text-[11px] font-bold uppercase tracking-[0.2em] shadow-[3px_3px_0_var(--ink)] ${map[color]}`}
-    >
+    <span className="inline-flex w-fit max-w-full items-center gap-2 rounded-full border-2 border-outsole bg-mesh px-3.5 py-1.5 text-sm font-extrabold leading-none whitespace-nowrap text-outsole shadow-[3px_3px_0_var(--outsole)]">
       {children}
     </span>
   );
@@ -32,21 +26,27 @@ export function BigButton({
 }: {
   children: ReactNode;
   onClick?: () => void;
-  variant?: "primary" | "secondary" | "volt" | "ghost";
+  variant?: "primary" | "secondary" | "accent" | "ghost" | "volt";
   disabled?: boolean;
 }) {
   const map: Record<string, string> = {
-    primary: "bg-flame text-white",
-    secondary: "bg-card text-ink",
-    volt: "bg-volt text-ink",
-    ghost: "bg-transparent text-ink",
+    primary:
+      "border-outsole bg-outsole text-lace shadow-[5px_5px_0_var(--mesh)] hover:bg-suede hover:shadow-[3px_3px_0_var(--mesh)]",
+    secondary:
+      "border-outsole bg-lace text-outsole shadow-[5px_5px_0_var(--outsole)] hover:bg-muted hover:shadow-[3px_3px_0_var(--outsole)]",
+    accent:
+      "border-outsole bg-mesh text-outsole shadow-[5px_5px_0_var(--outsole)] hover:bg-[#c7e9ff] hover:shadow-[3px_3px_0_var(--outsole)]",
+    volt:
+      "border-outsole bg-mesh text-outsole shadow-[5px_5px_0_var(--outsole)] hover:bg-[#c7e9ff] hover:shadow-[3px_3px_0_var(--outsole)]",
+    ghost:
+      "border-transparent bg-transparent text-outsole underline underline-offset-4 hover:bg-muted",
   };
 
   return (
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`inline-flex items-center justify-center rounded-full border-[5px] border-ink px-9 py-5 font-display text-2xl font-black uppercase tracking-tight transition-all duration-150 shadow-[8px_8px_0_var(--ink)] hover:translate-x-[4px] hover:translate-y-[4px] hover:shadow-[4px_4px_0_var(--ink)] disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-x-0 disabled:hover:translate-y-0 disabled:hover:shadow-[8px_8px_0_var(--ink)] ${map[variant]}`}
+      className={`inline-flex min-h-12 min-w-[168px] items-center justify-center rounded-full border-2 px-9 py-3.5 text-base font-extrabold transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-x-0 disabled:hover:translate-y-0 md:min-w-[196px] md:px-11 md:py-4 md:text-lg ${map[variant]}`}
     >
       {children}
     </button>
@@ -57,24 +57,24 @@ export function ProgressBar({
   current,
   total,
   label,
+  action,
 }: {
   current: number;
   total: number;
   label: string;
+  action?: ReactNode;
 }) {
   const pct = (current / total) * 100;
 
   return (
-    <div className="w-full max-w-3xl">
+    <div className="w-full max-w-5xl">
       <div className="mb-2 flex items-baseline justify-between">
-        <span className="font-mono text-[11px] uppercase tracking-[0.24em] font-bold">{label}</span>
-        <span className="font-mono text-[11px] uppercase tracking-[0.24em] opacity-60">
-          {current} / {total}
-        </span>
+        <span className="text-xs font-medium text-suede">{label}</span>
+        {action}
       </div>
-      <div className="h-4 overflow-hidden rounded-full border-[3px] border-ink bg-card shadow-[4px_4px_0_var(--ink)]">
+      <div className="h-3 overflow-hidden rounded-full bg-cement">
         <div
-          className="h-full border-r-[3px] border-ink bg-volt transition-all duration-500 ease-out"
+          className="h-full rounded-full bg-mesh transition-all duration-500 ease-out"
           style={{ width: `${pct}%` }}
         />
       </div>
@@ -87,32 +87,36 @@ export function StepShell({
   title,
   subtitle,
   children,
-  footer,
+  actions,
+  contentClassName,
 }: {
   eyebrow: ReactNode;
   title: ReactNode;
   subtitle?: ReactNode;
   children: ReactNode;
-  footer?: ReactNode;
+  actions?: ReactNode;
+  contentClassName?: string;
 }) {
   return (
-    <div className="min-h-dvh px-6 py-6 md:px-10">
-      <div className="mx-auto flex min-h-[calc(100dvh-3rem)] w-full max-w-[1600px] flex-col gap-6">
-        <div>{eyebrow}</div>
-        <div>
-          <h1 className="max-w-5xl font-display text-4xl font-black uppercase leading-[0.9] tracking-tight text-balance xl:text-5xl">
-            {title}
-          </h1>
-          {subtitle && <p className="mt-3 max-w-3xl text-base opacity-80">{subtitle}</p>}
-        </div>
-        <div className="flex-1">{children}</div>
-        {footer ? (
-          <div className="sticky bottom-0 z-30 flex items-center justify-between gap-4 border-t-[4px] border-ink bg-cream/95 py-4 backdrop-blur">
-            {footer}
+    <div className="min-h-dvh px-4 py-4 md:px-8 md:py-6">
+      <div className="relative mx-auto grid min-h-[calc(100dvh-2rem)] w-full max-w-[1500px] grid-rows-[auto_auto_minmax(0,1fr)] gap-5 md:min-h-[calc(100dvh-3rem)] md:gap-6">
+        <div className="min-h-0">{eyebrow}</div>
+        {actions ? (
+          <div className="flex flex-wrap items-center justify-start gap-3 lg:absolute lg:right-0 lg:top-[48px] lg:justify-end">
+            {actions}
           </div>
-        ) : (
-          <div />
-        )}
+        ) : null}
+        <div className="grid min-h-0 gap-4 lg:pr-[430px]">
+          <div>
+            <h1 className="max-w-4xl font-display text-3xl font-bold leading-[0.98] text-balance text-outsole md:text-5xl">
+              {title}
+            </h1>
+            {subtitle && (
+              <p className="mt-3 max-w-3xl text-base leading-relaxed text-suede">{subtitle}</p>
+            )}
+          </div>
+        </div>
+        <div className={cn("min-h-0", contentClassName)}>{children}</div>
       </div>
     </div>
   );

@@ -2,75 +2,41 @@ import { BigButton, Pill } from "./ui";
 
 export function Hero({ onStart }: { onStart: () => void }) {
   return (
-    <div className="min-h-dvh px-6 py-6 md:px-10">
-      <div className="mx-auto flex min-h-[calc(100dvh-3rem)] w-full max-w-[1600px] flex-col gap-8">
+    <div className="min-h-dvh px-4 py-4 md:px-8 md:py-6">
+      <div className="mx-auto grid min-h-[calc(100dvh-2rem)] w-full max-w-[1440px] grid-rows-[auto_minmax(0,1fr)] gap-8 md:min-h-[calc(100dvh-3rem)] md:gap-10">
         <nav className="flex items-center justify-between gap-4">
-          <div className="font-display text-3xl font-black uppercase tracking-tighter">
-            Шнурок<span className="text-flame">.</span>
-          </div>
+          <img src="/brand/logo-shnurok.svg" alt="SHNUROK" className="h-8 w-auto md:h-10" />
         </nav>
 
-        <main className="grid flex-1 grid-cols-1 items-center gap-10 xl:grid-cols-12">
-          <div className="z-20 flex flex-col items-start xl:col-span-6">
-            <Pill>сервис умного подбора</Pill>
-
-            <h1 className="mt-8 font-display text-[4rem] font-black uppercase leading-[0.9] tracking-tighter text-balance xl:text-[5.5rem]">
-              Подберём
-              <br />
-              кроссовки
-              <br />
-              под твой{" "}
-              <span className="inline-block rounded-full border-[4px] border-ink bg-volt px-5 py-1 rotate-[1deg] shadow-[6px_6px_0_var(--ink)]">
-                стиль
-              </span>
-              <br />
-              размер и задачу.
+        <main className="grid items-center gap-8 xl:grid-cols-[0.9fr_1.1fr]">
+          <div className="flex max-w-3xl flex-col items-start">
+            <Pill>умный подбор кроссовок</Pill>
+            <h1 className="mt-6 font-display text-5xl font-bold leading-[0.96] text-outsole text-balance md:text-6xl xl:text-7xl">
+              Соберем подборку под твой стиль, задачу и ритм
             </h1>
 
-            <p className="mt-5 max-w-[40rem] text-lg leading-relaxed opacity-80">
-              Ответь на несколько вопросов, покажи, что нравится визуально, и получи подборку моделей,
-              которые реально подходят.
+            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-suede">
+              Пара коротких шагов, визуальный свайп по силуэтам и готовая выдача с моделями, которые
+              действительно попадают в запрос.
             </p>
 
-            <div className="mt-9">
+            <div className="mt-8">
               <BigButton onClick={onStart} variant="primary">
-                Подобрать кроссовки →
+                Подобрать кроссовки
               </BigButton>
             </div>
           </div>
 
-          <div className="relative min-h-[540px] w-full max-w-[700px] justify-self-center xl:col-span-6">
-            <div className="absolute inset-x-10 inset-y-12 rounded-[3rem] border-[5px] border-ink bg-cobalt shadow-[16px_16px_0_var(--ink)] rotate-[-5deg]" />
-            <div className="absolute inset-x-0 top-1/2 h-[70%] -translate-y-1/2 rounded-[3rem] border-[5px] border-ink bg-cobalt shadow-[14px_14px_0_var(--ink)] rotate-[4deg]" />
-
-            <div className="absolute left-[10%] top-1/2 z-10 w-[72%] -translate-y-1/2 overflow-hidden rounded-[2.5rem] border-[5px] border-ink shadow-[14px_14px_0_var(--ink)] rotate-[2deg]">
+          <div className="relative min-h-[360px] w-full md:min-h-[560px]">
+            <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(135deg,#f6fbff_0%,#b0ddff_35%,#0a32ff_100%)]" />
+            <div className="absolute inset-x-[12%] top-[10%] h-[28%] rounded-[2rem] border border-white/60 bg-white/20 backdrop-blur-sm" />
+            <div className="absolute inset-x-[6%] bottom-[8%] h-[22%] rounded-[2rem] border border-outsole/10 bg-white/30 backdrop-blur-sm" />
+            <div className="absolute inset-x-[10%] top-[12%] bottom-[12%] overflow-hidden rounded-[2rem] border border-outsole bg-lace shadow-[0_25px_80px_rgba(10,10,10,0.14)]">
               <img
                 src="/hero-sneaker.jpg"
                 alt="Кроссовок крупным планом"
-                className="aspect-square w-full object-cover"
+                className="h-full w-full object-cover"
               />
-            </div>
-
-            <div className="absolute right-8 top-16 z-20 rotate-6">
-              <span className="inline-flex items-center rounded-full border-[5px] border-ink bg-cobalt px-6 py-3 font-display text-2xl font-black uppercase text-white shadow-[8px_8px_0_var(--ink)]">
-                EU 42
-              </span>
-            </div>
-            <div className="absolute -left-6 top-1/2 z-20 -translate-y-1/2 rotate-[-6deg]">
-              <span className="inline-flex items-center rounded-full border-[5px] border-ink bg-volt px-6 py-3 font-display text-2xl font-black uppercase shadow-[8px_8px_0_var(--ink)]">
-                на каждый день
-              </span>
-            </div>
-            <div className="absolute bottom-16 right-8 z-20 rotate-[-3deg]">
-              <span className="inline-flex items-center rounded-full border-[5px] border-ink bg-card px-6 py-3 font-display text-2xl font-black uppercase shadow-[8px_8px_0_var(--ink)]">
-                до 15 000 ₽
-              </span>
-            </div>
-            <div className="absolute bottom-2 left-6 z-20 rotate-[2deg]">
-              <span className="inline-flex items-center gap-3 rounded-full border-[5px] border-ink bg-card px-6 py-3 font-display text-2xl font-black uppercase shadow-[8px_8px_0_var(--ink)]">
-                <span className="size-6 rounded-full border-[3px] border-ink bg-white" />
-                белый
-              </span>
             </div>
           </div>
         </main>

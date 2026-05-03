@@ -86,11 +86,11 @@
 Ввести брендовые CSS-переменные:
 
 ```css
---outsole: #0A0A0A;
+--outsole: #0a0a0a;
 --suede: #656565;
---mesh: #B0DDFF;
---cement: #DDDDDD;
---lace: #FFFFFF;
+--mesh: #b0ddff;
+--cement: #dddddd;
+--lace: #ffffff;
 ```
 
 Назначение:

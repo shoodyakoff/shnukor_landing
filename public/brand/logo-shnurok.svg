@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 128" role="img" aria-labelledby="title">
+  <title id="title">SHNUROK</title>
+  <rect width="520" height="128" fill="none"/>
+  <g fill="#0A0A0A" font-family="Arial Black, Inter, sans-serif" font-size="68" font-weight="900">
+    <text x="38" y="82" transform="rotate(-7 38 82)">S</text>
+    <text x="96" y="78" transform="rotate(4 96 78)">H</text>
+    <text x="163" y="84" transform="rotate(-3 163 84)">N</text>
+    <text x="232" y="79" transform="rotate(5 232 79)">U</text>
+    <text x="298" y="84" transform="rotate(-4 298 84)">R</text>
+    <text x="362" y="78" transform="rotate(3 362 78)">O</text>
+    <text x="433" y="84" transform="rotate(-6 433 84)">K</text>
+  </g>
+</svg>

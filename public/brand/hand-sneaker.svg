@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 180" role="img" aria-labelledby="title">
+  <title id="title">Hand holding sneaker</title>
+  <g fill="none" stroke="#0A0A0A" stroke-linecap="round" stroke-linejoin="round" stroke-width="4">
+    <path d="M32 126c26 20 88 24 131 6 17-7 31-18 43-33"/>
+    <path d="M63 124c-2-30 2-72 17-76 9-2 12 8 12 25"/>
+    <path d="M92 113c-2-40 3-80 18-83 10-2 13 10 12 34"/>
+    <path d="M124 111c4-38 16-72 31-70 10 1 11 14 5 36"/>
+    <path d="M154 116c12-25 27-43 39-36 10 6 3 25-16 43"/>
+    <path d="M70 119c17 8 57 10 84 1"/>
+    <path d="M92 87c22-13 56-13 82 0l19 23c-35 15-77 15-124 0l23-23Z" fill="#FFFFFF"/>
+    <path d="M106 87l19 23M130 84l22 24M154 86l21 22"/>
+    <path d="M86 112c9 11 83 18 112 1"/>
+    <path d="M112 78c10-12 28-15 44-5"/>
+    <path d="M189 78l8-12M201 93l15-2M184 61l2-14"/>
+  </g>
+</svg>
