@@ -1,5 +1,6 @@
 import { createRouter, useRouter } from "@tanstack/react-router";
 import { routeTree } from "./routeTree.gen";
+import { publicAsset } from "@/lib/assets";
 
 function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => void }) {
   const router = useRouter();
@@ -41,7 +42,7 @@ function DefaultErrorComponent({ error, reset }: { error: Error; reset: () => vo
             Повторить
           </button>
           <a
-            href="/"
+            href={publicAsset("")}
             className="inline-flex items-center justify-center rounded-md border border-input bg-background px-4 py-2 text-sm font-medium text-foreground transition-colors hover:bg-accent"
           >
             На главную

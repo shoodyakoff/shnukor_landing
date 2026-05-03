@@ -1,3 +1,5 @@
+import { publicAsset } from "@/lib/assets";
+
 export type Step =
   | "hero"
   | "intro"
@@ -82,7 +84,7 @@ export const STYLES = [
     id: "chunky",
     title: "Массивные",
     desc: "Крупная подошва, заметный силуэт, сильный акцент в образе.",
-    image: "/style-chunky.jpg",
+    image: publicAsset("style-chunky.jpg"),
     bg: "#ff2a00",
     fg: "#fff",
   },
@@ -90,7 +92,7 @@ export const STYLES = [
     id: "retro",
     title: "Ретро низкие",
     desc: "Низкие классические модели, которые легко носить каждый день.",
-    image: "/style-retro.jpg",
+    image: publicAsset("style-retro.jpg"),
     bg: "#facc15",
     fg: "#111",
   },
@@ -98,7 +100,7 @@ export const STYLES = [
     id: "basket",
     title: "Ретро-баскетбол",
     desc: "Плотная форма, спортивный характер и отсылка к баскетбольной классике.",
-    image: "/style-basket.jpg",
+    image: publicAsset("style-basket.jpg"),
     bg: "#0044ff",
     fg: "#fff",
   },
@@ -106,7 +108,7 @@ export const STYLES = [
     id: "puffy",
     title: "Дутые",
     desc: "Объёмные мягкие формы, расслабленный и заметный силуэт.",
-    image: "/style-puffy.jpg",
+    image: publicAsset("style-puffy.jpg"),
     bg: "#ccff00",
     fg: "#111",
   },
@@ -114,7 +116,7 @@ export const STYLES = [
     id: "running",
     title: "Беговые",
     desc: "Динамичная форма, лёгкость и спортивная технологичность.",
-    image: "/style-running.jpg",
+    image: publicAsset("style-running.jpg"),
     bg: "#fb923c",
     fg: "#111",
   },

@@ -1,3 +1,5 @@
+import { publicAsset } from "@/lib/assets";
+
 export const INTRO_STEPS = [
   {
     id: "01",
@@ -39,7 +41,7 @@ export const RESULT_GROUPS: Array<{
         name: "Zoom Vomero 5",
         price: "14 990 ₽",
         why: "Техничный силуэт, спокойная палитра и сильное совпадение на каждый день.",
-        img: "/result-nike-vomero-5.png",
+        img: publicAsset("result-nike-vomero-5.png"),
         fit: "98% подходит",
       },
       {
@@ -47,7 +49,7 @@ export const RESULT_GROUPS: Array<{
         name: "GEL-1130",
         price: "12 490 ₽",
         why: "Легкий беговой характер, носибельность каждый день, хороший баланс цены.",
-        img: "/result-asics-gel-1130.png",
+        img: publicAsset("result-asics-gel-1130.png"),
         fit: "95% подходит",
       },
       {
@@ -55,7 +57,7 @@ export const RESULT_GROUPS: Array<{
         name: "990v6",
         price: "18 990 ₽",
         why: "Премиальные материалы и массивный, но универсальный силуэт.",
-        img: "/result-new-balance-990v6.png",
+        img: publicAsset("result-new-balance-990v6.png"),
         fit: "94% подходит",
       },
       {
@@ -63,7 +65,7 @@ export const RESULT_GROUPS: Array<{
         name: "740",
         price: "13 490 ₽",
         why: "Ретро-беговой характер и мягкий повседневный контур без лишней тяжести.",
-        img: "/result-new-balance-740.png",
+        img: publicAsset("result-new-balance-740.png"),
         fit: "92% подходит",
       },
     ],
@@ -77,7 +79,7 @@ export const RESULT_GROUPS: Array<{
         name: "Wave Prophecy Moc",
         price: "26 490 ₽",
         why: "Футуристичная подошва и очень выразительная технологичная подача.",
-        img: "/result-mizuno-wave-prophecy-moc.png",
+        img: publicAsset("result-mizuno-wave-prophecy-moc.png"),
         fit: "90% подходит",
       },
       {
@@ -85,7 +87,7 @@ export const RESULT_GROUPS: Array<{
         name: "Kobe 6 Protro",
         price: "29 990 ₽",
         why: "Агрессивный баскетбольный силуэт и заметный премиальный акцент.",
-        img: "/result-nike-kobe-6-protro.png",
+        img: publicAsset("result-nike-kobe-6-protro.png"),
         fit: "88% подходит",
       },
       {
@@ -93,7 +95,7 @@ export const RESULT_GROUPS: Array<{
         name: "204L",
         price: "22 990 ₽",
         why: "Более модная и тонкая альтернатива с дорогим технологичным ощущением.",
-        img: "/result-new-balance-204l.png",
+        img: publicAsset("result-new-balance-204l.png"),
         fit: "86% подходит",
       },
     ],
@@ -107,7 +109,7 @@ export const RESULT_GROUPS: Array<{
         name: "Samba OG",
         price: "11 990 ₽",
         why: "Низкий ретро-силуэт и чистый городской образ без перегруза.",
-        img: "/result-adidas-samba-og.png",
+        img: publicAsset("result-adidas-samba-og.png"),
         fit: "82% подходит",
       },
       {
@@ -115,7 +117,7 @@ export const RESULT_GROUPS: Array<{
         name: "Total 90 III",
         price: "15 490 ₽",
         why: "Футбольный характер двухтысячных, если хочется более резкий и необычный силуэт.",
-        img: "/result-nike-total-90-iii.png",
+        img: publicAsset("result-nike-total-90-iii.png"),
         fit: "80% подходит",
       },
     ],

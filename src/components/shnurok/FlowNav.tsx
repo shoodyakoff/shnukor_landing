@@ -1,9 +1,12 @@
 import { BigButton, Pill, ProgressBar } from "./ui";
 import { PRICES, type Selections, type Step } from "./types";
 import { getTaskCopy, selectedNames, stepIndex } from "./flow-utils";
+import { publicAsset } from "@/lib/assets";
 
 export function LogoMark() {
-  return <img src="/brand/logo-shnurok.svg" alt="SHNUROK" className="h-7 w-auto md:h-8" />;
+  return (
+    <img src={publicAsset("brand/logo-shnurok.svg")} alt="SHNUROK" className="h-7 w-auto md:h-8" />
+  );
 }
 
 export function TextAction({

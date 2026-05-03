@@ -18,6 +18,7 @@ import { ProductShowcase } from "./ProductCards";
 import { StyleDeck } from "./StyleDeck";
 import { Pill, StepShell } from "./ui";
 import { choiceCardClass, useFlowSummary, voteSummary } from "./flow-utils";
+import { publicAsset } from "@/lib/assets";
 import {
   COLORS,
   PRICES,
@@ -67,7 +68,7 @@ export function IntroScreen({ eyebrow, onNext }: { eyebrow: React.ReactNode; onN
                 {item.id === "03" ? (
                   <div className="grid min-h-40 place-items-center rounded-[1.5rem] bg-lace/70 p-8">
                     <img
-                      src="/brand/hand-sneaker.svg"
+                      src={publicAsset("brand/hand-sneaker.svg")}
                       alt="Мини-кроссовок в руке"
                       className="h-auto w-full max-w-[210px]"
                     />
@@ -311,14 +312,14 @@ export function TaskScreen({
       id: "daily" as Task,
       title: "На каждый день",
       sub: "Город, прогулки, учеба, работа и повседневные образы.",
-      image: "/result-new-balance-990v6.png",
+      image: publicAsset("result-new-balance-990v6.png"),
       label: "каждый день",
     },
     {
       id: "sport" as Task,
       title: "Для спорта",
       sub: "Тренировки, бег, зал, игра и активное движение.",
-      image: "/result-nike-kobe-6-protro.png",
+      image: publicAsset("result-nike-kobe-6-protro.png"),
       label: "спорт",
     },
   ];
@@ -372,42 +373,42 @@ export function SportScreen({
   const sportCards = SPORTS.map((sport) => {
     const map: Record<string, { image: string; sub: string; icon: React.ReactNode }> = {
       Бег: {
-        image: "/result-asics-gel-1130.png",
+        image: publicAsset("result-asics-gel-1130.png"),
         sub: "легкая амортизация",
         icon: <PersonSimpleRun size={22} weight="bold" />,
       },
       "Фитнес / зал": {
-        image: "/result-nike-vomero-5.png",
+        image: publicAsset("result-nike-vomero-5.png"),
         sub: "стабильная база",
         icon: <Barbell size={22} weight="bold" />,
       },
       Футбол: {
-        image: "/result-nike-total-90-iii.png",
+        image: publicAsset("result-nike-total-90-iii.png"),
         sub: "низкий цепкий силуэт",
         icon: <SoccerBall size={22} weight="bold" />,
       },
       Баскетбол: {
-        image: "/result-nike-kobe-6-protro.png",
+        image: publicAsset("result-nike-kobe-6-protro.png"),
         sub: "поддержка и резкость",
         icon: <Basketball size={22} weight="bold" />,
       },
       Теннис: {
-        image: "/result-adidas-samba-og.png",
+        image: publicAsset("result-adidas-samba-og.png"),
         sub: "плотная боковая опора",
         icon: <TennisBall size={22} weight="bold" />,
       },
       "Трейл / улица": {
-        image: "/result-mizuno-wave-prophecy-moc.png",
+        image: publicAsset("result-mizuno-wave-prophecy-moc.png"),
         sub: "цепкость и защита",
         icon: <Target size={22} weight="bold" />,
       },
       Скейтбординг: {
-        image: "/result-new-balance-204l.png",
+        image: publicAsset("result-new-balance-204l.png"),
         sub: "контроль доски",
         icon: <Sneaker size={22} weight="bold" />,
       },
       "Универсальные для спорта": {
-        image: "/result-new-balance-740.png",
+        image: publicAsset("result-new-balance-740.png"),
         sub: "одна пара на разные дни",
         icon: <Sparkle size={22} weight="bold" />,
       },
