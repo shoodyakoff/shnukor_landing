@@ -12,7 +12,7 @@ import {
   Target,
 } from "@phosphor-icons/react";
 
-import { INTRO_STEPS, RESULT_GROUPS } from "./data";
+import { PRICE_PREVIEW_ITEMS, RESULT_GROUPS } from "./data";
 import { StepActions } from "./FlowNav";
 import { ProductShowcase } from "./ProductCards";
 import { StyleDeck } from "./StyleDeck";
@@ -21,6 +21,7 @@ import { choiceCardClass, useFlowSummary, voteSummary } from "./flow-utils";
 import { publicAsset } from "@/lib/assets";
 import {
   COLORS,
+  DEFAULT_PRICE_ID,
   PRICES,
   SIZES,
   SPORTS,
@@ -29,63 +30,6 @@ import {
   type StyleVote,
   type Task,
 } from "./types";
-
-export function IntroScreen({ eyebrow, onNext }: { eyebrow: React.ReactNode; onNext: () => void }) {
-  return (
-    <StepShell
-      eyebrow={eyebrow}
-      title="Соберем вашу подборку"
-      subtitle="Три коротких шага: параметры, визуальный стиль и готовая товарная выдача."
-      actions={<StepActions next={onNext} nextLabel="Начать" />}
-      contentClassName="flex items-center"
-    >
-      <div className="grid w-full items-center gap-6 xl:grid-cols-[minmax(0,0.92fr)_minmax(380px,0.88fr)]">
-        <div className="grid gap-4">
-          {INTRO_STEPS.map((item) => (
-            <div
-              key={item.id}
-              className={`rounded-[2rem] border p-5 ${
-                item.id === "03" ? "border-outsole bg-mesh" : "border-cement bg-lace"
-              }`}
-            >
-              <div
-                className={`grid gap-5 ${
-                  item.id === "03" ? "items-center lg:grid-cols-[minmax(0,1fr)_220px]" : ""
-                }`}
-              >
-                <div className="flex items-start gap-4">
-                  <div className="mt-1 text-sm font-semibold text-suede">{item.id}</div>
-                  <div>
-                    <div className="text-[2rem] font-bold leading-none text-outsole">
-                      {item.title}
-                    </div>
-                    <p className="mt-3 max-w-xl text-sm leading-relaxed text-outsole/78">
-                      {item.text}
-                    </p>
-                  </div>
-                </div>
-
-                {item.id === "03" ? (
-                  <div className="grid min-h-40 place-items-center rounded-[1.5rem] bg-lace/70 p-8">
-                    <img
-                      src={publicAsset("brand/hand-sneaker.svg")}
-                      alt="Мини-кроссовок в руке"
-                      className="h-auto w-full max-w-[210px]"
-                    />
-                  </div>
-                ) : null}
-              </div>
-            </div>
-          ))}
-        </div>
-
-        <div className="grid">
-          <ProductShowcase item={RESULT_GROUPS[0].items[0]} accent />
-        </div>
-      </div>
-    </StepShell>
-  );
-}
 
 export function SizeScreen({
   eyebrow,
@@ -128,10 +72,10 @@ export function SizeScreen({
         </div>
 
         <SelectionAside
-          eyebrow="размер"
-          title="Проверь посадку"
+          eyebrow="Таблица размеров"
+          title="Проверь себя"
           icon={<Ruler size={26} weight="bold" />}
-          footer="Если между брендами плаваешь на полразмера, выбери оба варианта."
+          footer="Лучше проверь, сколько см твоя нога, чтобы чувствовать себя комфортно."
         >
           <div className="grid grid-cols-2 gap-2">
             {[
@@ -144,8 +88,7 @@ export function SizeScreen({
               ["EU 42", "27 см"],
               ["EU 43", "27.5 см"],
               ["EU 44", "28 см"],
-              ["EU 45", "29 см"],
-              ["EU 46", "29.5 см"],
+              ["EU 45+", "29 см+"],
             ].map(([eu, cm]) => (
               <div
                 key={eu}
@@ -179,7 +122,7 @@ export function ColorScreen({
     <StepShell
       eyebrow={eyebrow}
       title="Какие цвета нравятся?"
-      subtitle="Выбирайте несколько. Если цвет не важен, отметьте «Без разницы»."
+      subtitle="Можешь выбрать несколько, если цвет не важен так и скажи."
       actions={<StepActions back={onBack} next={onNext} disabled={!selections.colors.length} />}
       contentClassName="flex items-center"
     >
@@ -215,7 +158,7 @@ export function ColorScreen({
           eyebrow="палитра"
           title="Сочетания сезона"
           icon={<Palette size={26} weight="bold" />}
-          footer="Нейтральная база дружит с акцентом: серый, бежевый и один яркий цвет."
+          footer="Для повседневной пары проще выбрать базовый цвет, а яркий оставить как акцент."
         >
           <div className="grid gap-3">
             {[
@@ -312,14 +255,14 @@ export function TaskScreen({
       id: "daily" as Task,
       title: "На каждый день",
       sub: "Город, прогулки, учеба, работа и повседневные образы.",
-      image: publicAsset("result-new-balance-990v6.png"),
+      image: publicAsset("catalog-court-minimal.png"),
       label: "каждый день",
     },
     {
       id: "sport" as Task,
       title: "Для спорта",
       sub: "Тренировки, бег, зал, игра и активное движение.",
-      image: publicAsset("result-nike-kobe-6-protro.png"),
+      image: publicAsset("catalog-knit-tech.png"),
       label: "спорт",
     },
   ];
@@ -373,42 +316,42 @@ export function SportScreen({
   const sportCards = SPORTS.map((sport) => {
     const map: Record<string, { image: string; sub: string; icon: React.ReactNode }> = {
       Бег: {
-        image: publicAsset("result-asics-gel-1130.png"),
+        image: publicAsset("catalog-retro-runner.png"),
         sub: "легкая амортизация",
         icon: <PersonSimpleRun size={22} weight="bold" />,
       },
       "Фитнес / зал": {
-        image: publicAsset("result-nike-vomero-5.png"),
+        image: publicAsset("catalog-knit-tech.png"),
         sub: "стабильная база",
         icon: <Barbell size={22} weight="bold" />,
       },
       Футбол: {
-        image: publicAsset("result-nike-total-90-iii.png"),
+        image: publicAsset("catalog-dark-accent.png"),
         sub: "низкий цепкий силуэт",
         icon: <SoccerBall size={22} weight="bold" />,
       },
       Баскетбол: {
-        image: publicAsset("result-nike-kobe-6-protro.png"),
+        image: publicAsset("catalog-chunky-lifestyle.png"),
         sub: "поддержка и резкость",
         icon: <Basketball size={22} weight="bold" />,
       },
       Теннис: {
-        image: publicAsset("result-adidas-samba-og.png"),
+        image: publicAsset("catalog-court-minimal.png"),
         sub: "плотная боковая опора",
         icon: <TennisBall size={22} weight="bold" />,
       },
       "Трейл / улица": {
-        image: publicAsset("result-mizuno-wave-prophecy-moc.png"),
+        image: publicAsset("catalog-chunky-lifestyle.png"),
         sub: "цепкость и защита",
         icon: <Target size={22} weight="bold" />,
       },
       Скейтбординг: {
-        image: publicAsset("result-new-balance-204l.png"),
+        image: publicAsset("catalog-dark-accent.png"),
         sub: "контроль доски",
         icon: <Sneaker size={22} weight="bold" />,
       },
       "Универсальные для спорта": {
-        image: publicAsset("result-new-balance-740.png"),
+        image: publicAsset("catalog-knit-tech.png"),
         sub: "одна пара на разные дни",
         icon: <Sparkle size={22} weight="bold" />,
       },
@@ -561,7 +504,9 @@ function SelectionAside({
       <div className="flex items-start justify-between gap-4">
         <div>
           <div className="text-sm font-black text-suede">{eyebrow}</div>
-          <div className="mt-2 max-w-64 text-3xl font-black leading-none text-outsole">{title}</div>
+          <div className="mt-2 max-w-64 text-[1.65rem] font-black leading-[1.05] text-outsole">
+            {title}
+          </div>
         </div>
         <div className="flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-outsole bg-lace shadow-[3px_3px_0_var(--outsole)]">
           {icon}
@@ -574,23 +519,14 @@ function SelectionAside({
 }
 
 function PriceAside({ priceId }: { priceId?: string }) {
-  const previews: Record<string, (typeof RESULT_GROUPS)[number]["items"][number]> = {
-    p1: RESULT_GROUPS[2].items[0],
-    p2: RESULT_GROUPS[2].items[0],
-    p3: RESULT_GROUPS[0].items[1],
-    p4: RESULT_GROUPS[0].items[0],
-    p5: RESULT_GROUPS[1].items[0],
-    p6: RESULT_GROUPS[1].items[1],
-    any: RESULT_GROUPS[0].items[0],
-  };
-  const defaultPriceId = priceId ?? "p3";
-  const item = previews[defaultPriceId];
+  const defaultPriceId = priceId ?? DEFAULT_PRICE_ID;
+  const item = PRICE_PREVIEW_ITEMS[defaultPriceId] ?? PRICE_PREVIEW_ITEMS[DEFAULT_PRICE_ID];
   const priceLabel = PRICES.find((price) => price.id === defaultPriceId)?.label;
 
   return (
     <SelectionAside
-      eyebrow="пример"
-      title="Что попадает в бюджет"
+      eyebrow="Что попадает в бюджет"
+      title="Топовая пара в этом сегменте"
       icon={<CurrencyRub size={26} weight="bold" />}
       footer="Это не финальный результат, а ориентир по уровню моделей в выбранном диапазоне."
     >
@@ -604,7 +540,7 @@ function PriceAside({ priceId }: { priceId?: string }) {
               {priceLabel}
             </div>
           ) : null}
-          <div className="text-xs font-black text-suede">{item.brand}</div>
+          {item.brand ? <div className="text-xs font-black text-suede">{item.brand}</div> : null}
           <div className="mt-1 text-xl font-black leading-none text-outsole">{item.name}</div>
           <div className="mt-2 text-base font-black text-outsole">{item.price}</div>
         </div>

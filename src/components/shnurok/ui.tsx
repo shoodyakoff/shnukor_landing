@@ -36,8 +36,7 @@ export function BigButton({
       "border-outsole bg-lace text-outsole shadow-[5px_5px_0_var(--outsole)] hover:bg-muted hover:shadow-[3px_3px_0_var(--outsole)]",
     accent:
       "border-outsole bg-mesh text-outsole shadow-[5px_5px_0_var(--outsole)] hover:bg-[#c7e9ff] hover:shadow-[3px_3px_0_var(--outsole)]",
-    volt:
-      "border-outsole bg-mesh text-outsole shadow-[5px_5px_0_var(--outsole)] hover:bg-[#c7e9ff] hover:shadow-[3px_3px_0_var(--outsole)]",
+    volt: "border-outsole bg-mesh text-outsole shadow-[5px_5px_0_var(--outsole)] hover:bg-[#c7e9ff] hover:shadow-[3px_3px_0_var(--outsole)]",
     ghost:
       "border-transparent bg-transparent text-outsole underline underline-offset-4 hover:bg-muted",
   };
@@ -102,7 +101,7 @@ export function StepShell({
       <div className="relative mx-auto grid min-h-[calc(100dvh-2rem)] w-full max-w-[1500px] grid-rows-[auto_auto_minmax(0,1fr)] gap-5 md:min-h-[calc(100dvh-3rem)] md:gap-6">
         <div className="min-h-0">{eyebrow}</div>
         {actions ? (
-          <div className="flex flex-wrap items-center justify-start gap-3 lg:absolute lg:right-0 lg:top-[48px] lg:justify-end">
+          <div className="flex flex-wrap items-center justify-start gap-3 lg:absolute lg:right-0 lg:top-[60px] lg:justify-end">
             {actions}
           </div>
         ) : null}

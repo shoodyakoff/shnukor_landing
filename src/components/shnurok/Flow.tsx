@@ -3,19 +3,29 @@ import { useState } from "react";
 import { Hero } from "./Hero";
 import {
   ColorScreen,
-  IntroScreen,
   PriceScreen,
   SizeScreen,
   SportScreen,
   StyleScreen,
-  SummaryScreen,
   TaskScreen,
 } from "./FlowChoiceScreens";
 import { FlowHeader } from "./FlowNav";
 import { EmptyState, Results, SearchScreen } from "./FlowResultScreens";
-import { STYLES, type Selections, type Step, type StyleVote, type Task } from "./types";
+import {
+  DEFAULT_PRICE_ID,
+  STYLES,
+  type Selections,
+  type Step,
+  type StyleVote,
+  type Task,
+} from "./types";
 
-const initialSelections: Selections = { sizes: [], colors: [], styleVotes: {} };
+const initialSelections: Selections = {
+  sizes: [],
+  colors: [],
+  price: DEFAULT_PRICE_ID,
+  styleVotes: {},
+};
 
 export default function Flow() {
   const [step, setStep] = useState<Step>("hero");
@@ -76,7 +86,7 @@ export default function Flow() {
     if (styleIdx < STYLES.length - 1) {
       setStyleIdx((prev) => prev + 1);
     } else {
-      setStep("summary");
+      setStep("search");
     }
   };
 
@@ -96,14 +106,13 @@ export default function Flow() {
     setStyleIdx((prev) => prev - 1);
   };
 
-  if (step === "hero") return <Hero onStart={() => setStep("intro")} />;
-  if (step === "intro") return <IntroScreen eyebrow={eyebrow} onNext={() => setStep("size")} />;
+  if (step === "hero") return <Hero onStart={() => setStep("size")} />;
   if (step === "size") {
     return (
       <SizeScreen
         eyebrow={eyebrow}
         selections={sel}
-        onBack={() => setStep("intro")}
+        onBack={() => setStep("hero")}
         onNext={() => setStep("color")}
         onToggle={toggleSize}
       />
@@ -152,16 +161,6 @@ export default function Flow() {
         styleIdx={styleIdx}
         onBack={goBackFromStyle}
         onVote={voteStyle}
-      />
-    );
-  }
-  if (step === "summary") {
-    return (
-      <SummaryScreen
-        eyebrow={eyebrow}
-        selections={sel}
-        onBack={() => setStep("style")}
-        onNext={() => setStep("search")}
       />
     );
   }

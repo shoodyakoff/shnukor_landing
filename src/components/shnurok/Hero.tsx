@@ -7,9 +7,9 @@ export function Hero({ onStart }: { onStart: () => void }) {
       <div className="mx-auto grid min-h-[calc(100dvh-2rem)] w-full max-w-[1440px] grid-rows-[auto_minmax(0,1fr)] gap-8 md:min-h-[calc(100dvh-3rem)] md:gap-10">
         <nav className="flex items-center justify-between gap-4">
           <img
-            src={publicAsset("brand/logo-shnurok.svg")}
+            src={publicAsset("brand/shnurok8-logo.png")}
             alt="SHNUROK"
-            className="h-8 w-auto md:h-10"
+            className="h-10 w-auto object-contain md:h-12"
           />
         </nav>
 

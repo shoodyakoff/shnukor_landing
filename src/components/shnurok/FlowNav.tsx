@@ -5,7 +5,11 @@ import { publicAsset } from "@/lib/assets";
 
 export function LogoMark() {
   return (
-    <img src={publicAsset("brand/logo-shnurok.svg")} alt="SHNUROK" className="h-7 w-auto md:h-8" />
+    <img
+      src={publicAsset("brand/shnurok8-logo.png")}
+      alt="SHNUROK"
+      className="h-9 w-auto object-contain md:h-10"
+    />
   );
 }
 

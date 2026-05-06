@@ -33,9 +33,7 @@ export function ProductShowcase({
       <div className={`grid gap-3 bg-lace ${compact ? "p-4" : "p-5"}`}>
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
-            <div className="text-xs font-bold text-suede">
-              {item.brand}
-            </div>
+            {item.brand ? <div className="text-xs font-bold text-suede">{item.brand}</div> : null}
             <div
               className={`${compact ? "text-xl" : "text-2xl"} mt-1 font-bold leading-tight text-outsole`}
             >
@@ -53,7 +51,7 @@ export function ProductShowcase({
 export function ResultCard({ item }: { item: ProductItem }) {
   return (
     <div className="grid h-full overflow-hidden rounded-[1.75rem] border-2 border-cement bg-lace transition-all hover:border-outsole hover:shadow-[6px_6px_0_var(--mesh)]">
-      <div className="relative aspect-[16/9] max-h-[260px] overflow-hidden bg-muted">
+      <div className="relative aspect-square overflow-hidden bg-muted">
         <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
         <div className="absolute left-4 top-4">
           <Pill color="active">{item.fit}</Pill>
@@ -63,9 +61,7 @@ export function ResultCard({ item }: { item: ProductItem }) {
       <div className="grid gap-2.5 p-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <div className="text-xs font-bold text-suede">
-              {item.brand}
-            </div>
+            {item.brand ? <div className="text-xs font-bold text-suede">{item.brand}</div> : null}
             <div className="mt-1 text-[1.45rem] font-black leading-[1] text-outsole">
               {item.name}
             </div>
@@ -86,12 +82,8 @@ export function ResultCard({ item }: { item: ProductItem }) {
 function WhyBlock({ why, compact = false }: { why: string; compact?: boolean }) {
   return (
     <div className="rounded-[1.25rem] border border-outsole/10 bg-muted/70 p-3">
-      <div className="text-[11px] font-bold text-suede">
-        Почему подходит
-      </div>
-      <p className={`${compact ? "text-sm" : "text-sm"} mt-1.5 leading-snug text-outsole`}>
-        {why}
-      </p>
+      <div className="text-[11px] font-bold text-suede">Почему подходит</div>
+      <p className={`${compact ? "text-sm" : "text-sm"} mt-1.5 leading-snug text-outsole`}>{why}</p>
     </div>
   );
 }

@@ -63,7 +63,9 @@ export function SearchScreen({
           <div className="flex items-center justify-between gap-4 border-b-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#ffffff_76%)] p-5">
             <div>
               <div className="text-sm font-black text-suede">Ход подбора</div>
-              <div className="mt-1 text-3xl font-black leading-none text-outsole">собираем выдачу</div>
+              <div className="mt-1 text-3xl font-black leading-none text-outsole">
+                собираем выдачу
+              </div>
             </div>
             <div className="flex size-12 items-center justify-center rounded-full border-2 border-outsole bg-lace shadow-[3px_3px_0_var(--outsole)]">
               <MagnifyingGlass size={26} weight="bold" />
@@ -87,7 +89,9 @@ export function SearchScreen({
                   <div className="flex size-11 shrink-0 items-center justify-center rounded-full border-2 border-outsole bg-lace text-outsole">
                     {done ? <CheckCircle size={26} weight="fill" /> : status.icon}
                   </div>
-                  <div className="text-lg font-black leading-tight text-outsole">{status.label}</div>
+                  <div className="text-lg font-black leading-tight text-outsole">
+                    {status.label}
+                  </div>
                 </div>
               );
             })}
@@ -162,9 +166,6 @@ export function Results({
                   </div>
                   <p className="mt-2 max-w-2xl text-base leading-relaxed text-suede">{group.sub}</p>
                 </div>
-                {group.title === "Альтернатива" ? (
-                  <TextAction onClick={onWiden}>нет точного матча?</TextAction>
-                ) : null}
               </div>
 
               <div className="-mx-4 overflow-x-auto px-4 pb-2 [scrollbar-width:thin] md:-mx-8 md:px-8">

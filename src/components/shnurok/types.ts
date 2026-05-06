@@ -2,7 +2,6 @@ import { publicAsset } from "@/lib/assets";
 
 export type Step =
   | "hero"
-  | "intro"
   | "size"
   | "color"
   | "price"
@@ -36,8 +35,7 @@ export const SIZES = [
   "EU 42",
   "EU 43",
   "EU 44",
-  "EU 45",
-  "EU 46",
+  "EU 45+",
 ];
 
 export const COLORS = [
@@ -58,8 +56,9 @@ export const COLORS = [
   { id: "any", name: "Без разницы", hex: "transparent", text: "#111" },
 ];
 
+export const DEFAULT_PRICE_ID = "p3";
+
 export const PRICES = [
-  { id: "p1", label: "До 5 000 ₽", sub: "минимальный бюджет" },
   { id: "p2", label: "5 000 – 10 000 ₽", sub: "доступно" },
   { id: "p3", label: "10 000 – 15 000 ₽", sub: "оптимум" },
   { id: "p4", label: "15 000 – 20 000 ₽", sub: "премиум вход" },
@@ -84,7 +83,7 @@ export const STYLES = [
     id: "chunky",
     title: "Массивные",
     desc: "Крупная подошва, заметный силуэт, сильный акцент в образе.",
-    image: publicAsset("style-chunky.jpg"),
+    image: publicAsset("catalog-chunky-lifestyle.png"),
     bg: "#ff2a00",
     fg: "#fff",
   },
@@ -92,7 +91,7 @@ export const STYLES = [
     id: "retro",
     title: "Ретро низкие",
     desc: "Низкие классические модели, которые легко носить каждый день.",
-    image: publicAsset("style-retro.jpg"),
+    image: publicAsset("catalog-court-minimal.png"),
     bg: "#facc15",
     fg: "#111",
   },
@@ -100,7 +99,7 @@ export const STYLES = [
     id: "basket",
     title: "Ретро-баскетбол",
     desc: "Плотная форма, спортивный характер и отсылка к баскетбольной классике.",
-    image: publicAsset("style-basket.jpg"),
+    image: publicAsset("catalog-dark-accent.png"),
     bg: "#0044ff",
     fg: "#fff",
   },
@@ -108,7 +107,7 @@ export const STYLES = [
     id: "puffy",
     title: "Дутые",
     desc: "Объёмные мягкие формы, расслабленный и заметный силуэт.",
-    image: publicAsset("style-puffy.jpg"),
+    image: publicAsset("catalog-retro-runner.png"),
     bg: "#ccff00",
     fg: "#111",
   },
@@ -116,7 +115,7 @@ export const STYLES = [
     id: "running",
     title: "Беговые",
     desc: "Динамичная форма, лёгкость и спортивная технологичность.",
-    image: publicAsset("style-running.jpg"),
+    image: publicAsset("catalog-knit-tech.png"),
     bg: "#fb923c",
     fg: "#111",
   },

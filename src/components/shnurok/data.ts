@@ -27,6 +27,58 @@ export type ProductItem = {
   fit: string;
 };
 
+export const CATALOG_ITEMS: ProductItem[] = [
+  {
+    brand: "",
+    name: "Court Minimal",
+    price: "9 990 ₽",
+    why: "Чистая кожаная база без лишних акцентов, легко попадает в повседневный гардероб.",
+    img: publicAsset("catalog-court-minimal.png"),
+    fit: "96% подходит",
+  },
+  {
+    brand: "",
+    name: "Retro Runner",
+    price: "13 990 ₽",
+    why: "Спокойный ретро-беговой силуэт, мягкая палитра и хороший баланс цены.",
+    img: publicAsset("catalog-retro-runner.png"),
+    fit: "94% подходит",
+  },
+  {
+    brand: "",
+    name: "Chunky Lifestyle",
+    price: "18 990 ₽",
+    why: "Более заметная форма с массивной подошвой, но без визуального шума.",
+    img: publicAsset("catalog-chunky-lifestyle.png"),
+    fit: "92% подходит",
+  },
+  {
+    brand: "",
+    name: "Knit Tech",
+    price: "24 990 ₽",
+    why: "Легкий технологичный верх и спокойный акцент для спортивного городского образа.",
+    img: publicAsset("catalog-knit-tech.png"),
+    fit: "90% подходит",
+  },
+  {
+    brand: "",
+    name: "Dark Accent Low",
+    price: "31 990 ₽",
+    why: "Премиальная темная отделка, чистый низкий силуэт и выразительный контраст.",
+    img: publicAsset("catalog-dark-accent.png"),
+    fit: "88% подходит",
+  },
+];
+
+export const PRICE_PREVIEW_ITEMS: Record<string, ProductItem> = {
+  p2: CATALOG_ITEMS[0],
+  p3: CATALOG_ITEMS[1],
+  p4: CATALOG_ITEMS[2],
+  p5: CATALOG_ITEMS[3],
+  p6: CATALOG_ITEMS[4],
+  any: CATALOG_ITEMS[1],
+};
+
 export const RESULT_GROUPS: Array<{
   title: string;
   sub: string;
@@ -35,91 +87,16 @@ export const RESULT_GROUPS: Array<{
   {
     title: "Точное попадание",
     sub: "Самые близкие по характеру, палитре и сценарию носки.",
-    items: [
-      {
-        brand: "Nike",
-        name: "Zoom Vomero 5",
-        price: "14 990 ₽",
-        why: "Техничный силуэт, спокойная палитра и сильное совпадение на каждый день.",
-        img: publicAsset("result-nike-vomero-5.png"),
-        fit: "98% подходит",
-      },
-      {
-        brand: "ASICS",
-        name: "GEL-1130",
-        price: "12 490 ₽",
-        why: "Легкий беговой характер, носибельность каждый день, хороший баланс цены.",
-        img: publicAsset("result-asics-gel-1130.png"),
-        fit: "95% подходит",
-      },
-      {
-        brand: "New Balance",
-        name: "990v6",
-        price: "18 990 ₽",
-        why: "Премиальные материалы и массивный, но универсальный силуэт.",
-        img: publicAsset("result-new-balance-990v6.png"),
-        fit: "94% подходит",
-      },
-      {
-        brand: "New Balance",
-        name: "740",
-        price: "13 490 ₽",
-        why: "Ретро-беговой характер и мягкий повседневный контур без лишней тяжести.",
-        img: publicAsset("result-new-balance-740.png"),
-        fit: "92% подходит",
-      },
-    ],
+    items: CATALOG_ITEMS.slice(0, 3),
   },
   {
     title: "Чуть дороже, но стоит",
     sub: "Больше технологий, материалов и визуального характера.",
-    items: [
-      {
-        brand: "Mizuno",
-        name: "Wave Prophecy Moc",
-        price: "26 490 ₽",
-        why: "Футуристичная подошва и очень выразительная технологичная подача.",
-        img: publicAsset("result-mizuno-wave-prophecy-moc.png"),
-        fit: "90% подходит",
-      },
-      {
-        brand: "Nike",
-        name: "Kobe 6 Protro",
-        price: "29 990 ₽",
-        why: "Агрессивный баскетбольный силуэт и заметный премиальный акцент.",
-        img: publicAsset("result-nike-kobe-6-protro.png"),
-        fit: "88% подходит",
-      },
-      {
-        brand: "New Balance",
-        name: "204L",
-        price: "22 990 ₽",
-        why: "Более модная и тонкая альтернатива с дорогим технологичным ощущением.",
-        img: publicAsset("result-new-balance-204l.png"),
-        fit: "86% подходит",
-      },
-    ],
+    items: CATALOG_ITEMS.slice(3),
   },
   {
     title: "Альтернатива",
     sub: "Чуть другой характер, но все еще в правильном настроении.",
-    items: [
-      {
-        brand: "adidas",
-        name: "Samba OG",
-        price: "11 990 ₽",
-        why: "Низкий ретро-силуэт и чистый городской образ без перегруза.",
-        img: publicAsset("result-adidas-samba-og.png"),
-        fit: "82% подходит",
-      },
-      {
-        brand: "Nike",
-        name: "Total 90 III",
-        price: "15 490 ₽",
-        why: "Футбольный характер двухтысячных, если хочется более резкий и необычный силуэт.",
-        img: publicAsset("result-nike-total-90-iii.png"),
-        fit: "80% подходит",
-      },
-    ],
+    items: [CATALOG_ITEMS[1], CATALOG_ITEMS[4]],
   },
 ];
