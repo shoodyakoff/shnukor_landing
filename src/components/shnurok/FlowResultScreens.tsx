@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import {
   CheckCircle,
   CurrencyRub,
@@ -9,19 +9,22 @@ import {
   Sparkle,
 } from "@phosphor-icons/react";
 
-import { RESULT_GROUPS } from "./data";
+import { RESULT_GROUPS, type ProductItem } from "./data";
 import { ChipsBar, LogoMark, TextAction } from "./FlowNav";
 import { ResultCard } from "./ProductCards";
 import { Pill, StepShell } from "./ui";
 import { getTaskCopy } from "./flow-utils";
+import { fetchSneakers, type SneakersApiResult, type SneakersPayload } from "./sneakers-api";
 import { PRICES, type Selections } from "./types";
 
 export function SearchScreen({
   sel,
+  payload,
   onDone,
 }: {
   sel: Selections;
-  onDone: (empty: boolean) => void;
+  payload?: SneakersPayload | null;
+  onDone: (empty: boolean, items: ProductItem[]) => void;
 }) {
   const statuses = [
     { label: "Сверяем размер", icon: <Ruler size={26} weight="bold" /> },
@@ -31,7 +34,25 @@ export function SearchScreen({
     { label: "Готовим выдачу", icon: <Package size={26} weight="bold" /> },
   ];
   const [idx, setIdx] = useState(0);
-  const visibleItems = RESULT_GROUPS.flatMap((group) => group.items).slice(0, 6);
+  const [apiResult, setApiResult] = useState<SneakersApiResult | null>(null);
+  const previewItems = RESULT_GROUPS.flatMap((group) => group.items).slice(0, 6);
+  const visibleItems = (apiResult?.items.length ? apiResult.items : previewItems).slice(0, 6);
+  const progress = Math.min(
+    100,
+    Math.round((Math.min(idx, statuses.length) / statuses.length) * 100),
+  );
+
+  useEffect(() => {
+    let active = true;
+
+    fetchSneakers(sel, payload).then((result) => {
+      if (active) setApiResult(result);
+    });
+
+    return () => {
+      active = false;
+    };
+  }, [payload, sel]);
 
   useEffect(() => {
     const timer = window.setInterval(() => setIdx((prev) => prev + 1), 850);
@@ -39,12 +60,13 @@ export function SearchScreen({
   }, []);
 
   useEffect(() => {
-    if (idx >= statuses.length) {
-      const timer = window.setTimeout(() => onDone(false), 700);
+    if (idx >= statuses.length && apiResult) {
+      const empty = apiResult.source === "api" && apiResult.items.length === 0;
+      const timer = window.setTimeout(() => onDone(empty, apiResult.items), 700);
       return () => window.clearTimeout(timer);
     }
     return undefined;
-  }, [idx, onDone, statuses.length]);
+  }, [apiResult, idx, onDone, statuses.length]);
 
   return (
     <StepShell
@@ -70,6 +92,12 @@ export function SearchScreen({
             <div className="flex size-12 items-center justify-center rounded-full border-2 border-outsole bg-lace shadow-[3px_3px_0_var(--outsole)]">
               <MagnifyingGlass size={26} weight="bold" />
             </div>
+          </div>
+          <div className="mx-5 mt-5 h-3 overflow-hidden rounded-full border-2 border-outsole bg-lace">
+            <div
+              className="h-full bg-mesh transition-[width] duration-500"
+              style={{ width: `${progress}%` }}
+            />
           </div>
           <div className="mt-4 grid gap-3">
             {statuses.map((status, index) => {
@@ -102,7 +130,7 @@ export function SearchScreen({
         <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
           {visibleItems.map((item, index) => (
             <div
-              key={item.name}
+              key={item.id || `${item.name}-${index}`}
               className={`aspect-[4/3] overflow-hidden rounded-[1.5rem] border-2 border-cement bg-muted transition-all duration-300 ${
                 index <= idx ? "opacity-100" : "opacity-35"
               }`}
@@ -118,14 +146,17 @@ export function SearchScreen({
 
 export function Results({
   sel,
+  items,
   onReset,
   onWiden,
 }: {
   sel: Selections;
+  items: ProductItem[];
   onReset: () => void;
   onWiden: () => void;
 }) {
-  const totalItems = RESULT_GROUPS.reduce((sum, group) => sum + group.items.length, 0);
+  const resultGroups = useMemo(() => buildResultGroups(items), [items]);
+  const totalItems = resultGroups.reduce((sum, group) => sum + group.items.length, 0);
 
   return (
     <div className="min-h-dvh px-4 py-4 md:px-8 md:py-6">
@@ -154,7 +185,7 @@ export function Results({
         </div>
 
         <div className="grid gap-7">
-          {RESULT_GROUPS.map((group) => (
+          {resultGroups.map((group) => (
             <section key={group.title} className="grid gap-3">
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>
@@ -168,14 +199,12 @@ export function Results({
                 </div>
               </div>
 
-              <div className="-mx-4 overflow-x-auto px-4 pb-2 [scrollbar-width:thin] md:-mx-8 md:px-8">
-                <div className="grid auto-cols-[minmax(300px,82vw)] grid-flow-col gap-3 snap-x snap-mandatory md:auto-cols-[minmax(440px,46vw)] xl:auto-cols-[minmax(420px,31vw)]">
-                  {group.items.map((item) => (
-                    <div key={item.name} className="snap-start">
-                      <ResultCard item={item} />
-                    </div>
-                  ))}
-                </div>
+              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                {group.items.map((item, index) => (
+                  <div key={item.id || `${item.name}-${index}`}>
+                    <ResultCard item={item} />
+                  </div>
+                ))}
               </div>
             </section>
           ))}
@@ -183,6 +212,30 @@ export function Results({
       </div>
     </div>
   );
+}
+
+function buildResultGroups(items: ProductItem[]) {
+  if (!items.length) return RESULT_GROUPS;
+
+  const exact = items.slice(0, 3);
+  const other = items.slice(3);
+
+  return [
+    {
+      title: "Точное попадание",
+      sub: "Модели из каталога, которые ближе всего подходят под выбранные фильтры.",
+      items: exact,
+    },
+    ...(other.length
+      ? [
+          {
+            title: "Еще варианты",
+            sub: "Дополнительные модели в рамках текущего запроса.",
+            items: other,
+          },
+        ]
+      : []),
+  ];
 }
 
 export function EmptyState({ onReset, onResults }: { onReset: () => void; onResults: () => void }) {

@@ -19,12 +19,14 @@ export const INTRO_STEPS = [
 ];
 
 export type ProductItem = {
+  id?: string;
   brand: string;
   name: string;
   price: string;
   why: string;
   img: string;
   fit: string;
+  url?: string;
 };
 
 export const CATALOG_ITEMS: ProductItem[] = [

@@ -11,8 +11,12 @@ import {
 } from "./FlowChoiceScreens";
 import { FlowHeader } from "./FlowNav";
 import { EmptyState, Results, SearchScreen } from "./FlowResultScreens";
+import type { ProductItem } from "./data";
+import type { SneakersPayload } from "./sneakers-api";
 import {
+  COLORS,
   DEFAULT_PRICE_ID,
+  PRICES,
   STYLES,
   type Selections,
   type Step,
@@ -30,10 +34,14 @@ const initialSelections: Selections = {
 export default function Flow() {
   const [step, setStep] = useState<Step>("hero");
   const [sel, setSel] = useState<Selections>(initialSelections);
+  const [resultItems, setResultItems] = useState<ProductItem[]>([]);
+  const [payloadOverride, setPayloadOverride] = useState<SneakersPayload | null>(null);
   const [styleIdx, setStyleIdx] = useState(0);
 
   const reset = () => {
     setSel(initialSelections);
+    setResultItems([]);
+    setPayloadOverride(null);
     setStyleIdx(0);
     setStep("hero");
   };
@@ -86,8 +94,17 @@ export default function Flow() {
     if (styleIdx < STYLES.length - 1) {
       setStyleIdx((prev) => prev + 1);
     } else {
+      setPayloadOverride(null);
       setStep("search");
     }
+  };
+
+  const startJsonSearch = (payload: SneakersPayload) => {
+    setPayloadOverride(payload);
+    setResultItems([]);
+    setStyleIdx(0);
+    setSel(selectionFromPayload(payload));
+    setStep("search");
   };
 
   const goBackFromStyle = () => {
@@ -106,7 +123,16 @@ export default function Flow() {
     setStyleIdx((prev) => prev - 1);
   };
 
-  if (step === "hero") return <Hero onStart={() => setStep("size")} />;
+  if (step === "hero")
+    return (
+      <Hero
+        onStart={() => {
+          setPayloadOverride(null);
+          setStep("size");
+        }}
+        onJsonSearch={startJsonSearch}
+      />
+    );
   if (step === "size") {
     return (
       <SizeScreen
@@ -165,10 +191,55 @@ export default function Flow() {
     );
   }
   if (step === "search")
-    return <SearchScreen sel={sel} onDone={(empty) => setStep(empty ? "empty" : "results")} />;
+    return (
+      <SearchScreen
+        sel={sel}
+        payload={payloadOverride}
+        onDone={(empty, items) => {
+          setResultItems(items);
+          setStep(empty ? "empty" : "results");
+        }}
+      />
+    );
   if (step === "results")
-    return <Results sel={sel} onReset={reset} onWiden={() => setStep("empty")} />;
+    return (
+      <Results sel={sel} items={resultItems} onReset={reset} onWiden={() => setStep("empty")} />
+    );
   if (step === "empty") return <EmptyState onReset={reset} onResults={() => setStep("results")} />;
 
   return null;
+}
+
+function selectionFromPayload(payload: SneakersPayload): Selections {
+  return {
+    sizes: Array.isArray(payload.size) ? payload.size.map((size) => `EU ${size}`) : [],
+    colors: Array.isArray(payload.color) ? payload.color.map(colorIdFromApiName) : [],
+    price: priceIdFromPayload(payload),
+    task: Array.isArray(payload.categories) && payload.categories.length ? "daily" : undefined,
+    styleVotes: {},
+  };
+}
+
+function colorIdFromApiName(name: string) {
+  const normalized = normalizeRu(name);
+  return COLORS.find((color) => normalizeRu(color.name) === normalized)?.id || normalized;
+}
+
+function priceIdFromPayload(payload: SneakersPayload) {
+  const from = payload.price_from;
+  const to = payload.price_to;
+
+  if (typeof from !== "number" || typeof to !== "number") return DEFAULT_PRICE_ID;
+
+  if (from === 5000 && to === 10000) return "p2";
+  if (from === 10000 && to === 15000) return "p3";
+  if (from === 15000 && to === 20000) return "p4";
+  if (from === 20000 && to === 30000) return "p5";
+  if (from === 30000) return "p6";
+
+  return PRICES.some((price) => price.id === "any") ? "any" : DEFAULT_PRICE_ID;
+}
+
+function normalizeRu(value: string) {
+  return value.trim().toLowerCase().replaceAll("ё", "е");
 }

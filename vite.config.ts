@@ -5,17 +5,31 @@
 //     error logger plugins, and sandbox detection (port/host/strictPort).
 // You can pass additional config via defineConfig({ vite: { ... } }) if needed.
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
+import { nitro } from "nitro/vite";
 
-const githubPagesBase = "/shnukor_landing/";
+const isVercel = Boolean(process.env.VERCEL);
+const basePath = isVercel ? "/" : process.env.VITE_BASE_PATH || "/shnukor_landing/";
 
 export default defineConfig({
   cloudflare: false,
+  plugins: isVercel
+    ? [
+        nitro({
+          preset: "vercel",
+          vercel: {
+            functions: {
+              runtime: "nodejs22.x",
+            },
+          },
+        }),
+      ]
+    : [],
   tanstackStart: {
     router: {
-      basepath: githubPagesBase,
+      basepath: basePath,
     },
     client: {
-      base: `${githubPagesBase}_build`,
+      base: `${basePath}_build`,
     },
     pages: [{ path: "/" }],
     prerender: {
@@ -25,6 +39,6 @@ export default defineConfig({
     },
   },
   vite: {
-    base: githubPagesBase,
+    base: basePath,
   },
 });
