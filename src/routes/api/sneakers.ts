@@ -36,7 +36,7 @@ export const Route = createFileRoute("/api/sneakers")({
             method: "POST",
             headers: {
               "Content-Type": "application/json",
-              Authorization: token,
+              Authorization: authorizationHeader(token),
             },
             body: JSON.stringify(payload),
           });
@@ -66,4 +66,8 @@ function corsHeaders() {
     "Access-Control-Allow-Methods": "POST, OPTIONS",
     "Access-Control-Allow-Headers": "Content-Type",
   };
+}
+
+function authorizationHeader(token: string) {
+  return token.trim().toLowerCase().startsWith("bearer ") ? token.trim() : `Bearer ${token.trim()}`;
 }

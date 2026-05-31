@@ -29,3 +29,17 @@ npm run dev
 ```
 
 Local dev keeps the `/shnukor_landing/` base path unless `VITE_BASE_PATH` is set.
+
+## Sneakers API contract
+
+Known request fields: `size`, `color`, `categories`, `price_from`, `price_to`, `limit`, `offset`.
+The app sends category IDs as numbers, color names as lowercase Russian strings, and defaults
+`limit` to `20` with `offset: 0` so the upstream API can return proportional results.
+`SNEAKERS_API_TOKEN` may be stored either with or without the `Bearer ` prefix.
+
+Known response fields: `id`, `offer_id`, `name`, `price`, `currency`, `size`, `image`,
+`detail_url`.
+
+The API does not currently return a product description. UI-to-API assumptions live in
+`src/components/shnurok/sneakers-mapping.ts`; update that file when the category, color,
+task, or style tables are clarified.

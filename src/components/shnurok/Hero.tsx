@@ -2,15 +2,15 @@ import { useState } from "react";
 
 import { BigButton, Pill } from "./ui";
 import { publicAsset } from "@/lib/assets";
-import type { SneakersPayload } from "./sneakers-api";
+import type { SneakersPayload } from "./sneakers-mapping";
 
 const TEST_PAYLOAD = {
   size: ["36"],
-  color: ["Черный"],
-  categories: ["493"],
+  color: ["черный"],
+  categories: [493],
   price_from: 0,
   price_to: 50000,
-  limit: 3,
+  limit: 20,
   offset: 0,
 };
 

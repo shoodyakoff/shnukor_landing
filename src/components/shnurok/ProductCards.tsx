@@ -66,7 +66,10 @@ export function ResultCard({ item }: { item: ProductItem }) {
               {item.name}
             </div>
           </div>
-          <div className="text-lg font-black leading-none text-outsole">{item.price}</div>
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="text-lg font-black leading-none text-outsole">{item.price}</div>
+            {item.size ? <Pill>Размер: {item.size}</Pill> : null}
+          </div>
         </div>
 
         <WhyBlock why={item.why} />

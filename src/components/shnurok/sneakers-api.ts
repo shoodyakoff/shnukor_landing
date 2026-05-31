@@ -1,11 +1,11 @@
 import { publicAsset } from "@/lib/assets";
 
 import type { ProductItem } from "./data";
-import { COLORS, PRICES, type Selections } from "./types";
+import { buildSneakersPayload, type SneakersPayload } from "./sneakers-mapping";
+import { PRICES, type Selections } from "./types";
 
 const API_URL = publicAsset("api/sneakers");
 
-const DEFAULT_CATEGORY_ID = "493";
 const FALLBACK_IMAGES = [
   publicAsset("catalog-court-minimal.png"),
   publicAsset("catalog-retro-runner.png"),
@@ -15,17 +15,6 @@ const FALLBACK_IMAGES = [
 ];
 
 type ApiRecord = Record<string, unknown>;
-
-export type SneakersPayload = {
-  size?: string[];
-  color?: string[];
-  categories?: string[];
-  price_from?: number;
-  price_to?: number;
-  limit?: number;
-  offset?: number;
-  [key: string]: unknown;
-};
 
 export type SneakersApiResult = {
   items: ProductItem[];
@@ -61,41 +50,6 @@ export async function fetchSneakers(
   } catch (error) {
     console.warn("Sneakers API request failed, using temporary catalog.", error);
     return { items: [], source: "fallback" };
-  }
-}
-
-function buildSneakersPayload(selections: Selections): SneakersPayload {
-  const price = getPriceRange(selections.price);
-  const colors = selections.colors
-    .filter((id) => id !== "any")
-    .map((id) => COLORS.find((color) => color.id === id)?.name)
-    .filter(Boolean);
-
-  return {
-    size: selections.sizes.map((size) => size.replace("EU ", "").replace("+", "")),
-    color: colors.length ? colors : undefined,
-    categories: [DEFAULT_CATEGORY_ID],
-    price_from: price.from,
-    price_to: price.to,
-    limit: 10,
-    offset: 0,
-  };
-}
-
-function getPriceRange(priceId?: string) {
-  switch (priceId) {
-    case "p2":
-      return { from: 5000, to: 10000 };
-    case "p3":
-      return { from: 10000, to: 15000 };
-    case "p4":
-      return { from: 15000, to: 20000 };
-    case "p5":
-      return { from: 20000, to: 30000 };
-    case "p6":
-      return { from: 30000, to: 50000 };
-    default:
-      return { from: 0, to: 50000 };
   }
 }
 
@@ -145,6 +99,7 @@ function normalizeProduct(record: ApiRecord, index: number, selections: Selectio
     brand,
     name,
     price: formatPrice(record.price ?? record.cost ?? record.amount),
+    size: stringFrom(record.size),
     why:
       stringFrom(record.why, record.description, record.short_description) ||
       getDefaultWhy(selections),

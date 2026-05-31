@@ -14,7 +14,8 @@ import { ChipsBar, LogoMark, TextAction } from "./FlowNav";
 import { ResultCard } from "./ProductCards";
 import { Pill, StepShell } from "./ui";
 import { getTaskCopy } from "./flow-utils";
-import { fetchSneakers, type SneakersApiResult, type SneakersPayload } from "./sneakers-api";
+import type { SneakersPayload } from "./sneakers-mapping";
+import { fetchSneakers, type SneakersApiResult } from "./sneakers-api";
 import { PRICES, type Selections } from "./types";
 
 export function SearchScreen({
@@ -30,7 +31,7 @@ export function SearchScreen({
     { label: "Сверяем размер", icon: <Ruler size={26} weight="bold" /> },
     { label: "Уточняем бюджет", icon: <CurrencyRub size={26} weight="bold" /> },
     { label: "Смотрим палитру", icon: <Palette size={26} weight="bold" /> },
-    { label: "Сопоставляем стиль", icon: <Sparkle size={26} weight="bold" /> },
+    { label: "Проверяем доступные фильтры", icon: <Sparkle size={26} weight="bold" /> },
     { label: "Готовим выдачу", icon: <Package size={26} weight="bold" /> },
   ];
   const [idx, setIdx] = useState(0);
@@ -77,7 +78,7 @@ export function SearchScreen({
         </div>
       }
       title="Подбираем модели"
-      subtitle="Подбор идет по размеру, задаче, палитре и стилевым реакциям."
+      subtitle="Подбор идет по размеру, цвету, бюджету и доступным категориям."
       contentClassName="flex items-center"
     >
       <div className="grid w-full items-center gap-5 lg:grid-cols-[0.88fr_1.12fr]">
@@ -172,7 +173,7 @@ export function Results({
               Нашли {totalItems} моделей под твой запрос
             </h1>
             <p className="mt-3 max-w-3xl text-base leading-relaxed text-suede md:text-lg">
-              Учли размер, цвет, бюджет, задачу и визуальные предпочтения.
+              Учли доступные фильтры запроса.
             </p>
           </div>
           <div className="flex flex-wrap gap-2 lg:justify-end">

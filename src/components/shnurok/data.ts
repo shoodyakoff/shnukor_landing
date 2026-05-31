@@ -23,6 +23,7 @@ export type ProductItem = {
   brand: string;
   name: string;
   price: string;
+  size?: string;
   why: string;
   img: string;
   fit: string;
