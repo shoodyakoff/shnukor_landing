@@ -74,14 +74,20 @@ export function ResultCard({ item }: { item: ProductItem }) {
 
         <WhyBlock why={item.why} />
 
-        <a
-          href={item.url || "#"}
-          target={item.url ? "_blank" : undefined}
-          rel={item.url ? "noreferrer" : undefined}
-          className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-outsole bg-outsole px-4 py-2.5 text-sm font-black text-lace shadow-[3px_3px_0_var(--mesh)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-suede hover:shadow-[1px_1px_0_var(--mesh)]"
-        >
-          Перейти в магазин
-        </a>
+        {item.url ? (
+          <a
+            href={item.url}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-outsole bg-outsole px-4 py-2.5 text-sm font-black text-lace shadow-[3px_3px_0_var(--mesh)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-suede hover:shadow-[1px_1px_0_var(--mesh)]"
+          >
+            Перейти в магазин
+          </a>
+        ) : (
+          <span className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-cement bg-muted px-4 py-2.5 text-sm font-black text-suede">
+            Ссылка скоро появится
+          </span>
+        )}
       </div>
     </div>
   );

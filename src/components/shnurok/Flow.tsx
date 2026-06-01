@@ -12,15 +12,8 @@ import {
 import { FlowHeader } from "./FlowNav";
 import { EmptyState, Results, SearchScreen } from "./FlowResultScreens";
 import type { ProductItem } from "./data";
-import { selectionsFromSneakersPayload, type SneakersPayload } from "./sneakers-mapping";
-import {
-  DEFAULT_PRICE_ID,
-  STYLES,
-  type Selections,
-  type Step,
-  type StyleVote,
-  type Task,
-} from "./types";
+import { getSneakersCardsForSelections } from "./sneakers-mapping";
+import { DEFAULT_PRICE_ID, type Selections, type Step, type StyleVote, type Task } from "./types";
 
 const initialSelections: Selections = {
   sizes: [],
@@ -33,13 +26,14 @@ export default function Flow() {
   const [step, setStep] = useState<Step>("hero");
   const [sel, setSel] = useState<Selections>(initialSelections);
   const [resultItems, setResultItems] = useState<ProductItem[]>([]);
-  const [payloadOverride, setPayloadOverride] = useState<SneakersPayload | null>(null);
+  const [resultAllSkipped, setResultAllSkipped] = useState(false);
   const [styleIdx, setStyleIdx] = useState(0);
+  const styleCards = getSneakersCardsForSelections(sel);
 
   const reset = () => {
     setSel(initialSelections);
     setResultItems([]);
-    setPayloadOverride(null);
+    setResultAllSkipped(false);
     setStyleIdx(0);
     setStep("hero");
   };
@@ -48,7 +42,7 @@ export default function Flow() {
     <FlowHeader
       step={step}
       styleIndex={styleIdx}
-      styleTotal={STYLES.length}
+      styleTotal={styleCards.length}
       selections={sel}
       onReset={reset}
     />
@@ -68,40 +62,38 @@ export default function Flow() {
     setSel((prev) => {
       if (id === "any") return { ...prev, colors: ["any"] };
       const withoutAny = prev.colors.filter((color) => color !== "any");
+      const active = withoutAny.includes(id);
+      if (!active && withoutAny.length >= 3) return prev;
       return {
         ...prev,
-        colors: withoutAny.includes(id)
-          ? withoutAny.filter((color) => color !== id)
-          : [...withoutAny, id],
+        colors: active ? withoutAny.filter((color) => color !== id) : [...withoutAny, id],
       };
     });
   };
 
   const goAfterTask = (task: Task) => {
-    setSel((prev) => ({ ...prev, task, sport: task === "daily" ? undefined : prev.sport }));
+    setSel((prev) => ({
+      ...prev,
+      task,
+      sport: task === "daily" ? undefined : prev.sport,
+      styleVotes: {},
+    }));
+    setStyleIdx(0);
     setStep(task === "sport" ? "sport" : "style");
   };
 
   const voteStyle = (value: StyleVote) => {
-    const currentStyle = STYLES[styleIdx];
-    setSel((prev) => ({
-      ...prev,
-      styleVotes: { ...prev.styleVotes, [currentStyle.id]: value },
-    }));
-    if (styleIdx < STYLES.length - 1) {
+    const currentStyle = styleCards[styleIdx];
+    if (!currentStyle) return;
+
+    const nextVotes = { ...sel.styleVotes, [currentStyle.id]: value };
+    setSel((prev) => ({ ...prev, styleVotes: { ...prev.styleVotes, [currentStyle.id]: value } }));
+    if (styleIdx < styleCards.length - 1) {
       setStyleIdx((prev) => prev + 1);
     } else {
-      setPayloadOverride(null);
+      setResultAllSkipped(styleCards.every((card) => nextVotes[card.id] === "dislike"));
       setStep("search");
     }
-  };
-
-  const startJsonSearch = (payload: SneakersPayload) => {
-    setPayloadOverride(payload);
-    setResultItems([]);
-    setStyleIdx(0);
-    setSel(selectionsFromSneakersPayload(payload));
-    setStep("search");
   };
 
   const goBackFromStyle = () => {
@@ -112,7 +104,7 @@ export default function Flow() {
 
     setSel((prev) => {
       const nextVotes = { ...prev.styleVotes };
-      for (const style of STYLES.slice(styleIdx)) {
+      for (const style of styleCards.slice(styleIdx)) {
         delete nextVotes[style.id];
       }
       return { ...prev, styleVotes: nextVotes };
@@ -124,10 +116,8 @@ export default function Flow() {
     return (
       <Hero
         onStart={() => {
-          setPayloadOverride(null);
           setStep("size");
         }}
-        onJsonSearch={startJsonSearch}
       />
     );
   if (step === "size") {
@@ -173,7 +163,10 @@ export default function Flow() {
         selections={sel}
         onBack={() => setStep("task")}
         onNext={() => setStep("style")}
-        onSelect={(sport) => setSel((prev) => ({ ...prev, sport }))}
+        onSelect={(sport) => {
+          setStyleIdx(0);
+          setSel((prev) => ({ ...prev, sport, styleVotes: {} }));
+        }}
       />
     );
   }
@@ -181,6 +174,7 @@ export default function Flow() {
     return (
       <StyleScreen
         eyebrow={eyebrow}
+        cards={styleCards}
         styleIdx={styleIdx}
         onBack={goBackFromStyle}
         onVote={voteStyle}
@@ -191,7 +185,7 @@ export default function Flow() {
     return (
       <SearchScreen
         sel={sel}
-        payload={payloadOverride}
+        allSkipped={resultAllSkipped}
         onDone={(empty, items) => {
           setResultItems(items);
           setStep(empty ? "empty" : "results");
@@ -200,7 +194,13 @@ export default function Flow() {
     );
   if (step === "results")
     return (
-      <Results sel={sel} items={resultItems} onReset={reset} onWiden={() => setStep("empty")} />
+      <Results
+        sel={sel}
+        items={resultItems}
+        allSkipped={resultAllSkipped}
+        onReset={reset}
+        onWiden={() => setStep("empty")}
+      />
     );
   if (step === "empty") return <EmptyState onReset={reset} onResults={() => setStep("results")} />;
 

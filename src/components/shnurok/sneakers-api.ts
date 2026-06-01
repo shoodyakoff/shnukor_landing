@@ -5,6 +5,7 @@ import { buildSneakersPayload, type SneakersPayload } from "./sneakers-mapping";
 import { PRICES, type Selections } from "./types";
 
 const API_URL = publicAsset("api/sneakers");
+const SHNUROK_ORIGIN = "https://shnurok-shipping.ru";
 
 const FALLBACK_IMAGES = [
   publicAsset("catalog-court-minimal.png"),
@@ -41,10 +42,12 @@ export async function fetchSneakers(
 
     const data = text ? (JSON.parse(text) as unknown) : [];
     const records = extractRecords(data);
+    const items = records
+      .map((record, index) => normalizeProduct(record, index, selections))
+      .filter((item) => item.name);
+
     return {
-      items: records
-        .map((record, index) => normalizeProduct(record, index, selections))
-        .filter((item) => item.name),
+      items: dedupeProducts(items),
       source: "api",
     };
   } catch (error) {
@@ -107,8 +110,34 @@ function normalizeProduct(record: ApiRecord, index: number, selections: Selectio
     fit:
       stringFrom(record.fit, record.match, record.score) ||
       `${Math.max(88, 96 - index * 2)}% подходит`,
-    url: link,
+    url: normalizeProductUrl(link),
   };
+}
+
+function dedupeProducts(items: ProductItem[]) {
+  const seen = new Set<string>();
+
+  return items.filter((item) => {
+    const key = normalizeKey(item.url || item.name || item.id);
+    if (!key) return true;
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
+function normalizeProductUrl(link: string) {
+  if (!link) return "";
+
+  try {
+    return new URL(link, SHNUROK_ORIGIN).toString();
+  } catch {
+    return link;
+  }
+}
+
+function normalizeKey(value?: string) {
+  return value?.trim().toLowerCase().replace(/\/$/, "") ?? "";
 }
 
 function formatPrice(value: unknown) {

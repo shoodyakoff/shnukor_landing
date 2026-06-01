@@ -21,10 +21,12 @@ import { PRICES, type Selections } from "./types";
 export function SearchScreen({
   sel,
   payload,
+  allSkipped,
   onDone,
 }: {
   sel: Selections;
   payload?: SneakersPayload | null;
+  allSkipped?: boolean;
   onDone: (empty: boolean, items: ProductItem[]) => void;
 }) {
   const statuses = [
@@ -62,12 +64,12 @@ export function SearchScreen({
 
   useEffect(() => {
     if (idx >= statuses.length && apiResult) {
-      const empty = apiResult.source === "api" && apiResult.items.length === 0;
+      const empty = !allSkipped && apiResult.source === "api" && apiResult.items.length === 0;
       const timer = window.setTimeout(() => onDone(empty, apiResult.items), 700);
       return () => window.clearTimeout(timer);
     }
     return undefined;
-  }, [apiResult, idx, onDone, statuses.length]);
+  }, [allSkipped, apiResult, idx, onDone, statuses.length]);
 
   return (
     <StepShell
@@ -148,11 +150,13 @@ export function SearchScreen({
 export function Results({
   sel,
   items,
+  allSkipped,
   onReset,
   onWiden,
 }: {
   sel: Selections;
   items: ProductItem[];
+  allSkipped?: boolean;
   onReset: () => void;
   onWiden: () => void;
 }) {
@@ -170,10 +174,14 @@ export function Results({
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
             <h1 className="max-w-4xl text-4xl font-bold leading-[0.96] text-outsole md:text-5xl">
-              Нашли {totalItems} моделей под твой запрос
+              {allSkipped
+                ? "Жаль, что вам не понравился ни один из стилей, вот что мы вам предлагаем"
+                : `Нашли ${totalItems} моделей под твой запрос`}
             </h1>
             <p className="mt-3 max-w-3xl text-base leading-relaxed text-suede md:text-lg">
-              Учли доступные фильтры запроса.
+              {allSkipped
+                ? "Мы расширили подбор до всех карточек выбранного сценария и сохранили ваши фильтры."
+                : "Учли доступные фильтры запроса."}
             </p>
           </div>
           <div className="flex flex-wrap gap-2 lg:justify-end">
@@ -255,11 +263,18 @@ export function EmptyState({ onReset, onResults }: { onReset: () => void; onResu
           <div>
             <Pill color="active">ничего не найдено</Pill>
             <h1 className="mt-6 text-4xl font-bold leading-[0.98] text-outsole md:text-5xl">
-              По текущему запросу ничего не нашли
+              По вашим параметрам ничего не найдено
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-suede">
-              Ограничения слишком узкие. Можно быстро расширить поиск и сохранить то, что уже
-              выбрано.
+              Давайте попробуем еще раз или перейдите на сайт Шнурок{" "}
+              <a
+                href="https://shnurok-shipping.ru/"
+                target="_blank"
+                rel="noreferrer"
+                className="font-black text-outsole underline underline-offset-4"
+              >
+                https://shnurok-shipping.ru/
+              </a>
             </p>
           </div>
           <div className="mt-8">

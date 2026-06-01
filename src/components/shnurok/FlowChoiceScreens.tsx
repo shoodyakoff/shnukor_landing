@@ -19,13 +19,13 @@ import { StyleDeck } from "./StyleDeck";
 import { Pill, StepShell } from "./ui";
 import { choiceCardClass, useFlowSummary, voteSummary } from "./flow-utils";
 import { publicAsset } from "@/lib/assets";
+import type { SneakersCard } from "./sneakers-mapping";
 import {
   COLORS,
   DEFAULT_PRICE_ID,
   PRICES,
   SIZES,
   SPORTS,
-  STYLES,
   type Selections,
   type StyleVote,
   type Task,
@@ -88,7 +88,7 @@ export function SizeScreen({
               ["EU 42", "27 см"],
               ["EU 43", "27.5 см"],
               ["EU 44", "28 см"],
-              ["EU 45+", "29 см+"],
+              ["EU 45", "29 см"],
             ].map(([eu, cm]) => (
               <div
                 key={eu}
@@ -131,11 +131,14 @@ export function ColorScreen({
           {COLORS.map((color) => {
             const active = selections.colors.includes(color.id);
             const isAny = color.id === "any";
+            const disabled =
+              !active && !isAny && selections.colors.filter((id) => id !== "any").length >= 3;
             return (
               <button
                 key={color.id}
                 onClick={() => onToggle(color.id)}
-                className={`${choiceCardClass(active)} min-h-28`}
+                disabled={disabled}
+                className={`${choiceCardClass(active)} min-h-28 disabled:cursor-not-allowed disabled:opacity-35`}
               >
                 <div
                   className="mb-5 size-10 rounded-full border border-cement"
@@ -350,11 +353,6 @@ export function SportScreen({
         sub: "контроль доски",
         icon: <Sneaker size={22} weight="bold" />,
       },
-      "Универсальные для спорта": {
-        image: publicAsset("catalog-knit-tech.png"),
-        sub: "одна пара на разные дни",
-        icon: <Sparkle size={22} weight="bold" />,
-      },
     };
 
     return { sport, ...map[sport] };
@@ -400,15 +398,20 @@ export function SportScreen({
 
 export function StyleScreen({
   eyebrow,
+  cards,
   styleIdx,
   onBack,
   onVote,
 }: {
   eyebrow: React.ReactNode;
+  cards: SneakersCard[];
   styleIdx: number;
   onBack: () => void;
   onVote: (vote: StyleVote) => void;
 }) {
+  const currentCard = cards[styleIdx];
+  if (!currentCard) return null;
+
   return (
     <StepShell
       eyebrow={eyebrow}
@@ -418,10 +421,11 @@ export function StyleScreen({
       contentClassName="grid min-h-0 items-center"
     >
       <StyleDeck
-        key={STYLES[styleIdx].id}
-        upcoming={STYLES.slice(styleIdx, styleIdx + 3)}
+        key={currentCard.id}
+        upcoming={cards.slice(styleIdx, styleIdx + 3)}
+        cards={cards}
         currentIndex={styleIdx}
-        total={STYLES.length}
+        total={cards.length}
         onDislike={() => onVote("dislike")}
         onLike={() => onVote("like")}
       />

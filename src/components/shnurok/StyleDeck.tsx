@@ -1,16 +1,19 @@
 import { useRef, useState, type CSSProperties } from "react";
 
 import { Pill } from "./ui";
-import { STYLES, type StyleVote } from "./types";
+import type { SneakersCard } from "./sneakers-mapping";
+import type { StyleVote } from "./types";
 
 export function StyleDeck({
   upcoming,
+  cards,
   currentIndex,
   total,
   onLike,
   onDislike,
 }: {
-  upcoming: typeof STYLES;
+  upcoming: SneakersCard[];
+  cards: SneakersCard[];
   currentIndex: number;
   total: number;
   onLike: () => void;
@@ -146,7 +149,7 @@ export function StyleDeck({
 
       <div className="order-4 flex flex-col items-center gap-2 lg:col-start-2">
         <div className="flex gap-2">
-          {STYLES.map((style, index) => (
+          {cards.map((style, index) => (
             <div
               key={style.id}
               className={`h-2 rounded-full transition-all ${

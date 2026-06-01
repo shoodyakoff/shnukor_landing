@@ -1,14 +1,7 @@
 import { useMemo } from "react";
 
-import {
-  COLORS,
-  PRICES,
-  STYLES,
-  type Selections,
-  type Step,
-  type StyleVote,
-  type Task,
-} from "./types";
+import { getSneakersCardById } from "./sneakers-mapping";
+import { COLORS, PRICES, type Selections, type Step, type StyleVote, type Task } from "./types";
 
 export function stepIndex(step: Step): { current: number; total: number; label: string } {
   const total = 4;
@@ -35,12 +28,12 @@ export function selectedNames(ids: string[]) {
 }
 
 export function voteSummary(styleVotes: Record<string, StyleVote>) {
-  const liked = STYLES.filter((style) => styleVotes[style.id] === "like").map((style) =>
-    style.title.toLowerCase(),
-  );
-  const disliked = STYLES.filter((style) => styleVotes[style.id] === "dislike").map((style) =>
-    style.title.toLowerCase(),
-  );
+  const entries = Object.entries(styleVotes).map(([id, vote]) => ({
+    vote,
+    title: getSneakersCardById(id)?.title.toLowerCase() ?? id,
+  }));
+  const liked = entries.filter((entry) => entry.vote === "like").map((entry) => entry.title);
+  const disliked = entries.filter((entry) => entry.vote === "dislike").map((entry) => entry.title);
 
   return {
     liked,
