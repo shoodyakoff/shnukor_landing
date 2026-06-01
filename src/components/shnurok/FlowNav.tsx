@@ -1,6 +1,6 @@
 import { BigButton, Pill, ProgressBar } from "./ui";
 import { PRICES, type Selections, type Step } from "./types";
-import { getTaskCopy, selectedNames, stepIndex } from "./flow-utils";
+import { getTaskCopy, selectedNames, showPriceChipForStep, stepIndex } from "./flow-utils";
 import { publicAsset } from "@/lib/assets";
 
 export function LogoMark() {
@@ -70,7 +70,7 @@ export function FlowHeader({
           action={showReset ? <TextAction onClick={onReset}>начать заново</TextAction> : null}
         />
       ) : null}
-      <ChipsBar sel={selections} />
+      <ChipsBar sel={selections} showPrice={showPriceChipForStep(step)} />
     </div>
   );
 }
@@ -102,11 +102,11 @@ export function StepActions({
   );
 }
 
-export function ChipsBar({ sel }: { sel: Selections }) {
+export function ChipsBar({ sel, showPrice = true }: { sel: Selections; showPrice?: boolean }) {
   const items: Array<{ k: string; v: string; tone?: "default" | "active" | "dark" }> = [];
   if (sel.sizes.length) items.push({ k: "Размер", v: sel.sizes.join(", ") });
   if (sel.colors.length) items.push({ k: "Цвет", v: selectedNames(sel.colors) });
-  if (sel.price)
+  if (showPrice && sel.price)
     items.push({
       k: "Цена",
       v: PRICES.find((item) => item.id === sel.price)?.label ?? "",

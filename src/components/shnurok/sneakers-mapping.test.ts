@@ -4,6 +4,7 @@ import assert from "node:assert/strict";
 import { afterEach, test } from "node:test";
 
 import { Route } from "../../routes/api/sneakers";
+import { showPriceChipForStep } from "./flow-utils";
 import { fetchSneakers } from "./sneakers-api";
 import {
   buildSneakersPayload,
@@ -161,6 +162,15 @@ test("taxonomy excludes unsupported sport and daily cards", () => {
     dailyCards.some((card) => card.title.includes("Дутые")),
     false,
   );
+});
+
+test("showPriceChipForStep hides default price before the price step", () => {
+  assert.equal(showPriceChipForStep("size"), false);
+  assert.equal(showPriceChipForStep("color"), false);
+  assert.equal(showPriceChipForStep("price"), true);
+  assert.equal(showPriceChipForStep("task"), true);
+  assert.equal(showPriceChipForStep("style"), true);
+  assert.equal(showPriceChipForStep("search"), true);
 });
 
 test("selectionsFromSneakersPayload reads numeric categories from manual API payloads", () => {
