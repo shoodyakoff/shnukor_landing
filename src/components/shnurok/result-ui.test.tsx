@@ -40,7 +40,7 @@ test("Results renders all products without exact and other grouping", () => {
   }));
   const selections: Selections = {
     sizes: ["EU 40"],
-    colors: ["any"],
+    colors: ["purple"],
     price: "p3",
     task: "daily",
     styleVotes: {},
@@ -51,6 +51,8 @@ test("Results renders all products without exact and other grouping", () => {
   );
 
   assert.match(html, /Нашли 5 моделей под твой запрос/);
+  assert.match(html, /Цвет:/);
+  assert.match(html, /Фиолетовый/);
   assert.doesNotMatch(html, /Точное попадание/);
   assert.doesNotMatch(html, /Еще варианты/);
   assert.doesNotMatch(html, /Первые 3 позиции из выдачи API/);

@@ -13,7 +13,7 @@ import { CATALOG_ITEMS, RESULT_GROUPS, type ProductItem } from "./data";
 import { ChipsBar, LogoMark, TextAction } from "./FlowNav";
 import { ResultCard } from "./ProductCards";
 import { Pill, StepShell } from "./ui";
-import { getTaskCopy } from "./flow-utils";
+import { getTaskCopy, selectedNames } from "./flow-utils";
 import type { SneakersPayload } from "./sneakers-mapping";
 import { fetchSneakers, type SneakersApiResult } from "./sneakers-api";
 import { PRICES, type Selections } from "./types";
@@ -185,6 +185,11 @@ export function Results({
           </div>
           <div className="flex flex-wrap gap-2 lg:justify-end">
             {sel.sizes.length ? <Pill>Размер: {sel.sizes.join(", ")}</Pill> : null}
+            {sel.colors.length ? (
+              <Pill>
+                <span className="text-suede">Цвет:</span> {selectedNames(sel.colors)}
+              </Pill>
+            ) : null}
             {sel.price ? (
               <Pill color="active">{PRICES.find((item) => item.id === sel.price)?.label}</Pill>
             ) : null}
