@@ -117,11 +117,10 @@ export function StyleDeck({
                     <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(10,10,10,0.06)_0%,rgba(10,10,10,0.12)_38%,rgba(10,10,10,0.58)_100%)]" />
                     {isTop ? <SwipeLabels dragX={dragX} /> : null}
                     <div className="absolute inset-x-4 bottom-4 rounded-[1.3rem] border-2 border-outsole bg-white/90 p-4 shadow-[5px_5px_0_var(--outsole)] backdrop-blur-sm">
-                      <div className="flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3">
                         <Pill color="active">
                           стиль {currentIndex + index + 1} из {total}
                         </Pill>
-                        <Pill color="white">#{style.title.toLowerCase()}</Pill>
                       </div>
                       <div className="mt-3 text-2xl font-black leading-none text-outsole md:text-3xl">
                         {style.title}

@@ -14,6 +14,7 @@ import { ChipsBar, LogoMark, TextAction } from "./FlowNav";
 import { ResultCard } from "./ProductCards";
 import { Pill, StepShell } from "./ui";
 import { getTaskCopy } from "./flow-utils";
+import { buildResultGroups } from "./result-groups";
 import type { SneakersPayload } from "./sneakers-mapping";
 import { fetchSneakers, type SneakersApiResult } from "./sneakers-api";
 import { PRICES, type Selections } from "./types";
@@ -221,30 +222,6 @@ export function Results({
       </div>
     </div>
   );
-}
-
-function buildResultGroups(items: ProductItem[]) {
-  if (!items.length) return RESULT_GROUPS;
-
-  const exact = items.slice(0, 3);
-  const other = items.slice(3);
-
-  return [
-    {
-      title: "Точное попадание",
-      sub: "Модели из каталога, которые ближе всего подходят под выбранные фильтры.",
-      items: exact,
-    },
-    ...(other.length
-      ? [
-          {
-            title: "Еще варианты",
-            sub: "Дополнительные модели в рамках текущего запроса.",
-            items: other,
-          },
-        ]
-      : []),
-  ];
 }
 
 export function EmptyState({ onReset, onResults }: { onReset: () => void; onResults: () => void }) {

@@ -42,7 +42,6 @@ export function ProductShowcase({
           </div>
           <div className="text-lg font-bold text-outsole">{item.price}</div>
         </div>
-        {!compact ? <WhyBlock why={item.why} compact /> : null}
       </div>
     </div>
   );
@@ -50,29 +49,22 @@ export function ProductShowcase({
 
 export function ResultCard({ item }: { item: ProductItem }) {
   return (
-    <div className="grid h-full overflow-hidden rounded-[1.25rem] border-2 border-cement bg-lace transition-all hover:border-outsole hover:shadow-[5px_5px_0_var(--mesh)]">
-      <div className="relative aspect-[4/3] overflow-hidden bg-white p-2">
+    <div className="grid h-full overflow-hidden rounded-[1.15rem] border-2 border-cement bg-lace transition-all hover:border-outsole hover:shadow-[5px_5px_0_var(--mesh)]">
+      <div className="aspect-[4/3] overflow-hidden bg-white p-3">
         <img src={item.img} alt={item.name} className="h-full w-full object-contain" />
-        <div className="absolute left-3 top-3">
-          <Pill color="active">{item.fit}</Pill>
-        </div>
       </div>
 
-      <div className="grid gap-2.5 p-3.5">
-        <div className="grid gap-2">
-          <div className="min-w-0">
-            {item.brand ? <div className="text-xs font-bold text-suede">{item.brand}</div> : null}
-            <div className="mt-1 line-clamp-2 text-xl font-black leading-[0.98] text-outsole">
-              {item.name}
-            </div>
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            <div className="text-lg font-black leading-none text-outsole">{item.price}</div>
-            {item.size ? <Pill>Размер: {item.size}</Pill> : null}
+      <div className="grid gap-3 p-4">
+        <div className="min-w-0">
+          {item.brand ? <div className="text-xs font-bold text-suede">{item.brand}</div> : null}
+          <div className="mt-1 line-clamp-2 text-xl font-black leading-[1.02] text-outsole">
+            {item.name}
           </div>
         </div>
-
-        <WhyBlock why={item.why} />
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="text-xl font-black leading-none text-outsole">{item.price}</div>
+          {item.size ? <Pill>Размер: {item.size}</Pill> : null}
+        </div>
 
         {item.url ? (
           <a
@@ -89,19 +81,6 @@ export function ResultCard({ item }: { item: ProductItem }) {
           </span>
         )}
       </div>
-    </div>
-  );
-}
-
-function WhyBlock({ why, compact = false }: { why: string; compact?: boolean }) {
-  return (
-    <div className="rounded-2xl border border-outsole/10 bg-muted/70 p-3">
-      <div className="text-[11px] font-bold text-suede">Почему подходит</div>
-      <p
-        className={`${compact ? "text-sm" : "text-sm"} mt-1.5 line-clamp-2 leading-snug text-outsole`}
-      >
-        {why}
-      </p>
     </div>
   );
 }

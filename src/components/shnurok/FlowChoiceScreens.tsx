@@ -501,7 +501,7 @@ function SelectionAside({
   title: string;
   icon: React.ReactNode;
   children: React.ReactNode;
-  footer: string;
+  footer?: string;
 }) {
   return (
     <aside className="hidden min-h-full overflow-hidden rounded-[2rem] border-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#f7fbff_58%,#ffffff_100%)] p-5 shadow-[7px_7px_0_var(--outsole)] xl:grid">
@@ -516,8 +516,10 @@ function SelectionAside({
           {icon}
         </div>
       </div>
-      <div className="my-5">{children}</div>
-      <p className="self-end text-sm font-bold leading-snug text-outsole/72">{footer}</p>
+      <div className={footer ? "my-5" : "mt-5"}>{children}</div>
+      {footer ? (
+        <p className="self-end text-sm font-bold leading-snug text-outsole/72">{footer}</p>
+      ) : null}
     </aside>
   );
 }
@@ -532,13 +534,12 @@ function PriceAside({ priceId }: { priceId?: string }) {
       eyebrow="Что попадает в бюджет"
       title="Топовая пара в этом сегменте"
       icon={<CurrencyRub size={26} weight="bold" />}
-      footer="Это не финальный результат, а ориентир по уровню моделей в выбранном диапазоне."
     >
       <div className="overflow-hidden rounded-[1.5rem] border-2 border-outsole bg-lace shadow-[4px_4px_0_var(--outsole)]">
-        <div className="aspect-[16/10] overflow-hidden bg-muted">
+        <div className="aspect-[16/12] overflow-hidden bg-muted">
           <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
         </div>
-        <div className="p-3">
+        <div className="p-4">
           {priceLabel ? (
             <div className="mb-2 w-fit rounded-full border-2 border-outsole bg-mesh px-3 py-1 text-xs font-black text-outsole shadow-[2px_2px_0_var(--outsole)]">
               {priceLabel}
