@@ -4,9 +4,10 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { renderToStaticMarkup } from "react-dom/server";
 
+import { Results } from "./FlowResultScreens";
 import { ResultCard } from "./ProductCards";
 import type { ProductItem } from "./data";
-import { buildResultGroups, RESULT_EXACT_MATCH_LIMIT } from "./result-groups";
+import type { Selections } from "./types";
 
 const product: ProductItem = {
   brand: "Nike",
@@ -31,19 +32,30 @@ test("ResultCard renders only product essentials", () => {
   assert.doesNotMatch(html, /Тестовое объяснение/);
 });
 
-test("buildResultGroups explains exact hits as the first API-ranked products", () => {
+test("Results renders all products without exact and other grouping", () => {
   const items = Array.from({ length: 5 }, (_, index) => ({
     ...product,
     id: String(index + 1),
     name: `Test Sneaker ${index + 1}`,
   }));
+  const selections: Selections = {
+    sizes: ["EU 40"],
+    colors: ["any"],
+    price: "p3",
+    task: "daily",
+    styleVotes: {},
+  };
 
-  const groups = buildResultGroups(items);
+  const html = renderToStaticMarkup(
+    <Results sel={selections} items={items} onReset={() => {}} onWiden={() => {}} />,
+  );
 
-  assert.equal(groups[0]?.title, "Точное попадание");
-  assert.equal(groups[0]?.items.length, RESULT_EXACT_MATCH_LIMIT);
-  assert.match(groups[0]?.sub ?? "", /Первые 3 позиции из выдачи API/);
-  assert.equal(groups[1]?.title, "Еще варианты");
-  assert.equal(groups[1]?.items.length, 2);
-  assert.match(groups[1]?.sub ?? "", /Остальные подходящие товары/);
+  assert.match(html, /Нашли 5 моделей под твой запрос/);
+  assert.doesNotMatch(html, /Точное попадание/);
+  assert.doesNotMatch(html, /Еще варианты/);
+  assert.doesNotMatch(html, /Первые 3 позиции из выдачи API/);
+  assert.doesNotMatch(html, /Остальные подходящие товары/);
+  for (const item of items) {
+    assert.match(html, new RegExp(item.name));
+  }
 });

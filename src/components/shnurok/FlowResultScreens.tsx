@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CheckCircle,
   CurrencyRub,
@@ -9,12 +9,11 @@ import {
   Sparkle,
 } from "@phosphor-icons/react";
 
-import { RESULT_GROUPS, type ProductItem } from "./data";
+import { CATALOG_ITEMS, RESULT_GROUPS, type ProductItem } from "./data";
 import { ChipsBar, LogoMark, TextAction } from "./FlowNav";
 import { ResultCard } from "./ProductCards";
 import { Pill, StepShell } from "./ui";
 import { getTaskCopy } from "./flow-utils";
-import { buildResultGroups } from "./result-groups";
 import type { SneakersPayload } from "./sneakers-mapping";
 import { fetchSneakers, type SneakersApiResult } from "./sneakers-api";
 import { PRICES, type Selections } from "./types";
@@ -161,8 +160,7 @@ export function Results({
   onReset: () => void;
   onWiden: () => void;
 }) {
-  const resultGroups = useMemo(() => buildResultGroups(items), [items]);
-  const totalItems = resultGroups.reduce((sum, group) => sum + group.items.length, 0);
+  const resultItems = items.length ? items : CATALOG_ITEMS;
 
   return (
     <div className="min-h-dvh px-4 py-4 md:px-8 md:py-6">
@@ -177,7 +175,7 @@ export function Results({
             <h1 className="max-w-4xl text-4xl font-bold leading-[0.96] text-outsole md:text-5xl">
               {allSkipped
                 ? "Жаль, что вам не понравился ни один из стилей, вот что мы вам предлагаем"
-                : `Нашли ${totalItems} моделей под твой запрос`}
+                : `Нашли ${resultItems.length} моделей под твой запрос`}
             </h1>
             <p className="mt-3 max-w-3xl text-base leading-relaxed text-suede md:text-lg">
               {allSkipped
@@ -194,29 +192,11 @@ export function Results({
           </div>
         </div>
 
-        <div className="grid gap-7">
-          {resultGroups.map((group) => (
-            <section key={group.title} className="grid gap-3">
-              <div className="flex flex-wrap items-end justify-between gap-4">
-                <div>
-                  <div className="flex items-center gap-4">
-                    <div className="h-px w-10 bg-outsole" />
-                    <h2 className="text-2xl font-bold leading-none text-outsole md:text-3xl">
-                      {group.title}
-                    </h2>
-                  </div>
-                  <p className="mt-2 max-w-2xl text-base leading-relaxed text-suede">{group.sub}</p>
-                </div>
-              </div>
-
-              <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                {group.items.map((item, index) => (
-                  <div key={item.id || `${item.name}-${index}`}>
-                    <ResultCard item={item} />
-                  </div>
-                ))}
-              </div>
-            </section>
+        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+          {resultItems.map((item, index) => (
+            <div key={item.id || `${item.name}-${index}`}>
+              <ResultCard item={item} />
+            </div>
           ))}
         </div>
       </div>
