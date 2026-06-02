@@ -52,8 +52,8 @@ export function SizeScreen({
       actions={<StepActions back={onBack} next={onNext} disabled={!selections.sizes.length} />}
       contentClassName="flex items-center"
     >
-      <div className="grid w-full items-stretch gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div className="grid w-full items-stretch gap-4 md:gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:gap-3 lg:grid-cols-4 xl:grid-cols-5">
           {SIZES.map((size) => {
             const active = selections.sizes.includes(size);
             const disabled = !active && selections.sizes.length >= 3;
@@ -62,9 +62,11 @@ export function SizeScreen({
                 key={size}
                 onClick={() => onToggle(size)}
                 disabled={disabled}
-                className={`${choiceCardClass(active)} flex h-28 flex-col items-center justify-center text-center disabled:cursor-not-allowed disabled:opacity-35 md:h-32`}
+                className={`${choiceCardClass(active)} flex h-24 flex-col items-center justify-center text-center disabled:cursor-not-allowed disabled:opacity-35 sm:h-28 md:h-32`}
               >
-                <div className="text-4xl font-black leading-none">{size.replace("EU ", "")}</div>
+                <div className="text-3xl font-black leading-none sm:text-4xl">
+                  {size.replace("EU ", "")}
+                </div>
                 <div className="mt-2 text-xs font-bold text-suede">EU</div>
               </button>
             );
@@ -126,8 +128,8 @@ export function ColorScreen({
       actions={<StepActions back={onBack} next={onNext} disabled={!selections.colors.length} />}
       contentClassName="flex items-center"
     >
-      <div className="grid w-full items-stretch gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
+      <div className="grid w-full items-stretch gap-4 md:gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:gap-3 lg:grid-cols-5">
           {COLORS.map((color) => {
             const active = selections.colors.includes(color.id);
             const isAny = color.id === "any";
@@ -138,10 +140,10 @@ export function ColorScreen({
                 key={color.id}
                 onClick={() => onToggle(color.id)}
                 disabled={disabled}
-                className={`${choiceCardClass(active)} min-h-28 disabled:cursor-not-allowed disabled:opacity-35`}
+                className={`${choiceCardClass(active)} min-h-24 disabled:cursor-not-allowed disabled:opacity-35 sm:min-h-28`}
               >
                 <div
-                  className="mb-5 size-10 rounded-full border border-cement"
+                  className="mb-4 size-9 rounded-full border border-cement sm:mb-5 sm:size-10"
                   style={{
                     background: isAny
                       ? "repeating-linear-gradient(45deg,#fff,#fff 8px,#dddddd 8px,#dddddd 16px)"
@@ -221,18 +223,20 @@ export function PriceScreen({
       actions={<StepActions back={onBack} next={onNext} disabled={!selections.price} />}
       contentClassName="flex items-center"
     >
-      <div className="grid w-full items-stretch gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-3">
+      <div className="grid w-full items-stretch gap-4 md:gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 md:gap-3 xl:grid-cols-3">
           {PRICES.map((price) => {
             const active = selections.price === price.id;
             return (
               <button
                 key={price.id}
                 onClick={() => onSelect(price.id)}
-                className={`${choiceCardClass(active)} min-h-30`}
+                className={`${choiceCardClass(active)} min-h-24 sm:min-h-30`}
               >
                 <div className="text-sm font-medium text-suede">{price.sub}</div>
-                <div className="mt-3 text-2xl font-bold leading-tight">{price.label}</div>
+                <div className="mt-2 text-xl font-bold leading-tight sm:mt-3 sm:text-2xl">
+                  {price.label}
+                </div>
               </button>
             );
           })}
@@ -278,22 +282,24 @@ export function TaskScreen({
       actions={<StepActions back={onBack} />}
       contentClassName="flex items-center"
     >
-      <div className="grid w-full gap-4 lg:grid-cols-2">
+      <div className="grid w-full gap-3 md:gap-4 lg:grid-cols-2">
         {taskCards.map((card) => (
           <button
             key={card.id}
             onClick={() => onSelect(card.id)}
-            className="grid min-h-[260px] overflow-hidden rounded-[2rem] border border-cement bg-lace text-left transition-all hover:border-outsole focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh md:grid-cols-[1fr_0.92fr]"
+            className="grid min-h-0 overflow-hidden rounded-[1.5rem] border border-cement bg-lace text-left transition-all hover:border-outsole focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh sm:rounded-[2rem] md:grid-cols-[1fr_0.92fr] lg:min-h-[260px]"
           >
-            <div className="flex flex-col justify-between p-6">
+            <div className="flex flex-col justify-between p-4 sm:p-6">
               <Pill color="active">{card.label}</Pill>
               <div className="mt-7">
-                <div className="text-4xl font-bold leading-none text-outsole">{card.title}</div>
+                <div className="text-2xl font-bold leading-none text-outsole sm:text-3xl md:text-4xl">
+                  {card.title}
+                </div>
                 <p className="mt-4 max-w-md text-base leading-relaxed text-suede">{card.sub}</p>
               </div>
               <div className="mt-6 text-sm font-semibold text-outsole">Выбрать</div>
             </div>
-            <div className="min-h-56 overflow-hidden bg-muted">
+            <div className="aspect-[16/10] overflow-hidden bg-muted md:aspect-auto md:min-h-56">
               <img src={card.image} alt={card.title} className="h-full w-full object-cover" />
             </div>
           </button>
@@ -366,14 +372,14 @@ export function SportScreen({
       actions={<StepActions back={onBack} next={onNext} disabled={!selections.sport} />}
       contentClassName="flex items-center"
     >
-      <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="grid w-full grid-cols-1 gap-2.5 sm:grid-cols-2 md:gap-3 lg:grid-cols-3 xl:grid-cols-4">
         {sportCards.map((card, index) => {
           const active = selections.sport === card.sport;
           return (
             <button
               key={card.sport}
               onClick={() => onSelect(card.sport)}
-              className={`${choiceCardClass(active)} grid min-h-40 grid-cols-[minmax(0,1fr)_112px] gap-3 overflow-hidden p-3`}
+              className={`${choiceCardClass(active)} grid min-h-36 grid-cols-[minmax(0,1fr)_92px] gap-3 overflow-hidden p-3 sm:min-h-40 sm:grid-cols-[minmax(0,1fr)_112px]`}
             >
               <div className="flex flex-col justify-between">
                 <div className="flex items-center gap-2 text-xs font-bold text-suede">
@@ -381,7 +387,7 @@ export function SportScreen({
                   {card.icon}
                 </div>
                 <div>
-                  <div className="text-xl font-black leading-tight">{card.sport}</div>
+                  <div className="text-lg font-black leading-tight sm:text-xl">{card.sport}</div>
                   <div className="mt-2 text-sm font-bold leading-tight text-suede">{card.sub}</div>
                 </div>
               </div>
@@ -455,12 +461,12 @@ export function SummaryScreen({
       actions={<StepActions back={onBack} next={onNext} nextLabel="Показать подборку" />}
       contentClassName="flex items-center"
     >
-      <div className="grid w-full items-center gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.66fr)]">
-        <div className="overflow-hidden rounded-[2rem] border-2 border-outsole bg-lace shadow-[8px_8px_0_var(--mesh)]">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#ffffff_76%)] p-5">
+      <div className="grid w-full items-center gap-4 md:gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.66fr)]">
+        <div className="overflow-hidden rounded-[1.5rem] border-2 border-outsole bg-lace shadow-[5px_5px_0_var(--mesh)] sm:rounded-[2rem] md:shadow-[8px_8px_0_var(--mesh)]">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#ffffff_76%)] p-4 sm:p-5">
             <div>
               <div className="text-sm font-bold text-suede">Ваш профиль</div>
-              <div className="mt-1 text-3xl font-black leading-none text-outsole">
+              <div className="mt-1 text-2xl font-black leading-none text-outsole sm:text-3xl">
                 готов к поиску
               </div>
             </div>
@@ -475,7 +481,7 @@ export function SummaryScreen({
               ) : null}
             </div>
           </div>
-          <div className="grid gap-3 p-5 sm:grid-cols-2">
+          <div className="grid gap-3 p-4 sm:grid-cols-2 sm:p-5">
             {summaryLines.map((line) => (
               <SummaryTile key={line.k} label={line.k} value={line.v || "—"} />
             ))}
@@ -574,7 +580,7 @@ function SummaryTile({ label, value }: { label: string; value: string }) {
 
   return (
     <div
-      className={`rounded-[1.35rem] border-2 border-outsole p-4 shadow-[4px_4px_0_var(--outsole)] ${accentMap[label] ?? "bg-lace"}`}
+      className={`rounded-[1.25rem] border-2 border-outsole p-4 shadow-[3px_3px_0_var(--outsole)] sm:rounded-[1.35rem] sm:shadow-[4px_4px_0_var(--outsole)] ${accentMap[label] ?? "bg-lace"}`}
     >
       <div className="flex items-center gap-2 text-sm font-black text-outsole/70">
         {iconMap[label]}

@@ -3,24 +3,26 @@ import { publicAsset } from "@/lib/assets";
 
 export function Hero({ onStart }: { onStart: () => void }) {
   return (
-    <div className="min-h-dvh px-4 py-4 md:px-8 md:py-6">
-      <div className="mx-auto grid min-h-[calc(100dvh-2rem)] w-full max-w-[1440px] grid-rows-[auto_minmax(0,1fr)] gap-8 md:min-h-[calc(100dvh-3rem)] md:gap-10">
+    <div className="min-h-dvh overflow-x-hidden bg-lace px-3 py-3 sm:px-4 sm:py-4 md:px-8 md:py-6">
+      <div className="mx-auto grid min-h-[calc(100svh-1.5rem)] w-full max-w-[1440px] grid-rows-[auto_minmax(0,1fr)] gap-6 sm:min-h-[calc(100svh-2rem)] md:min-h-[calc(100dvh-3rem)] md:gap-10">
         <nav className="flex items-center justify-between gap-4">
           <img
             src={publicAsset("brand/shnurok8-logo.png")}
             alt="SHNUROK"
-            className="h-10 w-auto object-contain md:h-12"
+            className="h-9 w-auto object-contain sm:h-10 md:h-12"
           />
         </nav>
 
-        <main className="grid items-center gap-8 xl:grid-cols-[0.9fr_1.1fr]">
-          <div className="flex max-w-3xl flex-col items-start">
+        <main className="grid min-w-0 items-start gap-6 md:gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
+          <div className="flex min-w-0 max-w-3xl flex-col items-start">
             <Pill>умный подбор кроссовок</Pill>
-            <h1 className="mt-6 font-display text-5xl font-bold leading-[0.96] text-outsole text-balance md:text-6xl xl:text-7xl">
-              Соберем подборку под твой стиль, задачу и ритм
+            <h1 className="mt-5 max-w-full break-words font-display text-[2.05rem] font-bold leading-[1.02] text-outsole sm:mt-6 sm:text-5xl sm:leading-[0.98] md:text-6xl xl:text-7xl">
+              <span className="block sm:inline">Соберем подборку</span>{" "}
+              <span className="block sm:inline">под твой стиль,</span>{" "}
+              <span className="block sm:inline">задачу и ритм</span>
             </h1>
 
-            <p className="mt-5 max-w-2xl text-lg leading-relaxed text-suede">
+            <p className="mt-5 max-w-[36ch] text-base leading-relaxed text-suede sm:max-w-2xl sm:text-lg">
               Пара коротких шагов, визуальный свайп по силуэтам и готовая выдача с моделями, которые
               действительно попадают в запрос.
             </p>
@@ -32,20 +34,24 @@ export function Hero({ onStart }: { onStart: () => void }) {
             </div>
           </div>
 
-          <div className="relative min-h-[360px] w-full md:min-h-[560px]">
-            <div className="absolute inset-0 rounded-[2rem] bg-[linear-gradient(135deg,#f6fbff_0%,#b0ddff_35%,#0a32ff_100%)]" />
-            <div className="absolute inset-x-[12%] top-[10%] h-[28%] rounded-[2rem] border border-white/60 bg-white/20 backdrop-blur-sm" />
-            <div className="absolute inset-x-[6%] bottom-[8%] h-[22%] rounded-[2rem] border border-outsole/10 bg-white/30 backdrop-blur-sm" />
-            <div className="absolute inset-x-[10%] top-[12%] bottom-[12%] overflow-hidden rounded-[2rem] border border-outsole bg-lace shadow-[0_25px_80px_rgba(10,10,10,0.14)]">
-              <img
-                src={publicAsset("hero-sneaker.jpg")}
-                alt="Кроссовок крупным планом"
-                className="h-full w-full object-cover"
-              />
-            </div>
-          </div>
+          <HeroProductScene />
         </main>
       </div>
+    </div>
+  );
+}
+
+function HeroProductScene() {
+  return (
+    <div
+      data-scene="static-podium"
+      className="relative aspect-[16/9] w-full min-w-0 overflow-hidden rounded-[1.25rem] border border-cement bg-[linear-gradient(135deg,#ffffff_0%,#f7fbff_52%,#dff3ff_100%)] shadow-[0_18px_55px_rgba(10,10,10,0.10)] md:rounded-[1.5rem] xl:shadow-[0_24px_80px_rgba(10,10,10,0.10)]"
+    >
+      <img
+        src={publicAsset("hero-flat-hand-close.png")}
+        alt="Кроссовок на подиуме с рукой"
+        className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center"
+      />
     </div>
   );
 }

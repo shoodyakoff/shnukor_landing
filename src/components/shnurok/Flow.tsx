@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 import { Hero } from "./Hero";
 import {
@@ -29,6 +29,25 @@ export default function Flow() {
   const [resultAllSkipped, setResultAllSkipped] = useState(false);
   const [styleIdx, setStyleIdx] = useState(0);
   const styleCards = getSneakersCardsForSelections(sel);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return undefined;
+
+    const resetScroll = () => {
+      window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+    };
+
+    resetScroll();
+    const frame = window.requestAnimationFrame(() => {
+      resetScroll();
+    });
+    const timeout = window.setTimeout(resetScroll, 80);
+
+    return () => {
+      window.cancelAnimationFrame(frame);
+      window.clearTimeout(timeout);
+    };
+  }, [step, styleIdx]);
 
   const reset = () => {
     setSel(initialSelections);

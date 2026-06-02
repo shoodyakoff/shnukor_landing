@@ -110,6 +110,12 @@
     color: var(--color-foreground);
     font-family: var(--font-mono);
     letter-spacing: 0;
+    min-width: 320px;
+    overflow-x: hidden;
+  }
+
+  #root {
+    min-width: 0;
   }
 
   h1,

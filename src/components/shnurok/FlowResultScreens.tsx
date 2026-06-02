@@ -83,20 +83,20 @@ export function SearchScreen({
       subtitle="Подбор идет по размеру, цвету, бюджету и доступным категориям."
       contentClassName="flex items-center"
     >
-      <div className="grid w-full items-center gap-5 lg:grid-cols-[0.88fr_1.12fr]">
-        <div className="overflow-hidden rounded-[2rem] border-2 border-outsole bg-lace shadow-[8px_8px_0_var(--mesh)]">
-          <div className="flex items-center justify-between gap-4 border-b-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#ffffff_76%)] p-5">
+      <div className="grid w-full items-center gap-4 md:gap-5 lg:grid-cols-[0.88fr_1.12fr]">
+        <div className="overflow-hidden rounded-[1.5rem] border-2 border-outsole bg-lace shadow-[5px_5px_0_var(--mesh)] sm:rounded-[2rem] md:shadow-[8px_8px_0_var(--mesh)]">
+          <div className="flex items-center justify-between gap-3 border-b-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#ffffff_76%)] p-4 sm:gap-4 sm:p-5">
             <div>
               <div className="text-sm font-black text-suede">Ход подбора</div>
-              <div className="mt-1 text-3xl font-black leading-none text-outsole">
+              <div className="mt-1 text-2xl font-black leading-none text-outsole sm:text-3xl">
                 собираем выдачу
               </div>
             </div>
-            <div className="flex size-12 items-center justify-center rounded-full border-2 border-outsole bg-lace shadow-[3px_3px_0_var(--outsole)]">
+            <div className="flex size-11 shrink-0 items-center justify-center rounded-full border-2 border-outsole bg-lace shadow-[3px_3px_0_var(--outsole)] sm:size-12">
               <MagnifyingGlass size={26} weight="bold" />
             </div>
           </div>
-          <div className="mx-5 mt-5 h-3 overflow-hidden rounded-full border-2 border-outsole bg-lace">
+          <div className="mx-4 mt-4 h-3 overflow-hidden rounded-full border-2 border-outsole bg-lace sm:mx-5 sm:mt-5">
             <div
               className="h-full bg-mesh transition-[width] duration-500"
               style={{ width: `${progress}%` }}
@@ -109,7 +109,7 @@ export function SearchScreen({
               return (
                 <div
                   key={status.label}
-                  className={`mx-5 flex items-center gap-4 rounded-[1.35rem] border-2 px-4 py-3 shadow-[3px_3px_0_var(--outsole)] transition-all ${
+                  className={`mx-4 flex items-center gap-3 rounded-[1.15rem] border-2 px-3 py-3 shadow-[3px_3px_0_var(--outsole)] transition-all sm:mx-5 sm:gap-4 sm:rounded-[1.35rem] sm:px-4 ${
                     done
                       ? "border-outsole bg-[#d8f7c8]"
                       : active
@@ -117,10 +117,10 @@ export function SearchScreen({
                         : "border-cement bg-lace shadow-none"
                   }`}
                 >
-                  <div className="flex size-11 shrink-0 items-center justify-center rounded-full border-2 border-outsole bg-lace text-outsole">
+                  <div className="flex size-10 shrink-0 items-center justify-center rounded-full border-2 border-outsole bg-lace text-outsole sm:size-11">
                     {done ? <CheckCircle size={26} weight="fill" /> : status.icon}
                   </div>
-                  <div className="text-lg font-black leading-tight text-outsole">
+                  <div className="text-base font-black leading-tight text-outsole sm:text-lg">
                     {status.label}
                   </div>
                 </div>
@@ -130,11 +130,11 @@ export function SearchScreen({
           <div className="h-5" />
         </div>
 
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-3">
+        <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:gap-3">
           {visibleItems.map((item, index) => (
             <div
               key={item.id || `${item.name}-${index}`}
-              className={`aspect-[4/3] overflow-hidden rounded-[1.5rem] border-2 border-cement bg-muted transition-all duration-300 ${
+              className={`aspect-[4/3] overflow-hidden rounded-[1.15rem] border-2 border-cement bg-muted transition-all duration-300 sm:rounded-[1.5rem] ${
                 index <= idx ? "opacity-100" : "opacity-35"
               }`}
             >
@@ -163,7 +163,7 @@ export function Results({
   const resultItems = items.length ? items : CATALOG_ITEMS;
 
   return (
-    <div className="min-h-dvh px-4 py-4 md:px-8 md:py-6">
+    <div className="min-h-dvh overflow-x-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-8 md:py-6">
       <div className="mx-auto grid max-w-[1440px] gap-5">
         <div className="flex items-center justify-between gap-4">
           <LogoMark />
@@ -172,7 +172,7 @@ export function Results({
 
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-end">
           <div>
-            <h1 className="max-w-4xl text-4xl font-bold leading-[0.96] text-outsole md:text-5xl">
+            <h1 className="max-w-4xl text-3xl font-bold leading-[0.98] text-outsole sm:text-4xl md:text-5xl">
               {allSkipped
                 ? "Жаль, что вам не понравился ни один из стилей, вот что мы вам предлагаем"
                 : `Нашли ${resultItems.length} моделей под твой запрос`}
@@ -219,12 +219,12 @@ export function EmptyState({ onReset, onResults }: { onReset: () => void; onResu
   ];
 
   return (
-    <div className="min-h-dvh px-4 py-6 md:px-8">
+    <div className="min-h-dvh overflow-x-hidden px-3 py-4 sm:px-4 sm:py-6 md:px-8">
       <div className="mx-auto grid max-w-[1280px] gap-6 lg:grid-cols-[0.82fr_1.18fr]">
-        <div className="flex flex-col justify-between rounded-[2rem] border border-cement bg-lace p-6">
+        <div className="flex flex-col justify-between rounded-[1.5rem] border border-cement bg-lace p-4 sm:rounded-[2rem] sm:p-6">
           <div>
             <Pill color="active">ничего не найдено</Pill>
-            <h1 className="mt-6 text-4xl font-bold leading-[0.98] text-outsole md:text-5xl">
+            <h1 className="mt-5 text-3xl font-bold leading-[0.98] text-outsole sm:mt-6 sm:text-4xl md:text-5xl">
               По вашим параметрам ничего не найдено
             </h1>
             <p className="mt-4 max-w-xl text-base leading-relaxed text-suede">
@@ -249,7 +249,7 @@ export function EmptyState({ onReset, onResults }: { onReset: () => void; onResu
             <button
               key={action}
               onClick={onResults}
-              className={`rounded-[1.75rem] border p-5 text-left text-2xl font-bold leading-tight transition-colors hover:border-outsole ${
+              className={`rounded-[1.35rem] border p-4 text-left text-xl font-bold leading-tight transition-colors hover:border-outsole sm:rounded-[1.75rem] sm:p-5 sm:text-2xl ${
                 index === 0 ? "border-outsole bg-mesh" : "border-cement bg-lace"
               }`}
             >
@@ -258,7 +258,7 @@ export function EmptyState({ onReset, onResults }: { onReset: () => void; onResu
           ))}
           <button
             onClick={onResults}
-            className="rounded-[1.75rem] border border-outsole bg-outsole p-5 text-left text-2xl font-bold leading-tight text-lace transition-colors hover:bg-suede"
+            className="rounded-[1.35rem] border border-outsole bg-outsole p-4 text-left text-xl font-bold leading-tight text-lace transition-colors hover:bg-suede sm:rounded-[1.75rem] sm:p-5 sm:text-2xl"
           >
             Показать ближайшие варианты
           </button>

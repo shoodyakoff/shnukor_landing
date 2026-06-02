@@ -25,7 +25,7 @@ export function TextAction({
   return (
     <button
       onClick={onClick}
-      className={`rounded-full px-2 py-2 text-sm font-medium text-suede underline underline-offset-4 transition-colors hover:text-outsole focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh ${className}`}
+      className={`shrink-0 rounded-full px-2 py-2 text-sm font-medium text-suede underline underline-offset-4 transition-colors hover:text-outsole focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh ${className}`}
     >
       {children}
     </button>
@@ -51,7 +51,7 @@ export function FlowHeader({
   const isStyle = step === "style";
 
   return (
-    <div className="grid gap-3">
+    <div className="grid min-w-0 gap-3">
       <div className="flex items-center gap-4">
         <LogoMark />
       </div>
@@ -118,7 +118,7 @@ export function ChipsBar({ sel, showPrice = true }: { sel: Selections; showPrice
   if (!items.length) return null;
 
   return (
-    <div className="flex flex-wrap gap-2">
+    <div className="flex min-w-0 flex-nowrap gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
       {items.map((item) => (
         <Pill key={item.k} color={item.tone}>
           <span className="text-suede">{item.k}:</span> {item.v}

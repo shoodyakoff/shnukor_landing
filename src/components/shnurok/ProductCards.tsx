@@ -14,7 +14,7 @@ export function ProductShowcase({
 }) {
   return (
     <div
-      className={`overflow-hidden rounded-[2rem] border-2 ${
+      className={`overflow-hidden rounded-[1.5rem] border-2 sm:rounded-[2rem] ${
         accent
           ? "border-outsole bg-mesh shadow-[8px_8px_0_var(--outsole)]"
           : "border-cement bg-lace"
@@ -30,12 +30,12 @@ export function ProductShowcase({
           </div>
         ) : null}
       </div>
-      <div className={`grid gap-3 bg-lace ${compact ? "p-4" : "p-5"}`}>
+      <div className={`grid gap-3 bg-lace ${compact ? "p-4" : "p-4 sm:p-5"}`}>
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             {item.brand ? <div className="text-xs font-bold text-suede">{item.brand}</div> : null}
             <div
-              className={`${compact ? "text-xl" : "text-2xl"} mt-1 font-bold leading-tight text-outsole`}
+              className={`${compact ? "text-xl" : "text-xl sm:text-2xl"} mt-1 font-bold leading-tight text-outsole`}
             >
               {item.name}
             </div>
@@ -49,20 +49,22 @@ export function ProductShowcase({
 
 export function ResultCard({ item }: { item: ProductItem }) {
   return (
-    <div className="grid h-full overflow-hidden rounded-[1.15rem] border-2 border-cement bg-lace transition-all hover:border-outsole hover:shadow-[5px_5px_0_var(--mesh)]">
-      <div className="aspect-[4/3] overflow-hidden bg-white p-3">
+    <div className="grid h-full overflow-hidden rounded-[1rem] border-2 border-cement bg-lace transition-all hover:border-outsole hover:shadow-[5px_5px_0_var(--mesh)] sm:rounded-[1.15rem]">
+      <div className="aspect-[4/3] overflow-hidden bg-white p-2 sm:p-3">
         <img src={item.img} alt={item.name} className="h-full w-full object-contain" />
       </div>
 
-      <div className="grid gap-3 p-4">
+      <div className="grid gap-3 p-3 sm:p-4">
         <div className="min-w-0">
           {item.brand ? <div className="text-xs font-bold text-suede">{item.brand}</div> : null}
-          <div className="mt-1 line-clamp-2 text-xl font-black leading-[1.02] text-outsole">
+          <div className="mt-1 line-clamp-2 text-lg font-black leading-[1.04] text-outsole sm:text-xl sm:leading-[1.02]">
             {item.name}
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">
-          <div className="text-xl font-black leading-none text-outsole">{item.price}</div>
+          <div className="text-lg font-black leading-none text-outsole sm:text-xl">
+            {item.price}
+          </div>
           {item.size ? <Pill>Размер: {item.size}</Pill> : null}
         </div>
 

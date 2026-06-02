@@ -19,7 +19,7 @@ export function showPriceChipForStep(step: Step) {
 }
 
 export function choiceCardClass(active: boolean) {
-  return `rounded-[1.75rem] border-2 p-4 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh ${
+  return `rounded-[1.35rem] border-2 p-3 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh sm:rounded-[1.75rem] sm:p-4 ${
     active
       ? "border-outsole bg-mesh text-outsole shadow-[5px_5px_0_var(--outsole)]"
       : "border-cement bg-lace text-outsole hover:border-outsole hover:bg-muted hover:shadow-[4px_4px_0_var(--mesh)]"

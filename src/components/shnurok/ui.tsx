@@ -12,7 +12,7 @@ export function Pill({
   void _color;
 
   return (
-    <span className="inline-flex w-fit max-w-full items-center gap-2 rounded-full border-2 border-outsole bg-mesh px-3.5 py-1.5 text-sm font-extrabold leading-none whitespace-nowrap text-outsole shadow-[3px_3px_0_var(--outsole)]">
+    <span className="inline-flex w-fit max-w-full shrink-0 items-center gap-2 rounded-full border-2 border-outsole bg-mesh px-3.5 py-1.5 text-left text-sm font-extrabold leading-tight whitespace-normal text-outsole shadow-[3px_3px_0_var(--outsole)]">
       {children}
     </span>
   );
@@ -45,7 +45,7 @@ export function BigButton({
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`inline-flex min-h-12 min-w-[168px] items-center justify-center rounded-full border-2 px-9 py-3.5 text-base font-extrabold transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-x-0 disabled:hover:translate-y-0 md:min-w-[196px] md:px-11 md:py-4 md:text-lg ${map[variant]}`}
+      className={`inline-flex min-h-12 w-full min-w-[156px] flex-1 items-center justify-center rounded-full border-2 px-7 py-3.5 text-center text-base font-extrabold transition-all duration-150 hover:translate-x-[2px] hover:translate-y-[2px] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:translate-x-0 disabled:hover:translate-y-0 sm:w-auto sm:flex-none md:min-w-[196px] md:px-11 md:py-4 md:text-lg ${map[variant]}`}
     >
       {children}
     </button>
@@ -67,7 +67,7 @@ export function ProgressBar({
 
   return (
     <div className="w-full max-w-5xl">
-      <div className="mb-2 flex items-baseline justify-between">
+      <div className="mb-2 flex flex-wrap items-center justify-between gap-2">
         <span className="text-xs font-medium text-suede">{label}</span>
         {action}
       </div>
@@ -97,17 +97,17 @@ export function StepShell({
   contentClassName?: string;
 }) {
   return (
-    <div className="min-h-dvh px-4 py-4 md:px-8 md:py-6">
-      <div className="relative mx-auto grid min-h-[calc(100dvh-2rem)] w-full max-w-[1500px] grid-rows-[auto_auto_minmax(0,1fr)] gap-5 md:min-h-[calc(100dvh-3rem)] md:gap-6">
+    <div className="min-h-dvh overflow-x-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-6 md:py-6 xl:px-8">
+      <div className="relative mx-auto grid min-h-[calc(100svh-1.5rem)] w-full max-w-[1500px] grid-rows-[auto_auto_minmax(0,1fr)] gap-4 sm:min-h-[calc(100svh-2rem)] md:min-h-[calc(100dvh-3rem)] md:gap-6">
         <div className="min-h-0">{eyebrow}</div>
         {actions ? (
-          <div className="flex flex-wrap items-center justify-start gap-3 lg:absolute lg:right-0 lg:top-[60px] lg:justify-end">
+          <div className="flex w-full flex-wrap items-center justify-start gap-3 sm:w-auto xl:absolute xl:right-0 xl:top-[60px] xl:justify-end">
             {actions}
           </div>
         ) : null}
-        <div className="grid min-h-0 gap-4 lg:pr-[430px]">
+        <div className="grid min-h-0 gap-4 xl:pr-[430px]">
           <div>
-            <h1 className="max-w-4xl font-display text-3xl font-bold leading-[0.98] text-balance text-outsole md:text-5xl">
+            <h1 className="max-w-4xl font-display text-[2rem] font-bold leading-[0.98] text-balance text-outsole sm:text-4xl md:text-5xl">
               {title}
             </h1>
             {subtitle && (
