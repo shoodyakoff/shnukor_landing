@@ -12,8 +12,8 @@ import {
 import { CATALOG_ITEMS, RESULT_GROUPS, type ProductItem } from "./data";
 import { ChipsBar, LogoMark, TextAction } from "./FlowNav";
 import { ResultCard } from "./ProductCards";
-import { Pill, StepShell } from "./ui";
-import { getTaskCopy, selectedNames } from "./flow-utils";
+import { BigButton, Pill, StepShell } from "./ui";
+import { getTaskCopy, pluralizeModels, selectedNames } from "./flow-utils";
 import type { SneakersPayload } from "./sneakers-mapping";
 import { fetchSneakers, type SneakersApiResult } from "./sneakers-api";
 import { PRICES, type Selections } from "./types";
@@ -81,7 +81,7 @@ export function SearchScreen({
       }
       title="Подбираем модели"
       subtitle="Подбор идет по размеру, цвету, бюджету и доступным категориям."
-      contentClassName="flex items-center"
+      contentClassName="justify-center"
     >
       <div className="grid w-full items-center gap-4 md:gap-5 lg:grid-cols-[0.88fr_1.12fr]">
         <div className="overflow-hidden rounded-[1.5rem] border-2 border-outsole bg-lace shadow-[5px_5px_0_var(--mesh)] sm:rounded-[2rem] md:shadow-[8px_8px_0_var(--mesh)]">
@@ -175,7 +175,7 @@ export function Results({
             <h1 className="max-w-4xl text-3xl font-bold leading-[0.98] text-outsole sm:text-4xl md:text-5xl">
               {allSkipped
                 ? "Жаль, что вам не понравился ни один из стилей, вот что мы вам предлагаем"
-                : `Нашли ${resultItems.length} моделей под твой запрос`}
+                : `Нашли ${pluralizeModels(resultItems.length)} под твой запрос`}
             </h1>
             <p className="mt-3 max-w-3xl text-base leading-relaxed text-suede md:text-lg">
               {allSkipped
@@ -197,7 +197,7 @@ export function Results({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-3 sm:[grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]">
           {resultItems.map((item, index) => (
             <div key={item.id || `${item.name}-${index}`}>
               <ResultCard item={item} />
@@ -210,58 +210,41 @@ export function Results({
 }
 
 export function EmptyState({ onReset, onResults }: { onReset: () => void; onResults: () => void }) {
-  const actions = [
-    "Поднять цену",
-    "Убрать цвет",
-    "Смягчить стиль",
-    "Изменить задачу",
-    "Другой размер",
-  ];
-
   return (
-    <div className="min-h-dvh overflow-x-hidden px-3 py-4 sm:px-4 sm:py-6 md:px-8">
-      <div className="mx-auto grid max-w-[1280px] gap-6 lg:grid-cols-[0.82fr_1.18fr]">
-        <div className="flex flex-col justify-between rounded-[1.5rem] border border-cement bg-lace p-4 sm:rounded-[2rem] sm:p-6">
-          <div>
+    <div className="flex min-h-dvh flex-col overflow-x-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-8 md:py-6">
+      <div className="mx-auto flex min-h-[calc(100dvh-1.5rem)] w-full max-w-[760px] flex-col gap-5">
+        <div className="flex items-center justify-between gap-4">
+          <LogoMark />
+          <TextAction onClick={onReset}>подобрать заново</TextAction>
+        </div>
+
+        <div className="flex flex-1 flex-col justify-center">
+          <div className="rounded-[1.5rem] border-2 border-outsole bg-lace p-5 shadow-[6px_6px_0_var(--mesh)] sm:rounded-[2rem] sm:p-7">
             <Pill color="active">ничего не найдено</Pill>
-            <h1 className="mt-5 text-3xl font-bold leading-[0.98] text-outsole sm:mt-6 sm:text-4xl md:text-5xl">
+            <h1 className="mt-5 text-2xl font-bold leading-[1.05] text-outsole sm:text-3xl md:text-4xl">
               По вашим параметрам ничего не найдено
             </h1>
-            <p className="mt-4 max-w-xl text-base leading-relaxed text-suede">
-              Давайте попробуем еще раз или перейдите на сайт Шнурок{" "}
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-suede sm:text-base">
+              Можем смягчить фильтры и показать ближайшие варианты — или загляните в полный каталог
+              на сайте Шнурок{" "}
               <a
                 href="https://shnurok-shipping.ru/"
                 target="_blank"
                 rel="noreferrer"
                 className="font-black text-outsole underline underline-offset-4"
               >
-                https://shnurok-shipping.ru/
+                shnurok-shipping.ru
               </a>
             </p>
+            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
+              <BigButton onClick={onResults} variant="primary">
+                Показать ближайшие варианты
+              </BigButton>
+              <BigButton onClick={onReset} variant="secondary">
+                Подобрать заново
+              </BigButton>
+            </div>
           </div>
-          <div className="mt-8">
-            <TextAction onClick={onReset}>подобрать заново</TextAction>
-          </div>
-        </div>
-
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
-          {actions.map((action, index) => (
-            <button
-              key={action}
-              onClick={onResults}
-              className={`rounded-[1.35rem] border p-4 text-left text-xl font-bold leading-tight transition-colors hover:border-outsole sm:rounded-[1.75rem] sm:p-5 sm:text-2xl ${
-                index === 0 ? "border-outsole bg-mesh" : "border-cement bg-lace"
-              }`}
-            >
-              {action}
-            </button>
-          ))}
-          <button
-            onClick={onResults}
-            className="rounded-[1.35rem] border border-outsole bg-outsole p-4 text-left text-xl font-bold leading-tight text-lace transition-colors hover:bg-suede sm:rounded-[1.75rem] sm:p-5 sm:text-2xl"
-          >
-            Показать ближайшие варианты
-          </button>
         </div>
       </div>
     </div>

@@ -19,11 +19,22 @@ export function showPriceChipForStep(step: Step) {
 }
 
 export function choiceCardClass(active: boolean) {
-  return `rounded-[1.35rem] border-2 p-3 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh sm:rounded-[1.75rem] sm:p-4 ${
+  return `rounded-2xl border-2 p-2.5 text-left transition-all duration-150 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh sm:rounded-[1.25rem] sm:p-3 ${
     active
-      ? "border-outsole bg-mesh text-outsole shadow-[5px_5px_0_var(--outsole)]"
-      : "border-cement bg-lace text-outsole hover:border-outsole hover:bg-muted hover:shadow-[4px_4px_0_var(--mesh)]"
+      ? "border-outsole bg-mesh text-outsole shadow-[4px_4px_0_var(--outsole)]"
+      : "border-cement bg-lace text-outsole hover:border-outsole hover:bg-muted hover:shadow-[3px_3px_0_var(--mesh)]"
   }`;
+}
+
+const MODEL_FORMS: [one: string, few: string, many: string] = ["модель", "модели", "моделей"];
+
+export function pluralizeModels(count: number) {
+  const mod100 = count % 100;
+  const mod10 = count % 10;
+  let form = MODEL_FORMS[2];
+  if (mod10 === 1 && mod100 !== 11) form = MODEL_FORMS[0];
+  else if (mod10 >= 2 && mod10 <= 4 && (mod100 < 10 || mod100 >= 20)) form = MODEL_FORMS[1];
+  return `${count} ${form}`;
 }
 
 export function selectedNames(ids: string[]) {

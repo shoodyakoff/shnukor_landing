@@ -25,7 +25,7 @@ const cards: SneakersCard[] = [
   },
 ];
 
-test("StepShell keeps action controls in normal flow until wide desktop", () => {
+test("StepShell pins primary actions in a bottom bar (sticky on phones, in-flow on desktop)", () => {
   const html = renderToStaticMarkup(
     <StepShell
       eyebrow={<div>eyebrow</div>}
@@ -36,10 +36,10 @@ test("StepShell keeps action controls in normal flow until wide desktop", () => 
     </StepShell>,
   );
 
-  assert.match(html, /xl:absolute/);
-  assert.match(html, /xl:pr-\[430px\]/);
-  assert.doesNotMatch(html, /lg:absolute/);
-  assert.doesNotMatch(html, /lg:pr-\[430px\]/);
+  assert.match(html, /sticky/);
+  assert.match(html, /md:static/);
+  assert.doesNotMatch(html, /xl:absolute/);
+  assert.doesNotMatch(html, /xl:pr-\[430px\]/);
 });
 
 test("Primary actions stretch on phones and return to intrinsic width on larger screens", () => {
@@ -55,7 +55,6 @@ test("StyleDeck pins the compact mobile action row and restores desktop side con
       upcoming={cards}
       cards={cards}
       currentIndex={0}
-      total={cards.length}
       onDislike={() => {}}
       onLike={() => {}}
     />,

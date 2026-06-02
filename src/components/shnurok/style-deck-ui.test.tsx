@@ -24,26 +24,24 @@ const cards: SneakersCard[] = [
   },
 ];
 
-test("StyleDeck keeps style copy above the image without darkening the artwork", () => {
+test("StyleDeck overlays style copy on the card and drops the duplicated counter", () => {
   const html = renderToStaticMarkup(
     <StyleDeck
       upcoming={cards}
       cards={cards}
       currentIndex={0}
-      total={cards.length}
       onDislike={() => {}}
       onLike={() => {}}
+      onBack={() => {}}
     />,
   );
 
-  assert.ok(
-    html.indexOf("стиль 1 из 2") < html.indexOf("<img"),
-    "style counter should render before the image instead of inside a bottom overlay",
-  );
-  assert.ok(
-    html.indexOf("Трендовые кроссовки") < html.indexOf("<img"),
-    "style title should render before the image instead of covering it",
-  );
-  assert.doesNotMatch(html, /linear-gradient\(180deg/);
-  assert.doesNotMatch(html, /backdrop-blur/);
+  // Title/desc now live in a gradient overlay on the artwork, not in a block above it.
+  assert.match(html, /bg-gradient-to-t/);
+  // The redundant "стиль N из M" pill is removed — the header progress bar owns progress.
+  assert.doesNotMatch(html, /стиль 1 из 2/);
+  // Back control + swipe actions are present.
+  assert.match(html, /Назад/);
+  assert.match(html, /Нравится/);
+  assert.match(html, /Не нравится/);
 });

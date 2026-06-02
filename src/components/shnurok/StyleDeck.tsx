@@ -1,6 +1,5 @@
 import { useRef, useState, type CSSProperties } from "react";
 
-import { Pill } from "./ui";
 import type { SneakersCard } from "./sneakers-mapping";
 import type { StyleVote } from "./types";
 
@@ -8,16 +7,16 @@ export function StyleDeck({
   upcoming,
   cards,
   currentIndex,
-  total,
   onLike,
   onDislike,
+  onBack,
 }: {
   upcoming: SneakersCard[];
   cards: SneakersCard[];
   currentIndex: number;
-  total: number;
   onLike: () => void;
   onDislike: () => void;
+  onBack?: () => void;
 }) {
   const [dragX, setDragX] = useState(0);
   const [pointerDown, setPointerDown] = useState(false);
@@ -26,7 +25,6 @@ export function StyleDeck({
 
   const threshold = 110;
   const topOpacity = Math.max(0.55, 1 - Math.abs(dragX) / 620);
-  const currentStyle = upcoming[0];
 
   const completeSwipe = (vote: StyleVote) => {
     if (swipeDirection) return;
@@ -85,20 +83,15 @@ export function StyleDeck({
         </div>
       </div>
 
-      <div className="order-1 mx-auto w-full max-w-[min(430px,94vw)] sm:max-w-[430px] lg:order-2 lg:max-w-[min(500px,36vw)]">
-        {currentStyle ? (
-          <div className="mb-5 text-center sm:mb-8 lg:text-left">
-            <div className="flex justify-center lg:justify-start">
-              <Pill color="active">
-                стиль {currentIndex + 1} из {total}
-              </Pill>
-            </div>
-            <div className="mt-3 text-2xl font-black leading-none text-outsole sm:text-3xl md:text-4xl">
-              {currentStyle.title}
-            </div>
-            <p className="mx-auto mt-2 max-w-md text-sm font-semibold leading-snug text-suede lg:mx-0">
-              {currentStyle.desc}
-            </p>
+      <div className="order-1 mx-auto flex w-full max-w-[min(440px,94vw)] flex-col sm:max-w-[440px] lg:order-2 lg:max-w-[min(480px,34vw)]">
+        {onBack ? (
+          <div className="mb-3 flex items-center">
+            <button
+              onClick={onBack}
+              className="rounded-full px-2 py-1 text-sm font-bold text-suede underline underline-offset-4 transition-colors hover:text-outsole focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh"
+            >
+              ← Назад
+            </button>
           </div>
         ) : null}
         <div className="relative">
@@ -141,7 +134,19 @@ export function StyleDeck({
                       alt={style.title}
                       className="h-full w-full object-cover"
                     />
-                    {isTop ? <SwipeLabels dragX={dragX} /> : null}
+                    {isTop ? (
+                      <>
+                        <SwipeLabels dragX={dragX} />
+                        <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-4 pt-10 text-lace sm:p-5">
+                          <div className="text-xl font-black leading-tight sm:text-2xl">
+                            {style.title}
+                          </div>
+                          <p className="mt-1 line-clamp-2 text-sm font-semibold leading-snug text-lace/85">
+                            {style.desc}
+                          </p>
+                        </div>
+                      </>
+                    ) : null}
                   </div>
                 );
               })}

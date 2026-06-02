@@ -97,25 +97,25 @@ export function StepShell({
   contentClassName?: string;
 }) {
   return (
-    <div className="min-h-dvh overflow-x-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-6 md:py-6 xl:px-8">
-      <div className="relative mx-auto grid min-h-[calc(100svh-1.5rem)] w-full max-w-[1500px] grid-rows-[auto_auto_minmax(0,1fr)] gap-4 sm:min-h-[calc(100svh-2rem)] md:min-h-[calc(100dvh-3rem)] md:gap-6">
+    <div className="flex min-h-dvh flex-col overflow-x-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-6 md:py-5 xl:px-8">
+      <div className="mx-auto flex min-h-[calc(100dvh-1.5rem)] w-full max-w-[1400px] flex-col gap-3 sm:min-h-[calc(100dvh-2rem)] md:min-h-[calc(100dvh-2.5rem)] md:gap-4">
         <div className="min-h-0">{eyebrow}</div>
+        <div className="min-w-0">
+          <h1 className="max-w-4xl font-display text-2xl font-bold leading-[1.05] text-balance text-outsole sm:text-3xl md:text-4xl">
+            {title}
+          </h1>
+          {subtitle && (
+            <p className="mt-1.5 max-w-2xl text-sm leading-snug text-suede sm:text-base">
+              {subtitle}
+            </p>
+          )}
+        </div>
+        <div className={cn("flex min-h-0 flex-1 flex-col", contentClassName)}>{children}</div>
         {actions ? (
-          <div className="flex w-full flex-wrap items-center justify-start gap-3 sm:w-auto xl:absolute xl:right-0 xl:top-[60px] xl:justify-end">
+          <div className="sticky bottom-0 z-30 -mx-3 mt-1 flex items-center justify-between gap-3 border-t-2 border-outsole bg-lace/95 px-3 py-3 backdrop-blur sm:-mx-4 sm:px-4 md:static md:mx-0 md:border-0 md:bg-transparent md:p-0 md:pt-1 md:backdrop-blur-none">
             {actions}
           </div>
         ) : null}
-        <div className="grid min-h-0 gap-4 xl:pr-[430px]">
-          <div>
-            <h1 className="max-w-4xl font-display text-[2rem] font-bold leading-[0.98] text-balance text-outsole sm:text-4xl md:text-5xl">
-              {title}
-            </h1>
-            {subtitle && (
-              <p className="mt-3 max-w-3xl text-base leading-relaxed text-suede">{subtitle}</p>
-            )}
-          </div>
-        </div>
-        <div className={cn("min-h-0", contentClassName)}>{children}</div>
       </div>
     </div>
   );

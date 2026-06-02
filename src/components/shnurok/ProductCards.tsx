@@ -54,10 +54,10 @@ export function ResultCard({ item }: { item: ProductItem }) {
         <img src={item.img} alt={item.name} className="h-full w-full object-contain" />
       </div>
 
-      <div className="grid gap-3 p-3 sm:p-4">
+      <div className="grid gap-2.5 p-3 sm:p-4">
         <div className="min-w-0">
           {item.brand ? <div className="text-xs font-bold text-suede">{item.brand}</div> : null}
-          <div className="mt-1 line-clamp-2 text-lg font-black leading-[1.04] text-outsole sm:text-xl sm:leading-[1.02]">
+          <div className="mt-1 line-clamp-2 text-base font-black leading-[1.08] text-outsole sm:text-lg sm:leading-[1.04]">
             {item.name}
           </div>
         </div>
