@@ -49,23 +49,30 @@ export function ProductShowcase({
 
 export function ResultCard({ item }: { item: ProductItem }) {
   return (
-    <div className="grid h-full overflow-hidden rounded-[1rem] border-2 border-cement bg-lace transition-all hover:border-outsole hover:shadow-[5px_5px_0_var(--mesh)] sm:rounded-[1.15rem]">
-      <div className="aspect-[4/3] overflow-hidden bg-white p-2 sm:p-3">
-        <img src={item.img} alt={item.name} className="h-full w-full object-contain" />
+    <div className="grid h-full grid-rows-[auto_1fr] overflow-hidden rounded-[1rem] border-2 border-cement bg-lace transition-all hover:border-outsole hover:shadow-[5px_5px_0_var(--mesh)] sm:rounded-[1.15rem]">
+      <div className="aspect-[4/3] overflow-hidden bg-white">
+        <img
+          src={item.img}
+          alt={item.name}
+          loading="lazy"
+          className="h-full w-full object-cover object-center"
+        />
       </div>
 
-      <div className="grid gap-2.5 p-3 sm:p-4">
+      <div className="grid content-between gap-2.5 p-3 sm:p-4">
         <div className="min-w-0">
           {item.brand ? <div className="text-xs font-bold text-suede">{item.brand}</div> : null}
           <div className="mt-1 line-clamp-2 text-base font-black leading-[1.08] text-outsole sm:text-lg sm:leading-[1.04]">
             {item.name}
           </div>
         </div>
-        <div className="flex flex-wrap items-center gap-2">
+        <div className="flex items-baseline justify-between gap-2">
           <div className="text-lg font-black leading-none text-outsole sm:text-xl">
             {item.price}
           </div>
-          {item.size ? <Pill>Размер: {item.size}</Pill> : null}
+          {item.size ? (
+            <span className="shrink-0 text-xs font-bold text-suede">EU {item.size}</span>
+          ) : null}
         </div>
 
         {item.url ? (

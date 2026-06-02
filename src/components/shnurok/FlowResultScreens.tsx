@@ -197,7 +197,7 @@ export function Results({
           </div>
         </div>
 
-        <div className="grid grid-cols-2 gap-3 sm:[grid-template-columns:repeat(auto-fill,minmax(220px,1fr))]">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 xl:grid-cols-4">
           {resultItems.map((item, index) => (
             <div key={item.id || `${item.name}-${index}`}>
               <ResultCard item={item} />

@@ -32,7 +32,6 @@ test("StyleDeck overlays style copy on the card and drops the duplicated counter
       currentIndex={0}
       onDislike={() => {}}
       onLike={() => {}}
-      onBack={() => {}}
     />,
   );
 
@@ -40,8 +39,9 @@ test("StyleDeck overlays style copy on the card and drops the duplicated counter
   assert.match(html, /bg-gradient-to-t/);
   // The redundant "стиль N из M" pill is removed — the header progress bar owns progress.
   assert.doesNotMatch(html, /стиль 1 из 2/);
-  // Back control + swipe actions are present.
-  assert.match(html, /Назад/);
+  // Card image must not hijack the pointer drag (native image DnD disabled).
+  assert.match(html, /draggable="false"/);
+  // Swipe actions are present.
   assert.match(html, /Нравится/);
   assert.match(html, /Не нравится/);
 });

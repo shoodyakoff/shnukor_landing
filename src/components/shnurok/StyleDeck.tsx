@@ -9,31 +9,48 @@ export function StyleDeck({
   currentIndex,
   onLike,
   onDislike,
-  onBack,
 }: {
   upcoming: SneakersCard[];
   cards: SneakersCard[];
   currentIndex: number;
   onLike: () => void;
   onDislike: () => void;
-  onBack?: () => void;
 }) {
-  const [dragX, setDragX] = useState(0);
-  const [pointerDown, setPointerDown] = useState(false);
-  const [swipeDirection, setSwipeDirection] = useState<StyleVote | null>(null);
+  const [swiping, setSwiping] = useState(false);
   const startX = useRef(0);
+  const dragX = useRef(0);
+  const dragging = useRef(false);
+  const swipedRef = useRef(false);
+  const cardRef = useRef<HTMLDivElement | null>(null);
+  const likeRef = useRef<HTMLDivElement | null>(null);
+  const dislikeRef = useRef<HTMLDivElement | null>(null);
 
   const threshold = 110;
-  const topOpacity = Math.max(0.55, 1 - Math.abs(dragX) / 620);
+
+  // Drive the top card straight through the DOM during a drag so we never
+  // re-render the (heavy) image stack on every pointermove.
+  const paint = (x: number, animate: boolean) => {
+    const el = cardRef.current;
+    if (el) {
+      el.style.transition = animate
+        ? "transform 320ms cubic-bezier(.16,1,.3,1), opacity 320ms ease"
+        : "none";
+      el.style.transform = `translate3d(${x}px,0,0) rotate(${x / 22}deg)`;
+      el.style.opacity = String(Math.max(0.55, 1 - Math.abs(x) / 620));
+    }
+    if (likeRef.current) likeRef.current.style.opacity = String(Math.min(Math.max(x / 96, 0), 1));
+    if (dislikeRef.current)
+      dislikeRef.current.style.opacity = String(Math.min(Math.max(-x / 96, 0), 1));
+  };
 
   const completeSwipe = (vote: StyleVote) => {
-    if (swipeDirection) return;
+    if (swipedRef.current) return;
+    swipedRef.current = true;
+    dragging.current = false;
+    setSwiping(true);
     const sign = vote === "like" ? 1 : -1;
     const viewportWidth = typeof window === "undefined" ? 1440 : window.innerWidth;
-    setPointerDown(false);
-    setSwipeDirection(vote);
-    setDragX(sign * Math.max(viewportWidth, 900));
-
+    paint(sign * Math.max(viewportWidth, 900), true);
     window.setTimeout(() => {
       if (vote === "like") onLike();
       else onDislike();
@@ -41,59 +58,46 @@ export function StyleDeck({
   };
 
   const handlePointerDown = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (swipeDirection) return;
+    if (swipedRef.current) return;
+    dragging.current = true;
     startX.current = event.clientX;
-    setPointerDown(true);
+    dragX.current = 0;
     event.currentTarget.setPointerCapture(event.pointerId);
+    paint(0, false);
   };
 
   const handlePointerMove = (event: React.PointerEvent<HTMLDivElement>) => {
-    if (!pointerDown || swipeDirection) return;
-    setDragX(event.clientX - startX.current);
+    if (!dragging.current || swipedRef.current) return;
+    dragX.current = event.clientX - startX.current;
+    paint(dragX.current, false);
   };
 
   const handlePointerUp = () => {
-    if (!pointerDown || swipeDirection) return;
-    setPointerDown(false);
-    if (dragX > threshold) return completeSwipe("like");
-    if (dragX < -threshold) return completeSwipe("dislike");
-    setDragX(0);
+    if (!dragging.current || swipedRef.current) return;
+    dragging.current = false;
+    const x = dragX.current;
+    if (x > threshold) return completeSwipe("like");
+    if (x < -threshold) return completeSwipe("dislike");
+    dragX.current = 0;
+    paint(0, true);
   };
 
   return (
     <div className="mx-auto grid h-full w-full max-w-[1400px] items-center gap-4 pb-20 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(360px,500px)_minmax(0,1fr)] lg:gap-12 lg:pb-0 xl:gap-16">
       <div className="fixed inset-x-3 bottom-3 z-40 order-2 grid grid-cols-2 gap-3 sm:inset-x-4 md:inset-x-6 lg:static lg:contents">
         <div className="flex min-w-0 justify-stretch lg:order-1 lg:justify-end">
-          <SwipeButton
-            tone="quiet"
-            disabled={Boolean(swipeDirection)}
-            onClick={() => completeSwipe("dislike")}
-          >
+          <SwipeButton tone="quiet" disabled={swiping} onClick={() => completeSwipe("dislike")}>
             Не нравится
           </SwipeButton>
         </div>
         <div className="flex min-w-0 justify-stretch lg:order-3 lg:justify-start">
-          <SwipeButton
-            tone="like"
-            disabled={Boolean(swipeDirection)}
-            onClick={() => completeSwipe("like")}
-          >
+          <SwipeButton tone="like" disabled={swiping} onClick={() => completeSwipe("like")}>
             Нравится
           </SwipeButton>
         </div>
       </div>
 
       <div className="order-1 mx-auto flex w-full max-w-[min(440px,94vw)] flex-col sm:max-w-[440px] lg:order-2 lg:max-w-[min(480px,34vw)]">
-        {onBack ? (
-          <div className="mb-3 flex items-center">
-            <button
-              onClick={onBack}
-              className="rounded-full px-2 py-1 text-sm font-bold text-suede underline underline-offset-4 transition-colors hover:text-outsole focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh"
-            >
-              ← Назад
-            </button>
-          </div>
-        ) : null}
         <div className="relative">
           <div className="pointer-events-none absolute -inset-x-2 -inset-y-4 rounded-[2rem] border-2 border-outsole/10 bg-[linear-gradient(135deg,#e9f6ff_0%,#b0ddff_42%,#ffffff_100%)] shadow-[10px_12px_0_rgba(10,10,10,0.05)] sm:-inset-x-7 sm:-inset-y-6 sm:rounded-[2.5rem] sm:shadow-[14px_18px_0_rgba(10,10,10,0.05)]" />
           <div className="pointer-events-none absolute -bottom-4 left-9 right-9 h-8 rounded-full bg-outsole/12 blur-xl" />
@@ -111,18 +115,16 @@ export function StyleDeck({
                   zIndex: 10 - index,
                 };
                 const topStyle: CSSProperties = {
-                  transform: `translate3d(${dragX}px, 0, 0) rotate(${dragX / 22}deg)`,
-                  opacity: topOpacity,
-                  transition: pointerDown
-                    ? "none"
-                    : "transform 320ms cubic-bezier(.16,1,.3,1), opacity 320ms ease",
+                  transform: "translate3d(0,0,0)",
+                  opacity: 1,
                   zIndex: 20,
                 };
 
                 return (
                   <div
                     key={style.id}
-                    className="absolute inset-0 touch-pan-y overflow-hidden rounded-[1.75rem] border-2 border-outsole bg-lace shadow-[0_18px_50px_rgba(10,10,10,0.18)] will-change-transform"
+                    ref={isTop ? cardRef : undefined}
+                    className="absolute inset-0 touch-pan-y select-none overflow-hidden rounded-[1.75rem] border-2 border-outsole bg-lace shadow-[0_18px_50px_rgba(10,10,10,0.18)] will-change-transform"
                     style={isTop ? topStyle : staticStyle}
                     onPointerDown={isTop ? handlePointerDown : undefined}
                     onPointerMove={isTop ? handlePointerMove : undefined}
@@ -132,11 +134,25 @@ export function StyleDeck({
                     <img
                       src={style.image}
                       alt={style.title}
-                      className="h-full w-full object-cover"
+                      draggable={false}
+                      className="pointer-events-none h-full w-full object-cover"
                     />
                     {isTop ? (
                       <>
-                        <SwipeLabels dragX={dragX} />
+                        <div
+                          ref={likeRef}
+                          style={{ opacity: 0 }}
+                          className="pointer-events-none absolute left-5 top-5 rounded-full border-2 border-outsole bg-mesh px-4 py-2 text-sm font-black text-outsole shadow-[3px_3px_0_var(--outsole)]"
+                        >
+                          Нравится
+                        </div>
+                        <div
+                          ref={dislikeRef}
+                          style={{ opacity: 0 }}
+                          className="pointer-events-none absolute right-5 top-5 rounded-full border-2 border-outsole bg-lace px-4 py-2 text-sm font-black text-outsole shadow-[3px_3px_0_var(--outsole)]"
+                        >
+                          Не нравится
+                        </div>
                         <div className="pointer-events-none absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/85 via-black/45 to-transparent p-4 pt-10 text-lace sm:p-5">
                           <div className="text-xl font-black leading-tight sm:text-2xl">
                             {style.title}
@@ -152,10 +168,8 @@ export function StyleDeck({
               })}
           </div>
         </div>
-      </div>
 
-      <div className="order-4 flex flex-col items-center gap-2 lg:col-start-2">
-        <div className="flex gap-2">
+        <div className="mt-4 flex justify-center gap-2 lg:mt-6">
           {cards.map((style, index) => (
             <div
               key={style.id}
@@ -198,24 +212,5 @@ function SwipeButton({
     >
       {children}
     </button>
-  );
-}
-
-function SwipeLabels({ dragX }: { dragX: number }) {
-  return (
-    <>
-      <div
-        className="absolute left-5 top-5 rounded-full border-2 border-outsole bg-mesh px-4 py-2 text-sm font-black text-outsole shadow-[3px_3px_0_var(--outsole)] transition-opacity"
-        style={{ opacity: Math.min(Math.max(dragX / 96, 0), 1) }}
-      >
-        Нравится
-      </div>
-      <div
-        className="absolute right-5 top-5 rounded-full border-2 border-outsole bg-lace px-4 py-2 text-sm font-black text-outsole shadow-[3px_3px_0_var(--outsole)] transition-opacity"
-        style={{ opacity: Math.min(Math.max(-dragX / 96, 0), 1) }}
-      >
-        Не нравится
-      </div>
-    </>
   );
 }

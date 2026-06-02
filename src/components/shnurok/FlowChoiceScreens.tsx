@@ -420,17 +420,24 @@ export function StyleScreen({
       eyebrow={eyebrow}
       title="Что нравится визуально?"
       subtitle="Свайпай карточки или жми кнопки — отметь силуэты для финальной подборки."
-      contentClassName="min-h-0"
+      contentClassName="min-h-0 gap-2"
     >
-      <StyleDeck
-        key={currentCard.id}
-        upcoming={cards.slice(styleIdx, styleIdx + 3)}
-        cards={cards}
-        currentIndex={styleIdx}
-        onDislike={() => onVote("dislike")}
-        onLike={() => onVote("like")}
-        onBack={onBack}
-      />
+      <button
+        onClick={onBack}
+        className="self-start rounded-full px-2 py-1 text-sm font-bold text-suede underline underline-offset-4 transition-colors hover:text-outsole focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh"
+      >
+        ← Назад
+      </button>
+      <div className="min-h-0 flex-1">
+        <StyleDeck
+          key={currentCard.id}
+          upcoming={cards.slice(styleIdx, styleIdx + 3)}
+          cards={cards}
+          currentIndex={styleIdx}
+          onDislike={() => onVote("dislike")}
+          onLike={() => onVote("like")}
+        />
+      </div>
     </StepShell>
   );
 }
