@@ -13,14 +13,14 @@ const cards: SneakersCard[] = [
     id: "daily-trending",
     title: "Трендовые кроссовки",
     desc: "Свежие силуэты на стыке баскетбола, бега, хайкинга и ретро.",
-    image: "/tinder-daily/daily-trending.png",
+    image: "/tinder-daily/daily-trending.webp",
     categoryId: 569,
   },
   {
     id: "daily-minimal",
     title: "Минималистичные кроссовки",
     desc: "Чистые пары без лишнего визуального шума.",
-    image: "/tinder-daily/daily-minimal.png",
+    image: "/tinder-daily/daily-minimal.webp",
     categoryId: 576,
   },
 ];

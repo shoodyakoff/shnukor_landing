@@ -36,7 +36,7 @@ export const CATALOG_ITEMS: ProductItem[] = [
     name: "Court Minimal",
     price: "9 990 ₽",
     why: "Чистая кожаная база без лишних акцентов, легко попадает в повседневный гардероб.",
-    img: publicAsset("catalog-court-minimal.png"),
+    img: publicAsset("catalog-court-minimal.webp"),
     fit: "96% подходит",
   },
   {
@@ -44,7 +44,7 @@ export const CATALOG_ITEMS: ProductItem[] = [
     name: "Retro Runner",
     price: "13 990 ₽",
     why: "Спокойный ретро-беговой силуэт, мягкая палитра и хороший баланс цены.",
-    img: publicAsset("catalog-retro-runner.png"),
+    img: publicAsset("catalog-retro-runner.webp"),
     fit: "94% подходит",
   },
   {
@@ -52,7 +52,7 @@ export const CATALOG_ITEMS: ProductItem[] = [
     name: "Chunky Lifestyle",
     price: "18 990 ₽",
     why: "Более заметная форма с массивной подошвой, но без визуального шума.",
-    img: publicAsset("catalog-chunky-lifestyle.png"),
+    img: publicAsset("catalog-chunky-lifestyle.webp"),
     fit: "92% подходит",
   },
   {
@@ -60,7 +60,7 @@ export const CATALOG_ITEMS: ProductItem[] = [
     name: "Knit Tech",
     price: "24 990 ₽",
     why: "Легкий технологичный верх и спокойный акцент для спортивного городского образа.",
-    img: publicAsset("catalog-knit-tech.png"),
+    img: publicAsset("catalog-knit-tech.webp"),
     fit: "90% подходит",
   },
   {
@@ -68,7 +68,7 @@ export const CATALOG_ITEMS: ProductItem[] = [
     name: "Dark Accent Low",
     price: "31 990 ₽",
     why: "Премиальная темная отделка, чистый низкий силуэт и выразительный контраст.",
-    img: publicAsset("catalog-dark-accent.png"),
+    img: publicAsset("catalog-dark-accent.webp"),
     fit: "88% подходит",
   },
 ];

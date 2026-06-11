@@ -8,7 +8,7 @@ export function Hero({ onStart }: { onStart: () => void }) {
       <div className="mx-auto grid min-h-[calc(100svh-1.5rem)] w-full max-w-[1440px] grid-rows-[auto_minmax(0,1fr)] gap-6 sm:min-h-[calc(100svh-2rem)] md:min-h-[calc(100dvh-3rem)] md:gap-10">
         <nav className="flex items-center justify-between gap-4">
           <img
-            src={publicAsset("brand/shnurok8-logo.png")}
+            src={publicAsset("brand/shnurok8-logo.webp")}
             alt="SHNUROK"
             className="h-9 w-auto object-contain sm:h-10 md:h-12"
           />
@@ -50,7 +50,7 @@ function HeroProductScene() {
       className="relative aspect-[16/9] w-full min-w-0 overflow-hidden rounded-[1.25rem] border border-cement bg-[linear-gradient(135deg,#ffffff_0%,#f7fbff_52%,#dff3ff_100%)] shadow-[0_18px_55px_rgba(10,10,10,0.10)] md:rounded-[1.5rem] xl:shadow-[0_24px_80px_rgba(10,10,10,0.10)]"
     >
       <img
-        src={publicAsset("hero-flat-hand-close.png")}
+        src={publicAsset("hero-flat-hand-close.webp")}
         alt="Кроссовок на подиуме с рукой"
         className="absolute inset-0 h-full w-full object-cover object-[62%_center] sm:object-center"
       />

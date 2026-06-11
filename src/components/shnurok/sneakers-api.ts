@@ -8,11 +8,11 @@ const API_URL = publicAsset("api/sneakers");
 const SHNUROK_ORIGIN = "https://shnurok-shipping.ru";
 
 const FALLBACK_IMAGES = [
-  publicAsset("catalog-court-minimal.png"),
-  publicAsset("catalog-retro-runner.png"),
-  publicAsset("catalog-chunky-lifestyle.png"),
-  publicAsset("catalog-knit-tech.png"),
-  publicAsset("catalog-dark-accent.png"),
+  publicAsset("catalog-court-minimal.webp"),
+  publicAsset("catalog-retro-runner.webp"),
+  publicAsset("catalog-chunky-lifestyle.webp"),
+  publicAsset("catalog-knit-tech.webp"),
+  publicAsset("catalog-dark-accent.webp"),
 ];
 
 type ApiRecord = Record<string, unknown>;

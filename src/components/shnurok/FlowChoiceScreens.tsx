@@ -257,14 +257,14 @@ export function TaskScreen({
       id: "daily" as Task,
       title: "На каждый день",
       sub: "Город, прогулки, учеба, работа и повседневные образы.",
-      image: publicAsset("catalog-court-minimal.png"),
+      image: publicAsset("catalog-court-minimal.webp"),
       label: "каждый день",
     },
     {
       id: "sport" as Task,
       title: "Для спорта",
       sub: "Тренировки, бег, зал, игра и активное движение.",
-      image: publicAsset("catalog-knit-tech.png"),
+      image: publicAsset("catalog-knit-tech.webp"),
       label: "спорт",
     },
   ];
@@ -314,37 +314,37 @@ export function SportScreen({
   const sportCards = SPORTS.map((sport) => {
     const map: Record<string, { image: string; sub: string; icon: React.ReactNode }> = {
       Бег: {
-        image: publicAsset("catalog-retro-runner.png"),
+        image: publicAsset("catalog-retro-runner.webp"),
         sub: "легкая амортизация",
         icon: <PersonSimpleRun size={22} weight="bold" />,
       },
       "Фитнес / зал": {
-        image: publicAsset("catalog-knit-tech.png"),
+        image: publicAsset("catalog-knit-tech.webp"),
         sub: "стабильная база",
         icon: <Barbell size={22} weight="bold" />,
       },
       Футбол: {
-        image: publicAsset("catalog-dark-accent.png"),
+        image: publicAsset("catalog-dark-accent.webp"),
         sub: "низкий цепкий силуэт",
         icon: <SoccerBall size={22} weight="bold" />,
       },
       Баскетбол: {
-        image: publicAsset("catalog-chunky-lifestyle.png"),
+        image: publicAsset("catalog-chunky-lifestyle.webp"),
         sub: "поддержка и резкость",
         icon: <Basketball size={22} weight="bold" />,
       },
       Теннис: {
-        image: publicAsset("catalog-court-minimal.png"),
+        image: publicAsset("catalog-court-minimal.webp"),
         sub: "плотная боковая опора",
         icon: <TennisBall size={22} weight="bold" />,
       },
       "Трейл / улица": {
-        image: publicAsset("catalog-chunky-lifestyle.png"),
+        image: publicAsset("catalog-chunky-lifestyle.webp"),
         sub: "цепкость и защита",
         icon: <Target size={22} weight="bold" />,
       },
       Скейтбординг: {
-        image: publicAsset("catalog-dark-accent.png"),
+        image: publicAsset("catalog-dark-accent.webp"),
         sub: "контроль доски",
         icon: <Sneaker size={22} weight="bold" />,
       },

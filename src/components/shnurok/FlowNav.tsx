@@ -7,7 +7,7 @@ import { publicAsset } from "@/lib/assets";
 export function LogoMark() {
   return (
     <img
-      src={publicAsset("brand/shnurok8-logo.png")}
+      src={publicAsset("brand/shnurok8-logo.webp")}
       alt="SHNUROK"
       className="h-9 w-auto object-contain md:h-10"
     />

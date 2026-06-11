@@ -35,6 +35,14 @@ public/**/_*/
 __pycache__/
 *.pyc
 
+# Unused exploration / dev-only assets (kept locally, out of the repo)
+public/hero-options/
+public/hero-static-podium.png
+public/price-preview/price-preview-contact-sheet.png
+public/tinder-sport/*.png
+src/assets/price-preview-generated/
+src/assets/price-preview-source/
+
 # Editor directories and files
 .claude/
 .vscode/*
