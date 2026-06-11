@@ -1,0 +1,17 @@
+<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Шнурок">
+  <rect width="32" height="32" rx="7" fill="#0a0a0a"/>
+  <g stroke="#b0ddff" stroke-width="2.4" fill="none" stroke-linecap="round">
+    <path d="M11 9 L21 16"/>
+    <path d="M21 9 L11 16"/>
+    <path d="M11 16 L21 23"/>
+    <path d="M21 16 L11 23"/>
+  </g>
+  <g fill="#ffffff">
+    <circle cx="11" cy="9" r="2"/>
+    <circle cx="21" cy="9" r="2"/>
+    <circle cx="11" cy="16" r="2"/>
+    <circle cx="21" cy="16" r="2"/>
+    <circle cx="11" cy="23" r="2"/>
+    <circle cx="21" cy="23" r="2"/>
+  </g>
+</svg>

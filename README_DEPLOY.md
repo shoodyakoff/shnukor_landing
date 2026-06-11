@@ -28,7 +28,12 @@ npm install
 npm run dev
 ```
 
-Local dev keeps the `/shnukor_landing/` base path unless `VITE_BASE_PATH` is set.
+The app is served from `/` by default. Set `VITE_BASE_PATH` only if you host it
+under a sub-path (e.g. a future self-hosted VPS deploy).
+
+> Note: the previous GitHub Pages workflow was removed — a static Pages build
+> cannot run the `/api/sneakers` server proxy, so the sneakers catalog would
+> always be empty there. Vercel (or any Node server runtime) is required.
 
 ## Sneakers API contract
 

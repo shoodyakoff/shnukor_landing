@@ -7,8 +7,10 @@
 import { defineConfig } from "@lovable.dev/vite-tanstack-config";
 import { nitro } from "nitro/vite";
 
+// Prod target is Vercel (served from "/"). VITE_BASE_PATH stays available for
+// hosting under a sub-path (e.g. a future self-hosted VPS deploy).
 const isVercel = Boolean(process.env.VERCEL);
-const basePath = isVercel ? "/" : process.env.VITE_BASE_PATH || "/shnukor_landing/";
+const basePath = process.env.VITE_BASE_PATH || "/";
 
 export default defineConfig({
   cloudflare: false,

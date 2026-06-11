@@ -16,7 +16,7 @@ import { PRICE_PREVIEW_ITEMS, RESULT_GROUPS } from "./data";
 import { StepActions } from "./FlowNav";
 import { ProductShowcase } from "./ProductCards";
 import { StyleDeck } from "./StyleDeck";
-import { Pill, StepShell } from "./ui";
+import { ChoiceLayout, ChoiceTile, Pill, SelectionAside, StepShell } from "./ui";
 import { choiceCardClass, useFlowSummary, voteSummary } from "./flow-utils";
 import { publicAsset } from "@/lib/assets";
 import type { SneakersCard } from "./sneakers-mapping";
@@ -34,75 +34,77 @@ import {
 export function SizeScreen({
   eyebrow,
   selections,
-  onBack,
   onNext,
   onToggle,
 }: {
   eyebrow: React.ReactNode;
   selections: Selections;
-  onBack: () => void;
   onNext: () => void;
   onToggle: (size: string) => void;
 }) {
+  const next = <StepActions next={onNext} disabled={!selections.sizes.length} />;
   return (
     <StepShell
       eyebrow={eyebrow}
-      title="Выберите размер"
-      subtitle="Можно выбрать до трех размеров. Это удобно, если носишь разные бренды."
-      actions={<StepActions back={onBack} next={onNext} disabled={!selections.sizes.length} />}
-      contentClassName="justify-center"
+      title="Какой у тебя размер?"
+      subtitle="Можно отметить до трёх — удобно, если носишь разные бренды."
+      actions={next}
+      actionsClassName="lg:hidden"
     >
-      <div className="grid w-full items-stretch gap-4 md:gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="grid grid-cols-5 gap-2 sm:gap-2.5">
-          {SIZES.map((size) => {
-            const active = selections.sizes.includes(size);
-            const disabled = !active && selections.sizes.length >= 3;
-            return (
-              <button
-                key={size}
-                onClick={() => onToggle(size)}
-                disabled={disabled}
-                className={`${choiceCardClass(active)} flex h-16 flex-col items-center justify-center text-center disabled:cursor-not-allowed disabled:opacity-35 sm:h-[4.5rem] md:h-20`}
-              >
-                <div className="text-xl font-black leading-none sm:text-2xl md:text-3xl">
-                  {size.replace("EU ", "")}
+      <ChoiceLayout
+        columns="grid-cols-5"
+        action={next}
+        aside={
+          <SelectionAside
+            title="Как подобрать размер"
+            icon={<Ruler size={26} weight="bold" />}
+            footer="Лучше проверь, сколько см твоя нога, чтобы чувствовать себя комфортно."
+          >
+            <div className="grid grid-cols-2 gap-2">
+              {[
+                ["EU 36", "23 см"],
+                ["EU 37", "23.5 см"],
+                ["EU 38", "24 см"],
+                ["EU 39", "25 см"],
+                ["EU 40", "25.5 см"],
+                ["EU 41", "26 см"],
+                ["EU 42", "27 см"],
+                ["EU 43", "27.5 см"],
+                ["EU 44", "28 см"],
+                ["EU 45", "29 см"],
+              ].map(([eu, cm]) => (
+                <div
+                  key={eu}
+                  className="flex items-center justify-between rounded-tile border-2 border-outsole bg-lace px-3 py-2 shadow-pop-xs"
+                >
+                  <span className="text-sm font-black text-outsole">{eu}</span>
+                  <span className="text-xs font-bold text-suede">{cm}</span>
                 </div>
-                <div className="mt-0.5 text-[10px] font-bold text-suede sm:text-xs">EU</div>
-              </button>
-            );
-          })}
-        </div>
-
-        <SelectionAside
-          eyebrow="Таблица размеров"
-          title="Проверь себя"
-          icon={<Ruler size={26} weight="bold" />}
-          footer="Лучше проверь, сколько см твоя нога, чтобы чувствовать себя комфортно."
-        >
-          <div className="grid grid-cols-2 gap-2">
-            {[
-              ["EU 36", "23 см"],
-              ["EU 37", "23.5 см"],
-              ["EU 38", "24 см"],
-              ["EU 39", "25 см"],
-              ["EU 40", "25.5 см"],
-              ["EU 41", "26 см"],
-              ["EU 42", "27 см"],
-              ["EU 43", "27.5 см"],
-              ["EU 44", "28 см"],
-              ["EU 45", "29 см"],
-            ].map(([eu, cm]) => (
-              <div
-                key={eu}
-                className="flex items-center justify-between rounded-2xl border-2 border-outsole bg-lace px-3 py-2 shadow-[2px_2px_0_var(--outsole)]"
-              >
-                <span className="text-sm font-black text-outsole">{eu}</span>
-                <span className="text-xs font-bold text-suede">{cm}</span>
+              ))}
+            </div>
+          </SelectionAside>
+        }
+      >
+        {SIZES.map((size) => {
+          const active = selections.sizes.includes(size);
+          const disabled = !active && selections.sizes.length >= 3;
+          return (
+            <ChoiceTile
+              key={size}
+              active={active}
+              disabled={disabled}
+              onClick={() => onToggle(size)}
+            >
+              <div className="text-2xl font-black leading-none text-outsole sm:text-3xl">
+                {size.replace("EU ", "")}
               </div>
-            ))}
-          </div>
-        </SelectionAside>
-      </div>
+              <div className="text-[11px] font-bold uppercase tracking-wide text-suede sm:text-xs">
+                EU
+              </div>
+            </ChoiceTile>
+          );
+        })}
+      </ChoiceLayout>
     </StepShell>
   );
 }
@@ -110,92 +112,92 @@ export function SizeScreen({
 export function ColorScreen({
   eyebrow,
   selections,
-  onBack,
   onNext,
   onToggle,
 }: {
   eyebrow: React.ReactNode;
   selections: Selections;
-  onBack: () => void;
   onNext: () => void;
   onToggle: (id: string) => void;
 }) {
+  const next = <StepActions next={onNext} disabled={!selections.colors.length} />;
   return (
     <StepShell
       eyebrow={eyebrow}
       title="Какие цвета нравятся?"
-      subtitle="Можешь выбрать несколько, если цвет не важен так и скажи."
-      actions={<StepActions back={onBack} next={onNext} disabled={!selections.colors.length} />}
-      contentClassName="justify-center"
+      subtitle="Можно выбрать несколько или отметить «без разницы»."
+      actions={next}
+      actionsClassName="lg:hidden"
     >
-      <div className="grid w-full items-stretch gap-4 md:gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="grid grid-cols-4 gap-2.5 sm:grid-cols-5 lg:grid-cols-6">
-          {COLORS.map((color) => {
-            const active = selections.colors.includes(color.id);
-            const isAny = color.id === "any";
-            const disabled =
-              !active && !isAny && selections.colors.filter((id) => id !== "any").length >= 3;
-            return (
-              <button
-                key={color.id}
-                onClick={() => onToggle(color.id)}
-                aria-pressed={active}
-                disabled={disabled}
-                className={`${choiceCardClass(active)} flex min-h-[5.25rem] flex-col items-center justify-center gap-2 text-center disabled:cursor-not-allowed disabled:opacity-35`}
-              >
-                <span
-                  className="size-11 rounded-full border-2 border-outsole/15 sm:size-12"
-                  style={{
-                    background: isAny
-                      ? "repeating-linear-gradient(45deg,#fff,#fff 8px,#dddddd 8px,#dddddd 16px)"
-                      : color.hex,
-                  }}
-                />
-                <span className="text-xs font-bold leading-tight sm:text-sm">{color.name}</span>
-              </button>
-            );
-          })}
-        </div>
-
-        <SelectionAside
-          eyebrow="палитра"
-          title="Сочетания сезона"
-          icon={<Palette size={26} weight="bold" />}
-          footer="Для повседневной пары проще выбрать базовый цвет, а яркий оставить как акцент."
-        >
-          <div className="grid gap-3">
-            {[
-              ["городская база", "#9ca3af", "#0044ff", "#ffffff"],
-              ["теплый контраст", "#e7d5b3", "#111111", "#ffffff"],
-              ["яркий акцент", "#ffffff", "#ccff00", "#ff2a00"],
-            ].map(([label, base, accent, light]) => (
-              <div
-                key={label as string}
-                className="relative min-h-[84px] overflow-hidden rounded-2xl border-2 border-outsole bg-lace p-3 shadow-[3px_3px_0_var(--outsole)]"
-              >
+      <ChoiceLayout
+        columns="grid-cols-4 sm:grid-cols-5 lg:grid-cols-6"
+        action={next}
+        aside={
+          <SelectionAside
+            title="Сочетания сезона"
+            icon={<Palette size={26} weight="bold" />}
+            footer="Для повседневной пары проще выбрать базовый цвет, а яркий оставить как акцент."
+          >
+            <div className="grid gap-3">
+              {[
+                ["городская база", "#9ca3af", "#0044ff", "#ffffff"],
+                ["теплый контраст", "#e7d5b3", "#111111", "#ffffff"],
+                ["яркий акцент", "#ffffff", "#ccff00", "#ff2a00"],
+              ].map(([label, base, accent, light]) => (
                 <div
-                  className="absolute inset-0"
-                  style={{
-                    background: `linear-gradient(135deg, ${base as string} 0 42%, ${light as string} 42% 64%, ${accent as string} 64% 100%)`,
-                  }}
-                />
-                <div className="absolute right-3 top-3 flex -space-x-2">
-                  {[base, light, accent].map((swatch) => (
-                    <span
-                      key={swatch as string}
-                      className="size-8 rounded-full border-2 border-outsole"
-                      style={{ background: swatch as string }}
-                    />
-                  ))}
+                  key={label as string}
+                  className="relative min-h-[84px] overflow-hidden rounded-card border-2 border-outsole bg-lace p-3 shadow-pop-sm"
+                >
+                  <div
+                    className="absolute inset-0"
+                    style={{
+                      background: `linear-gradient(135deg, ${base as string} 0 42%, ${light as string} 42% 64%, ${accent as string} 64% 100%)`,
+                    }}
+                  />
+                  <div className="absolute right-3 top-3 flex -space-x-2">
+                    {[base, light, accent].map((swatch) => (
+                      <span
+                        key={swatch as string}
+                        className="size-8 rounded-full border-2 border-outsole"
+                        style={{ background: swatch as string }}
+                      />
+                    ))}
+                  </div>
+                  <div className="absolute bottom-3 left-3 rounded-full border-2 border-outsole bg-lace px-3 py-1 text-xs font-black text-outsole shadow-pop-xs">
+                    {label as string}
+                  </div>
                 </div>
-                <div className="absolute bottom-3 left-3 rounded-full border-2 border-outsole bg-lace px-3 py-1 text-xs font-black text-outsole shadow-[2px_2px_0_var(--outsole)]">
-                  {label as string}
-                </div>
-              </div>
-            ))}
-          </div>
-        </SelectionAside>
-      </div>
+              ))}
+            </div>
+          </SelectionAside>
+        }
+      >
+        {COLORS.map((color) => {
+          const active = selections.colors.includes(color.id);
+          const isAny = color.id === "any";
+          const disabled =
+            !active && !isAny && selections.colors.filter((id) => id !== "any").length >= 3;
+          return (
+            <ChoiceTile
+              key={color.id}
+              active={active}
+              disabled={disabled}
+              ariaPressed={active}
+              onClick={() => onToggle(color.id)}
+            >
+              <span
+                className="size-10 rounded-full border-2 border-outsole/15 sm:size-11"
+                style={{
+                  background: isAny
+                    ? "repeating-linear-gradient(45deg,#fff,#fff 8px,#dddddd 8px,#dddddd 16px)"
+                    : color.hex,
+                }}
+              />
+              <span className="text-xs font-bold leading-tight sm:text-sm">{color.name}</span>
+            </ChoiceTile>
+          );
+        })}
+      </ChoiceLayout>
     </StepShell>
   );
 }
@@ -203,58 +205,51 @@ export function ColorScreen({
 export function PriceScreen({
   eyebrow,
   selections,
-  onBack,
   onNext,
   onSelect,
 }: {
   eyebrow: React.ReactNode;
   selections: Selections;
-  onBack: () => void;
   onNext: () => void;
   onSelect: (id: string) => void;
 }) {
+  const next = <StepActions next={onNext} disabled={!selections.price} />;
   return (
     <StepShell
       eyebrow={eyebrow}
-      title="Выберите бюджет"
-      subtitle="Один диапазон. Мы покажем модели, которые попадают в комфортную цену."
-      actions={<StepActions back={onBack} next={onNext} disabled={!selections.price} />}
-      contentClassName="justify-center"
+      title="Какой бюджет комфортен?"
+      subtitle="Выбери один диапазон — покажем модели в этой цене."
+      actions={next}
+      actionsClassName="lg:hidden"
     >
-      <div className="grid w-full items-stretch gap-4 md:gap-5 lg:grid-cols-[minmax(0,1fr)_320px]">
-        <div className="grid grid-cols-2 gap-2.5 md:grid-cols-3 md:gap-3">
-          {PRICES.map((price) => {
-            const active = selections.price === price.id;
-            return (
-              <button
-                key={price.id}
-                onClick={() => onSelect(price.id)}
-                className={`${choiceCardClass(active)} flex min-h-[4.75rem] flex-col justify-center sm:min-h-[5.25rem]`}
-              >
-                <div className="text-xs font-semibold uppercase tracking-wide text-suede">
-                  {price.sub}
-                </div>
-                <div className="mt-1 text-base font-bold leading-tight sm:text-lg">
-                  {price.label}
-                </div>
-              </button>
-            );
-          })}
-        </div>
-
-        <PriceAside priceId={selections.price} />
-      </div>
+      <ChoiceLayout
+        columns="grid-cols-2 md:grid-cols-3"
+        action={next}
+        aside={<PriceAside priceId={selections.price} />}
+      >
+        {PRICES.map((price) => {
+          const active = selections.price === price.id;
+          return (
+            <ChoiceTile key={price.id} active={active} onClick={() => onSelect(price.id)}>
+              <div className="text-base font-black leading-tight text-outsole sm:text-lg">
+                {price.label}
+              </div>
+              <div className="text-[11px] font-bold uppercase tracking-wide text-suede sm:text-xs">
+                {price.sub}
+              </div>
+            </ChoiceTile>
+          );
+        })}
+      </ChoiceLayout>
     </StepShell>
   );
 }
 
 export function TaskScreen({
   eyebrow,
-  onBack,
   onSelect,
 }: {
   eyebrow: React.ReactNode;
-  onBack: () => void;
   onSelect: (task: Task) => void;
 }) {
   const taskCards = [
@@ -279,15 +274,14 @@ export function TaskScreen({
       eyebrow={eyebrow}
       title="Для чего нужны кроссовки?"
       subtitle="Одна задача — один сценарий подбора."
-      actions={<StepActions back={onBack} />}
-      contentClassName="justify-center"
+      contentClassName="lg:justify-center"
     >
       <div className="grid w-full gap-3 sm:grid-cols-2 md:gap-4">
         {taskCards.map((card) => (
           <button
             key={card.id}
             onClick={() => onSelect(card.id)}
-            className="grid min-h-[8.5rem] grid-cols-[minmax(0,1fr)_38%] overflow-hidden rounded-[1.25rem] border-2 border-cement bg-lace text-left transition-all hover:border-outsole hover:shadow-[4px_4px_0_var(--mesh)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh sm:min-h-[12rem] sm:rounded-[1.5rem]"
+            className="grid min-h-[8.5rem] grid-cols-[minmax(0,1fr)_38%] overflow-hidden rounded-card border-2 border-cement bg-lace text-left transition-all hover:border-outsole hover:shadow-pop-mesh-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh sm:min-h-[12rem] sm:rounded-panel"
           >
             <div className="flex flex-col justify-center gap-1.5 p-4 sm:p-5">
               <div className="text-xl font-bold leading-tight text-outsole sm:text-2xl md:text-3xl">
@@ -309,13 +303,11 @@ export function TaskScreen({
 export function SportScreen({
   eyebrow,
   selections,
-  onBack,
   onNext,
   onSelect,
 }: {
   eyebrow: React.ReactNode;
   selections: Selections;
-  onBack: () => void;
   onNext: () => void;
   onSelect: (sport: string) => void;
 }) {
@@ -366,8 +358,8 @@ export function SportScreen({
       eyebrow={eyebrow}
       title="Какой именно спорт?"
       subtitle="От этого зависят амортизация, сцепление и силуэт."
-      actions={<StepActions back={onBack} next={onNext} disabled={!selections.sport} />}
-      contentClassName="justify-center"
+      actions={<StepActions next={onNext} disabled={!selections.sport} />}
+      contentClassName="lg:justify-center"
     >
       <div className="grid w-full grid-cols-2 gap-2.5 md:gap-3 lg:grid-cols-3 xl:grid-cols-4">
         {sportCards.map((card, index) => {
@@ -403,13 +395,11 @@ export function StyleScreen({
   eyebrow,
   cards,
   styleIdx,
-  onBack,
   onVote,
 }: {
   eyebrow: React.ReactNode;
   cards: SneakersCard[];
   styleIdx: number;
-  onBack: () => void;
   onVote: (vote: StyleVote) => void;
 }) {
   const currentCard = cards[styleIdx];
@@ -419,16 +409,10 @@ export function StyleScreen({
     <StepShell
       eyebrow={eyebrow}
       title="Что нравится визуально?"
-      subtitle="Свайпай карточки или жми кнопки — отметь силуэты для финальной подборки."
+      subtitle="Свайпай карточки или жми кнопки, чтобы собрать подборку."
       contentClassName="min-h-0 gap-2"
     >
-      <button
-        onClick={onBack}
-        className="self-start rounded-full px-2 py-1 text-sm font-bold text-suede underline underline-offset-4 transition-colors hover:text-outsole focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh"
-      >
-        ← Назад
-      </button>
-      <div className="min-h-0 flex-1">
+      <div className="flex min-h-0 flex-1 flex-col lg:justify-center">
         <StyleDeck
           key={currentCard.id}
           upcoming={cards.slice(styleIdx, styleIdx + 3)}
@@ -465,7 +449,7 @@ export function SummaryScreen({
       contentClassName="flex items-center"
     >
       <div className="grid w-full items-center gap-4 md:gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.66fr)]">
-        <div className="overflow-hidden rounded-[1.5rem] border-2 border-outsole bg-lace shadow-[5px_5px_0_var(--mesh)] sm:rounded-[2rem] md:shadow-[8px_8px_0_var(--mesh)]">
+        <div className="overflow-hidden rounded-panel border-2 border-outsole bg-lace shadow-pop-mesh-md md:shadow-pop-mesh-lg">
           <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#ffffff_76%)] p-4 sm:p-5">
             <div>
               <div className="text-sm font-bold text-suede">Ваш профиль</div>
@@ -499,40 +483,6 @@ export function SummaryScreen({
   );
 }
 
-function SelectionAside({
-  eyebrow,
-  title,
-  icon,
-  children,
-  footer,
-}: {
-  eyebrow: string;
-  title: string;
-  icon: React.ReactNode;
-  children: React.ReactNode;
-  footer?: string;
-}) {
-  return (
-    <aside className="hidden min-h-full overflow-hidden rounded-[1.5rem] border-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#f7fbff_58%,#ffffff_100%)] p-4 shadow-[6px_6px_0_var(--outsole)] lg:grid">
-      <div className="flex items-start justify-between gap-4">
-        <div>
-          <div className="text-sm font-black text-suede">{eyebrow}</div>
-          <div className="mt-2 max-w-64 text-[1.65rem] font-black leading-[1.05] text-outsole">
-            {title}
-          </div>
-        </div>
-        <div className="flex size-12 shrink-0 items-center justify-center rounded-full border-2 border-outsole bg-lace shadow-[3px_3px_0_var(--outsole)]">
-          {icon}
-        </div>
-      </div>
-      <div className={footer ? "my-5" : "mt-5"}>{children}</div>
-      {footer ? (
-        <p className="self-end text-sm font-bold leading-snug text-outsole/72">{footer}</p>
-      ) : null}
-    </aside>
-  );
-}
-
 function PriceAside({ priceId }: { priceId?: string }) {
   const defaultPriceId = priceId ?? DEFAULT_PRICE_ID;
   const item = PRICE_PREVIEW_ITEMS[defaultPriceId] ?? PRICE_PREVIEW_ITEMS[DEFAULT_PRICE_ID];
@@ -540,23 +490,16 @@ function PriceAside({ priceId }: { priceId?: string }) {
 
   return (
     <SelectionAside
-      eyebrow="Что попадает в бюджет"
       title="Топовая пара в этом сегменте"
       icon={<CurrencyRub size={26} weight="bold" />}
     >
-      <div className="overflow-hidden rounded-[1.5rem] border-2 border-outsole bg-lace shadow-[4px_4px_0_var(--outsole)]">
-        <div className="aspect-[16/12] overflow-hidden bg-muted">
+      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-panel bg-lace">
+        <div className="min-h-0 flex-1 overflow-hidden rounded-panel bg-muted">
           <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
         </div>
-        <div className="p-4">
-          {priceLabel ? (
-            <div className="mb-2 w-fit rounded-full border-2 border-outsole bg-mesh px-3 py-1 text-xs font-black text-outsole shadow-[2px_2px_0_var(--outsole)]">
-              {priceLabel}
-            </div>
-          ) : null}
-          {item.brand ? <div className="text-xs font-black text-suede">{item.brand}</div> : null}
-          <div className="mt-1 text-xl font-black leading-none text-outsole">{item.name}</div>
-          <div className="mt-2 text-base font-black text-outsole">{item.price}</div>
+        <div className="flex items-center justify-between gap-2 px-1 pt-4">
+          <div className="min-w-0 text-lg font-black leading-tight text-outsole">{item.name}</div>
+          {priceLabel ? <Pill size="sm">{priceLabel}</Pill> : null}
         </div>
       </div>
     </SelectionAside>
@@ -583,7 +526,7 @@ function SummaryTile({ label, value }: { label: string; value: string }) {
 
   return (
     <div
-      className={`rounded-[1.25rem] border-2 border-outsole p-4 shadow-[3px_3px_0_var(--outsole)] sm:rounded-[1.35rem] sm:shadow-[4px_4px_0_var(--outsole)] ${accentMap[label] ?? "bg-lace"}`}
+      className={`rounded-card border-2 border-outsole p-4 shadow-pop-sm sm:shadow-pop-md ${accentMap[label] ?? "bg-lace"}`}
     >
       <div className="flex items-center gap-2 text-sm font-black text-outsole/70">
         {iconMap[label]}

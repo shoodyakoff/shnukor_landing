@@ -1,3 +1,4 @@
+import { ContactLinks } from "./Contacts";
 import { BigButton, Pill } from "./ui";
 import { publicAsset } from "@/lib/assets";
 
@@ -11,6 +12,7 @@ export function Hero({ onStart }: { onStart: () => void }) {
             alt="SHNUROK"
             className="h-9 w-auto object-contain sm:h-10 md:h-12"
           />
+          <ContactLinks />
         </nav>
 
         <main className="grid min-w-0 items-start gap-6 md:gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">

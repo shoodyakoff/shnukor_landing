@@ -26,6 +26,15 @@ Shnurok MVP Visual/
 .wrangler/
 .dev.vars
 
+# Local asset dumps — underscore-prefixed folders are backup/staging/rejected
+# working copies, not for version control.
+public/**/_*/
+/шнурок/
+
+# Python caches (from asset-generation scripts)
+__pycache__/
+*.pyc
+
 # Editor directories and files
 .claude/
 .vscode/*

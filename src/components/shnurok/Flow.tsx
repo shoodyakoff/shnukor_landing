@@ -57,6 +57,18 @@ export default function Flow() {
     setStep("hero");
   };
 
+  // Single back handler routed through the header so every step shows the same
+  // "← Назад" link under the progress bar. `style` defers to its own handler
+  // (which steps back through the swipe deck before leaving the step).
+  const goBack = () => {
+    if (step === "size") setStep("hero");
+    else if (step === "color") setStep("size");
+    else if (step === "price") setStep("color");
+    else if (step === "task") setStep("price");
+    else if (step === "sport") setStep("task");
+    else if (step === "style") goBackFromStyle();
+  };
+
   const eyebrow = (
     <FlowHeader
       step={step}
@@ -64,6 +76,7 @@ export default function Flow() {
       styleTotal={styleCards.length}
       selections={sel}
       onReset={reset}
+      onBack={goBack}
     />
   );
 
@@ -144,7 +157,6 @@ export default function Flow() {
       <SizeScreen
         eyebrow={eyebrow}
         selections={sel}
-        onBack={() => setStep("hero")}
         onNext={() => setStep("color")}
         onToggle={toggleSize}
       />
@@ -155,7 +167,6 @@ export default function Flow() {
       <ColorScreen
         eyebrow={eyebrow}
         selections={sel}
-        onBack={() => setStep("size")}
         onNext={() => setStep("price")}
         onToggle={toggleColor}
       />
@@ -166,21 +177,19 @@ export default function Flow() {
       <PriceScreen
         eyebrow={eyebrow}
         selections={sel}
-        onBack={() => setStep("color")}
         onNext={() => setStep("task")}
         onSelect={(price) => setSel((prev) => ({ ...prev, price }))}
       />
     );
   }
   if (step === "task") {
-    return <TaskScreen eyebrow={eyebrow} onBack={() => setStep("price")} onSelect={goAfterTask} />;
+    return <TaskScreen eyebrow={eyebrow} onSelect={goAfterTask} />;
   }
   if (step === "sport") {
     return (
       <SportScreen
         eyebrow={eyebrow}
         selections={sel}
-        onBack={() => setStep("task")}
         onNext={() => setStep("style")}
         onSelect={(sport) => {
           setStyleIdx(0);
@@ -195,7 +204,6 @@ export default function Flow() {
         eyebrow={eyebrow}
         cards={styleCards}
         styleIdx={styleIdx}
-        onBack={goBackFromStyle}
         onVote={voteStyle}
       />
     );

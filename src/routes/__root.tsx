@@ -1,5 +1,7 @@
 import { Outlet, Link, createRootRoute, HeadContent, Scripts } from "@tanstack/react-router";
 
+import { OG_IMAGE_URL, SITE_URL } from "@/lib/site";
+
 import appCss from "../styles.css?url";
 
 function NotFoundComponent() {
@@ -27,36 +29,33 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Shnurok — умный подбор кроссовок" },
+      { title: "Шнурок — умный подбор кроссовок" },
       {
         name: "description",
-        content: "Shnurok: умный пошаговый подбор кроссовок под твой стиль, размер и бюджет.",
+        content: "Шнурок: умный пошаговый подбор кроссовок под твой стиль, размер и бюджет.",
       },
-      { name: "author", content: "Shnurok" },
-      { property: "og:title", content: "Shnurok — умный подбор кроссовок" },
+      { name: "author", content: "Шнурок" },
+      { property: "og:site_name", content: "Шнурок" },
+      { property: "og:locale", content: "ru_RU" },
+      { property: "og:type", content: "website" },
+      { property: "og:url", content: SITE_URL },
+      { property: "og:title", content: "Шнурок — умный подбор кроссовок" },
       {
         property: "og:description",
-        content: "Shnurok: умный пошаговый подбор кроссовок под твой стиль, размер и бюджет.",
+        content: "Шнурок: умный пошаговый подбор кроссовок под твой стиль, размер и бюджет.",
       },
-      { property: "og:type", content: "website" },
+      { property: "og:image", content: OG_IMAGE_URL },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:title", content: "Shnurok — умный подбор кроссовок" },
+      { name: "twitter:title", content: "Шнурок — умный подбор кроссовок" },
       {
         name: "twitter:description",
-        content: "Shnurok: умный пошаговый подбор кроссовок под твой стиль, размер и бюджет.",
+        content: "Шнурок: умный пошаговый подбор кроссовок под твой стиль, размер и бюджет.",
       },
-      {
-        property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a16ba91f-36f1-492c-8559-f2844d2123fb/id-preview-5a1c2b46--f6db9d5a-d9cb-4257-85b8-8d9fcd551300.lovable.app-1777541529584.png",
-      },
-      {
-        name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a16ba91f-36f1-492c-8559-f2844d2123fb/id-preview-5a1c2b46--f6db9d5a-d9cb-4257-85b8-8d9fcd551300.lovable.app-1777541529584.png",
-      },
+      { name: "twitter:image", content: OG_IMAGE_URL },
     ],
     links: [
+      { rel: "icon", href: "/favicon.svg", type: "image/svg+xml" },
+      { rel: "canonical", href: SITE_URL },
       { rel: "preconnect", href: "https://fonts.googleapis.com" },
       { rel: "preconnect", href: "https://fonts.gstatic.com", crossOrigin: "anonymous" },
       {

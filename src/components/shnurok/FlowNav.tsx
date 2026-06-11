@@ -1,3 +1,4 @@
+import { ContactLinks } from "./Contacts";
 import { BigButton, Pill, ProgressBar } from "./ui";
 import { PRICES, type Selections, type Step } from "./types";
 import { getTaskCopy, selectedNames, showPriceChipForStep, stepIndex } from "./flow-utils";
@@ -38,6 +39,7 @@ export function FlowHeader({
   styleTotal,
   selections,
   onReset,
+  onBack,
   showReset = true,
 }: {
   step: Step;
@@ -45,15 +47,17 @@ export function FlowHeader({
   styleTotal: number;
   selections: Selections;
   onReset: () => void;
+  onBack?: () => void;
   showReset?: boolean;
 }) {
   const currentStep = stepIndex(step);
   const isStyle = step === "style";
 
   return (
-    <div className="grid min-w-0 gap-3">
-      <div className="flex items-center gap-4">
+    <div className="grid min-w-0 gap-2.5">
+      <div className="flex items-center justify-between gap-4">
         <LogoMark />
+        <ContactLinks />
       </div>
       {isStyle ? (
         <ProgressBar
@@ -70,7 +74,14 @@ export function FlowHeader({
           action={showReset ? <TextAction onClick={onReset}>начать заново</TextAction> : null}
         />
       ) : null}
-      <ChipsBar sel={selections} showPrice={showPriceChipForStep(step)} />
+      <div className="flex min-h-8 min-w-0 items-start justify-between gap-3">
+        <ChipsBar sel={selections} showPrice={showPriceChipForStep(step)} />
+        {onBack ? (
+          <TextAction onClick={onBack} className="-mr-2 shrink-0">
+            ← Назад
+          </TextAction>
+        ) : null}
+      </div>
     </div>
   );
 }
@@ -115,12 +126,15 @@ export function ChipsBar({ sel, showPrice = true }: { sel: Selections; showPrice
   if (sel.task) items.push({ k: "Задача", v: getTaskCopy(sel.task), tone: "dark" });
   if (sel.sport) items.push({ k: "Спорт", v: sel.sport });
 
-  if (!items.length) return null;
+  // Reserve one chip-row of height even when empty so the first selection
+  // (e.g. size on step 1) doesn't shift the content below the progress bar.
+  if (!items.length) return <div className="min-h-8" aria-hidden />;
 
+  // Wrap (not horizontal scroll) so every selected chip stays visible on mobile.
   return (
-    <div className="flex min-w-0 flex-nowrap gap-2 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible sm:pb-0">
+    <div className="flex min-h-8 min-w-0 flex-wrap items-start gap-1.5">
       {items.map((item) => (
-        <Pill key={item.k} color={item.tone}>
+        <Pill key={item.k} color={item.tone} size="sm">
           <span className="text-suede">{item.k}:</span> {item.v}
         </Pill>
       ))}

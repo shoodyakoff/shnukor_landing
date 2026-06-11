@@ -13,6 +13,12 @@
   --radius-3xl: calc(var(--radius) + 12px);
   --radius-4xl: calc(var(--radius) + 16px);
 
+  /* Brand radius scale — use these instead of arbitrary values.
+     tile = small selectable cells, card = mid surfaces, panel = big containers. */
+  --radius-tile: 1rem;
+  --radius-card: 1.25rem;
+  --radius-panel: 1.5rem;
+
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -54,6 +60,18 @@
   --shadow-brutal: none;
   --shadow-brutal-lg: none;
   --shadow-brutal-xl: none;
+
+  /* Signature hard "pop" shadow scale. Default casts in --outsole;
+     the -mesh family is for dark/primary surfaces where the shadow needs the
+     blue to read. Use shadow-pop-* utilities instead of arbitrary offsets. */
+  --shadow-pop-xs: 2px 2px 0 var(--outsole);
+  --shadow-pop-sm: 3px 3px 0 var(--outsole);
+  --shadow-pop-md: 4px 4px 0 var(--outsole);
+  --shadow-pop-lg: 6px 6px 0 var(--outsole);
+  --shadow-pop-xl: 8px 8px 0 var(--outsole);
+  --shadow-pop-mesh-sm: 3px 3px 0 var(--mesh);
+  --shadow-pop-mesh-md: 5px 5px 0 var(--mesh);
+  --shadow-pop-mesh-lg: 8px 8px 0 var(--mesh);
 }
 
 :root {

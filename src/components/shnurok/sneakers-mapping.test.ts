@@ -8,6 +8,7 @@ import { showPriceChipForStep } from "./flow-utils";
 import { fetchSneakers } from "./sneakers-api";
 import {
   buildSneakersPayload,
+  getSneakersCardById,
   getSneakersCardsForSelections,
   isAllSkipSelection,
   selectionsFromSneakersPayload,
@@ -64,13 +65,18 @@ test("buildSneakersPayload falls back to all daily cards on all-skip", () => {
       "daily-retro-basket": "dislike",
       "daily-trending": "dislike",
       "daily-minimal": "dislike",
+      "daily-puffy": "dislike",
+      "daily-running": "dislike",
+      "daily-retro-runner": "dislike",
+      "daily-tech": "dislike",
+      "daily-luxury": "dislike",
     },
   };
 
   assert.equal(isAllSkipSelection(selections), true);
   assert.deepEqual(buildSneakersPayload(selections), {
     size: ["37"],
-    categories: [349, 731, 730, 569, 576],
+    categories: [349, 731, 730, 569, 576, 765, 493, 732, 579, 348],
     color: ["черный"],
     price_from: 10000,
     price_to: 15000,
@@ -145,7 +151,7 @@ test("buildSneakersPayload omits price limits for any and upper limit for p6", (
   });
 });
 
-test("taxonomy excludes unsupported sport and daily cards", () => {
+test("taxonomy includes all daily visual folders and excludes unsupported sport cards", () => {
   const dailyCards = getSneakersCardsForSelections({
     sizes: [],
     colors: [],
@@ -156,12 +162,32 @@ test("taxonomy excludes unsupported sport and daily cards", () => {
   assert.equal(SPORTS.includes("Универсальные для спорта"), false);
   assert.deepEqual(
     dailyCards.map((card) => card.categoryId),
-    [349, 731, 730, 569, 576],
+    [349, 731, 730, 569, 576, 765, 493, 732, 579, 348],
   );
   assert.equal(
     dailyCards.some((card) => card.title.includes("Дутые")),
-    false,
+    true,
   );
+});
+
+test("selected sport cards use generated Tinder sport images", () => {
+  assert.equal(
+    getSneakersCardById("basketball-rubber")?.image,
+    "/tinder-sport/basketball-rubber.png",
+  );
+  assert.equal(
+    getSneakersCardById("football-artificial")?.image,
+    "/tinder-sport/football-artificial.png",
+  );
+  assert.equal(
+    getSneakersCardById("football-natural")?.image,
+    "/tinder-sport/football-natural.png",
+  );
+  assert.equal(getSneakersCardById("football-base")?.image, "/tinder-sport/football-base.png");
+  assert.equal(getSneakersCardById("football-futsal")?.image, "/tinder-sport/football-futsal.png");
+  assert.equal(getSneakersCardById("tennis-clay")?.image, "/tinder-sport/tennis-clay.png");
+  assert.equal(getSneakersCardById("run-track")?.image, "/tinder-sport/run-track.png");
+  assert.equal(getSneakersCardById("outdoor-hiking")?.image, "/tinder-sport/outdoor-hiking.png");
 });
 
 test("showPriceChipForStep hides default price before the price step", () => {

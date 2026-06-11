@@ -9,7 +9,7 @@ import {
   Sparkle,
 } from "@phosphor-icons/react";
 
-import { CATALOG_ITEMS, RESULT_GROUPS, type ProductItem } from "./data";
+import { CATALOG_ITEMS, type ProductItem } from "./data";
 import { ChipsBar, LogoMark, TextAction } from "./FlowNav";
 import { ResultCard } from "./ProductCards";
 import { BigButton, Pill, StepShell } from "./ui";
@@ -38,8 +38,10 @@ export function SearchScreen({
   ];
   const [idx, setIdx] = useState(0);
   const [apiResult, setApiResult] = useState<SneakersApiResult | null>(null);
-  const previewItems = RESULT_GROUPS.flatMap((group) => group.items).slice(0, 6);
-  const visibleItems = (apiResult?.items.length ? apiResult.items : previewItems).slice(0, 6);
+  // Show real pairs as soon as the API resolves; until then keep neutral
+  // skeletons (no placeholder shoes that would later swap to the real ones).
+  const items = (apiResult?.items ?? []).slice(0, 6);
+  const loading = items.length === 0;
   const progress = Math.min(
     100,
     Math.round((Math.min(idx, statuses.length) / statuses.length) * 100),
@@ -86,11 +88,8 @@ export function SearchScreen({
       <div className="grid w-full items-center gap-4 md:gap-5 lg:grid-cols-[0.88fr_1.12fr]">
         <div className="overflow-hidden rounded-[1.5rem] border-2 border-outsole bg-lace shadow-[5px_5px_0_var(--mesh)] sm:rounded-[2rem] md:shadow-[8px_8px_0_var(--mesh)]">
           <div className="flex items-center justify-between gap-3 border-b-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#ffffff_76%)] p-4 sm:gap-4 sm:p-5">
-            <div>
-              <div className="text-sm font-black text-suede">Ход подбора</div>
-              <div className="mt-1 text-2xl font-black leading-none text-outsole sm:text-3xl">
-                собираем выдачу
-              </div>
+            <div className="text-2xl font-black leading-tight text-outsole sm:text-3xl">
+              Ищем для вас лучший вариант
             </div>
             <div className="flex size-11 shrink-0 items-center justify-center rounded-full border-2 border-outsole bg-lace shadow-[3px_3px_0_var(--outsole)] sm:size-12">
               <MagnifyingGlass size={26} weight="bold" />
@@ -131,16 +130,21 @@ export function SearchScreen({
         </div>
 
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:gap-3">
-          {visibleItems.map((item, index) => (
-            <div
-              key={item.id || `${item.name}-${index}`}
-              className={`aspect-[4/3] overflow-hidden rounded-[1.15rem] border-2 border-cement bg-muted transition-all duration-300 sm:rounded-[1.5rem] ${
-                index <= idx ? "opacity-100" : "opacity-35"
-              }`}
-            >
-              <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
-            </div>
-          ))}
+          {loading
+            ? Array.from({ length: 6 }).map((_, index) => (
+                <div
+                  key={`skeleton-${index}`}
+                  className="aspect-[4/3] animate-pulse rounded-card border-2 border-cement bg-muted"
+                />
+              ))
+            : items.map((item, index) => (
+                <div
+                  key={item.id || `${item.name}-${index}`}
+                  className="aspect-[4/3] overflow-hidden rounded-card border-2 border-cement bg-muted"
+                >
+                  <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
+                </div>
+              ))}
         </div>
       </div>
     </StepShell>
