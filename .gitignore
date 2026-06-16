@@ -35,6 +35,10 @@ public/**/_*/
 __pycache__/
 *.pyc
 
+# Contractor's project copy with the ready hero animation — source for the
+# hero Lottie port, kept locally, will be deleted later. Not for version control.
+shnukor_landing/
+
 # Unused exploration / dev-only assets (kept locally, out of the repo)
 public/hero-options/
 public/hero-static-podium.png

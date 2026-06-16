@@ -6,12 +6,11 @@ import { renderToStaticMarkup } from "react-dom/server";
 
 import { Hero } from "./Hero";
 
-test("Hero renders the selected flat-hand product scene", () => {
+test("Hero renders the animated product-flow scene", () => {
   const html = renderToStaticMarkup(<Hero onStart={() => {}} />);
 
-  assert.match(html, /data-scene="static-podium"/);
-  assert.match(html, /hero-flat-hand-close\.png/);
-  assert.match(html, /Кроссовок на подиуме с рукой/);
-  assert.doesNotMatch(html, /hero-motion/);
-  assert.doesNotMatch(html, /hero-scene-/);
+  assert.match(html, /data-scene="hero-loop"/);
+  assert.match(html, /Собираем подборку/);
+  assert.match(html, /Идеально для тебя/);
+  assert.doesNotMatch(html, /data-scene="static-podium"/);
 });
