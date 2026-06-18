@@ -25,8 +25,8 @@ test("ResultCard renders only product essentials", () => {
 
   assert.match(html, /Test Sneaker/);
   assert.match(html, /10 000 ₽/);
-  assert.match(html, /Размер: 40/);
-  assert.match(html, /Перейти в магазин/);
+  assert.match(html, /EU 40/);
+  assert.match(html, /В магазин/);
   assert.doesNotMatch(html, /88% подходит/);
   assert.doesNotMatch(html, /Почему подходит/);
   assert.doesNotMatch(html, /Тестовое объяснение/);

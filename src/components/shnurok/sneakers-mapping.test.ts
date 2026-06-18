@@ -173,21 +173,35 @@ test("taxonomy includes all daily visual folders and excludes unsupported sport 
 test("selected sport cards use generated Tinder sport images", () => {
   assert.equal(
     getSneakersCardById("basketball-rubber")?.image,
-    "/tinder-sport/basketball-rubber.png",
+    "/tinder-sport/basketball-rubber.webp",
+  );
+  assert.equal(getSneakersCardById("fitness-base")?.image, "/tinder-sport/fitness-base.webp");
+  assert.equal(
+    getSneakersCardById("fitness-weightlifting")?.image,
+    "/tinder-sport/fitness-weightlifting.webp",
   );
   assert.equal(
+    getSneakersCardById("fitness-functional")?.image,
+    "/tinder-sport/fitness-functional.webp",
+  );
+  assert.equal(
+    getSneakersCardById("fitness-crossfit")?.image,
+    "/tinder-sport/fitness-crossfit.webp",
+  );
+  assert.equal(getSneakersCardById("fitness-group")?.image, "/tinder-sport/fitness-group.webp");
+  assert.equal(
     getSneakersCardById("football-artificial")?.image,
-    "/tinder-sport/football-artificial.png",
+    "/tinder-sport/football-artificial.webp",
   );
   assert.equal(
     getSneakersCardById("football-natural")?.image,
-    "/tinder-sport/football-natural.png",
+    "/tinder-sport/football-natural.webp",
   );
-  assert.equal(getSneakersCardById("football-base")?.image, "/tinder-sport/football-base.png");
-  assert.equal(getSneakersCardById("football-futsal")?.image, "/tinder-sport/football-futsal.png");
-  assert.equal(getSneakersCardById("tennis-clay")?.image, "/tinder-sport/tennis-clay.png");
-  assert.equal(getSneakersCardById("run-track")?.image, "/tinder-sport/run-track.png");
-  assert.equal(getSneakersCardById("outdoor-hiking")?.image, "/tinder-sport/outdoor-hiking.png");
+  assert.equal(getSneakersCardById("football-base")?.image, "/tinder-sport/football-base.webp");
+  assert.equal(getSneakersCardById("football-futsal")?.image, "/tinder-sport/football-futsal.webp");
+  assert.equal(getSneakersCardById("tennis-clay")?.image, "/tinder-sport/tennis-clay.webp");
+  assert.equal(getSneakersCardById("run-track")?.image, "/tinder-sport/run-track.webp");
+  assert.equal(getSneakersCardById("outdoor-hiking")?.image, "/tinder-sport/outdoor-hiking.webp");
 });
 
 test("showPriceChipForStep hides default price before the price step", () => {

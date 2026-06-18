@@ -9,9 +9,9 @@ import {
   Sparkle,
 } from "@phosphor-icons/react";
 
-import { CATALOG_ITEMS, type ProductItem } from "./data";
+import { type ProductItem } from "./data";
 import { ChipsBar, LogoMark, TextAction } from "./FlowNav";
-import { ResultCard } from "./ProductCards";
+import { ResultCard, ResultImageFrame } from "./ProductCards";
 import { BigButton, Pill, StepShell } from "./ui";
 import { getTaskCopy, pluralizeModels, selectedNames } from "./flow-utils";
 import type { SneakersPayload } from "./sneakers-mapping";
@@ -21,12 +21,12 @@ import { PRICES, type Selections } from "./types";
 export function SearchScreen({
   sel,
   payload,
-  allSkipped,
+  onHome,
   onDone,
 }: {
   sel: Selections;
   payload?: SneakersPayload | null;
-  allSkipped?: boolean;
+  onHome: () => void;
   onDone: (empty: boolean, items: ProductItem[]) => void;
 }) {
   const statuses = [
@@ -38,10 +38,11 @@ export function SearchScreen({
   ];
   const [idx, setIdx] = useState(0);
   const [apiResult, setApiResult] = useState<SneakersApiResult | null>(null);
-  // Show real pairs as soon as the API resolves; until then keep neutral
-  // skeletons (no placeholder shoes that would later swap to the real ones).
+  // Only ever preview real API results — never fictional catalog fillers. While
+  // the request is in flight (or if it comes back empty) we keep neutral branded
+  // placeholders and route to the empty state instead of inventing models.
   const items = (apiResult?.items ?? []).slice(0, 6);
-  const loading = items.length === 0;
+  const loading = apiResult === null || items.length === 0;
   const progress = Math.min(
     100,
     Math.round((Math.min(idx, statuses.length) / statuses.length) * 100),
@@ -66,24 +67,24 @@ export function SearchScreen({
 
   useEffect(() => {
     if (idx >= statuses.length && apiResult) {
-      const empty = !allSkipped && apiResult.source === "api" && apiResult.items.length === 0;
+      const empty = apiResult.items.length === 0;
       const timer = window.setTimeout(() => onDone(empty, apiResult.items), 700);
       return () => window.clearTimeout(timer);
     }
     return undefined;
-  }, [allSkipped, apiResult, idx, onDone, statuses.length]);
+  }, [apiResult, idx, onDone, statuses.length]);
 
   return (
     <StepShell
       eyebrow={
         <div className="flex flex-wrap items-center justify-between gap-4">
-          <LogoMark />
+          <LogoMark onClick={onHome} />
           <ChipsBar sel={sel} />
         </div>
       }
       title="Подбираем модели"
       subtitle="Подбор идет по размеру, цвету, бюджету и доступным категориям."
-      contentClassName="justify-center"
+      contentClassName="lg:justify-center"
     >
       <div className="grid w-full items-center gap-4 md:gap-5 lg:grid-cols-[0.88fr_1.12fr]">
         <div className="overflow-hidden rounded-[1.5rem] border-2 border-outsole bg-lace shadow-[5px_5px_0_var(--mesh)] sm:rounded-[2rem] md:shadow-[8px_8px_0_var(--mesh)]">
@@ -132,18 +133,20 @@ export function SearchScreen({
         <div className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 md:gap-3">
           {loading
             ? Array.from({ length: 6 }).map((_, index) => (
-                <div
+                <ResultImageFrame
                   key={`skeleton-${index}`}
-                  className="aspect-[4/3] animate-pulse rounded-card border-2 border-cement bg-muted"
+                  placeholder
+                  className="rounded-card border-2 border-cement"
                 />
               ))
             : items.map((item, index) => (
-                <div
+                <ResultImageFrame
                   key={item.id || `${item.name}-${index}`}
-                  className="aspect-[4/3] overflow-hidden rounded-card border-2 border-cement bg-muted"
-                >
-                  <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
-                </div>
+                  src={item.img}
+                  alt={item.name}
+                  loading="eager"
+                  className="rounded-card border-2 border-cement"
+                />
               ))}
         </div>
       </div>
@@ -164,13 +167,13 @@ export function Results({
   onReset: () => void;
   onWiden: () => void;
 }) {
-  const resultItems = items.length ? items : CATALOG_ITEMS;
+  const resultItems = items;
 
   return (
     <div className="min-h-dvh overflow-x-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-8 md:py-6">
       <div className="mx-auto grid max-w-[1440px] gap-5">
         <div className="flex items-center justify-between gap-4">
-          <LogoMark />
+          <LogoMark onClick={onReset} />
           <TextAction onClick={onReset}>подобрать заново</TextAction>
         </div>
 
@@ -213,12 +216,12 @@ export function Results({
   );
 }
 
-export function EmptyState({ onReset, onResults }: { onReset: () => void; onResults: () => void }) {
+export function EmptyState({ onReset }: { onReset: () => void }) {
   return (
     <div className="flex min-h-dvh flex-col overflow-x-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-8 md:py-6">
       <div className="mx-auto flex min-h-[calc(100dvh-1.5rem)] w-full max-w-[760px] flex-col gap-5">
         <div className="flex items-center justify-between gap-4">
-          <LogoMark />
+          <LogoMark onClick={onReset} />
           <TextAction onClick={onReset}>подобрать заново</TextAction>
         </div>
 
@@ -229,23 +232,11 @@ export function EmptyState({ onReset, onResults }: { onReset: () => void; onResu
               По вашим параметрам ничего не найдено
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-suede sm:text-base">
-              Можем смягчить фильтры и показать ближайшие варианты — или загляните в полный каталог
-              на сайте Шнурок{" "}
-              <a
-                href="https://shnurok-shipping.ru/"
-                target="_blank"
-                rel="noreferrer"
-                className="font-black text-outsole underline underline-offset-4"
-              >
-                shnurok-shipping.ru
-              </a>
+              Попробуйте изменить параметры — поищем другие модели.
             </p>
-            <div className="mt-6 flex flex-col gap-3 sm:flex-row">
-              <BigButton onClick={onResults} variant="primary">
-                Показать ближайшие варианты
-              </BigButton>
-              <BigButton onClick={onReset} variant="secondary">
-                Подобрать заново
+            <div className="mt-6">
+              <BigButton onClick={onReset} variant="primary">
+                Попробовать ещё раз
               </BigButton>
             </div>
           </div>

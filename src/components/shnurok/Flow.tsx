@@ -77,6 +77,7 @@ export default function Flow() {
       selections={sel}
       onReset={reset}
       onBack={goBack}
+      onLogoClick={reset}
     />
   );
 
@@ -200,19 +201,14 @@ export default function Flow() {
   }
   if (step === "style") {
     return (
-      <StyleScreen
-        eyebrow={eyebrow}
-        cards={styleCards}
-        styleIdx={styleIdx}
-        onVote={voteStyle}
-      />
+      <StyleScreen eyebrow={eyebrow} cards={styleCards} styleIdx={styleIdx} onVote={voteStyle} />
     );
   }
   if (step === "search")
     return (
       <SearchScreen
         sel={sel}
-        allSkipped={resultAllSkipped}
+        onHome={reset}
         onDone={(empty, items) => {
           setResultItems(items);
           setStep(empty ? "empty" : "results");
@@ -229,7 +225,7 @@ export default function Flow() {
         onWiden={() => setStep("empty")}
       />
     );
-  if (step === "empty") return <EmptyState onReset={reset} onResults={() => setStep("results")} />;
+  if (step === "empty") return <EmptyState onReset={reset} />;
 
   return null;
 }

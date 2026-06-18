@@ -4,13 +4,32 @@ import { PRICES, type Selections, type Step } from "./types";
 import { getTaskCopy, selectedNames, showPriceChipForStep, stepIndex } from "./flow-utils";
 import { publicAsset } from "@/lib/assets";
 
-export function LogoMark() {
-  return (
+export function LogoMark({
+  onClick,
+  className = "",
+}: {
+  onClick?: () => void;
+  className?: string;
+} = {}) {
+  const image = (
     <img
       src={publicAsset("brand/shnurok8-logo.webp")}
       alt="SHNUROK"
       className="h-9 w-auto object-contain md:h-10"
     />
+  );
+
+  if (!onClick) return image;
+
+  return (
+    <button
+      type="button"
+      onClick={onClick}
+      aria-label="На главную"
+      className={`inline-flex w-fit shrink-0 rounded-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-mesh ${className}`}
+    >
+      {image}
+    </button>
   );
 }
 
@@ -40,6 +59,7 @@ export function FlowHeader({
   selections,
   onReset,
   onBack,
+  onLogoClick,
   showReset = true,
 }: {
   step: Step;
@@ -48,15 +68,25 @@ export function FlowHeader({
   selections: Selections;
   onReset: () => void;
   onBack?: () => void;
+  onLogoClick?: () => void;
   showReset?: boolean;
 }) {
   const currentStep = stepIndex(step);
   const isStyle = step === "style";
 
+  // Back + restart sit together top-right so the chips row below spans the full
+  // width and packs two chips per line instead of stacking one per row.
+  const headerActions = (
+    <div className="flex items-center gap-3">
+      {onBack ? <TextAction onClick={onBack}>← Назад</TextAction> : null}
+      {showReset ? <TextAction onClick={onReset}>начать заново</TextAction> : null}
+    </div>
+  );
+
   return (
     <div className="grid min-w-0 gap-2.5">
       <div className="flex items-center justify-between gap-4">
-        <LogoMark />
+        <LogoMark onClick={onLogoClick ?? onReset} />
         <ContactLinks />
       </div>
       {isStyle ? (
@@ -64,24 +94,17 @@ export function FlowHeader({
           current={styleIndex + 1}
           total={styleTotal}
           label={`Стиль ${styleIndex + 1} из ${styleTotal}`}
-          action={showReset ? <TextAction onClick={onReset}>начать заново</TextAction> : null}
+          action={headerActions}
         />
       ) : currentStep.label ? (
         <ProgressBar
           current={currentStep.current}
           total={currentStep.total}
           label={currentStep.label}
-          action={showReset ? <TextAction onClick={onReset}>начать заново</TextAction> : null}
+          action={headerActions}
         />
       ) : null}
-      <div className="flex min-h-8 min-w-0 items-start justify-between gap-3">
-        <ChipsBar sel={selections} showPrice={showPriceChipForStep(step)} />
-        {onBack ? (
-          <TextAction onClick={onBack} className="-mr-2 shrink-0">
-            ← Назад
-          </TextAction>
-        ) : null}
-      </div>
+      <ChipsBar sel={selections} showPrice={showPriceChipForStep(step)} />
     </div>
   );
 }

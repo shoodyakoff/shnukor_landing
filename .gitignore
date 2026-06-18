@@ -35,9 +35,10 @@ public/**/_*/
 __pycache__/
 *.pyc
 
-# Contractor's project copy with the ready hero animation — source for the
-# hero Lottie port, kept locally, will be deleted later. Not for version control.
-shnukor_landing/
+# Contractor's project copies (and numbered re-sends like "shnukor_landing 2")
+# used as a source for porting hero/responsive work — kept locally, deleted
+# later. Not for version control.
+shnukor_landing*/
 
 # Unused exploration / dev-only assets (kept locally, out of the repo)
 public/hero-options/

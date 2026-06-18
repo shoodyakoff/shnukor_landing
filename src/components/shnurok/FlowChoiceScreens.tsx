@@ -42,18 +42,19 @@ export function SizeScreen({
   onNext: () => void;
   onToggle: (size: string) => void;
 }) {
-  const next = <StepActions next={onNext} disabled={!selections.sizes.length} />;
+  const mobileNext = <StepActions next={onNext} disabled={!selections.sizes.length} />;
+  const desktopNext = <StepActions next={onNext} disabled={!selections.sizes.length} />;
   return (
     <StepShell
       eyebrow={eyebrow}
-      title="Какой у тебя размер?"
-      subtitle="Можно отметить до трёх — удобно, если носишь разные бренды."
-      actions={next}
+      title="Какой у вас размер?"
+      subtitle="Можно отметить до трёх — удобно, если носите разные бренды."
+      actions={mobileNext}
       actionsClassName="lg:hidden"
+      titleAction={desktopNext}
     >
       <ChoiceLayout
         columns="grid-cols-5"
-        action={next}
         aside={
           <SelectionAside
             title="Как подобрать размер"
@@ -120,18 +121,19 @@ export function ColorScreen({
   onNext: () => void;
   onToggle: (id: string) => void;
 }) {
-  const next = <StepActions next={onNext} disabled={!selections.colors.length} />;
+  const mobileNext = <StepActions next={onNext} disabled={!selections.colors.length} />;
+  const desktopNext = <StepActions next={onNext} disabled={!selections.colors.length} />;
   return (
     <StepShell
       eyebrow={eyebrow}
       title="Какие цвета нравятся?"
       subtitle="Можно выбрать несколько или отметить «без разницы»."
-      actions={next}
+      actions={mobileNext}
       actionsClassName="lg:hidden"
+      titleAction={desktopNext}
     >
       <ChoiceLayout
         columns="grid-cols-4 sm:grid-cols-5 lg:grid-cols-6"
-        action={next}
         aside={
           <SelectionAside
             title="Сочетания сезона"
@@ -213,18 +215,19 @@ export function PriceScreen({
   onNext: () => void;
   onSelect: (id: string) => void;
 }) {
-  const next = <StepActions next={onNext} disabled={!selections.price} />;
+  const mobileNext = <StepActions next={onNext} disabled={!selections.price} />;
+  const desktopNext = <StepActions next={onNext} disabled={!selections.price} />;
   return (
     <StepShell
       eyebrow={eyebrow}
       title="Какой бюджет комфортен?"
       subtitle="Выбери один диапазон — покажем модели в этой цене."
-      actions={next}
+      actions={mobileNext}
       actionsClassName="lg:hidden"
+      titleAction={desktopNext}
     >
       <ChoiceLayout
         columns="grid-cols-2 md:grid-cols-3"
-        action={next}
         aside={<PriceAside priceId={selections.price} />}
       >
         {PRICES.map((price) => {
@@ -257,14 +260,14 @@ export function TaskScreen({
       id: "daily" as Task,
       title: "На каждый день",
       sub: "Город, прогулки, учеба, работа и повседневные образы.",
-      image: publicAsset("catalog-court-minimal.webp"),
+      image: publicAsset("task-preview/task-daily.webp"),
       label: "каждый день",
     },
     {
       id: "sport" as Task,
       title: "Для спорта",
       sub: "Тренировки, бег, зал, игра и активное движение.",
-      image: publicAsset("catalog-knit-tech.webp"),
+      image: publicAsset("task-preview/task-sport.webp"),
       label: "спорт",
     },
   ];
@@ -359,6 +362,8 @@ export function SportScreen({
       title="Какой именно спорт?"
       subtitle="От этого зависят амортизация, сцепление и силуэт."
       actions={<StepActions next={onNext} disabled={!selections.sport} />}
+      actionsClassName="lg:hidden"
+      titleAction={<StepActions next={onNext} disabled={!selections.sport} />}
       contentClassName="lg:justify-center"
     >
       <div className="grid w-full grid-cols-2 gap-2.5 md:gap-3 lg:grid-cols-3 xl:grid-cols-4">
@@ -493,12 +498,17 @@ function PriceAside({ priceId }: { priceId?: string }) {
       title="Топовая пара в этом сегменте"
       icon={<CurrencyRub size={26} weight="bold" />}
     >
-      <div className="flex min-h-0 flex-1 flex-col overflow-hidden rounded-panel bg-lace">
-        <div className="min-h-0 flex-1 overflow-hidden rounded-panel bg-muted">
+      <div className="flex min-h-0 flex-1 flex-col gap-3">
+        <div className="min-h-0 flex-1 overflow-hidden rounded-card border-2 border-outsole bg-muted shadow-pop-sm">
           <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
         </div>
-        <div className="flex items-center justify-between gap-2 px-1 pt-4">
-          <div className="min-w-0 text-lg font-black leading-tight text-outsole">{item.name}</div>
+        <div
+          data-slot="price-preview-meta"
+          className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 rounded-card border-2 border-outsole bg-lace p-3 shadow-pop-sm"
+        >
+          <div className="min-w-0 line-clamp-2 text-lg font-black leading-tight text-outsole">
+            {item.name}
+          </div>
           {priceLabel ? <Pill size="sm">{priceLabel}</Pill> : null}
         </div>
       </div>

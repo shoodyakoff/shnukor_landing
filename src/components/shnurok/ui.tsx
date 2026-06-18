@@ -106,7 +106,7 @@ export function ProgressBar({
         <span className="text-xs font-bold uppercase tracking-wide text-suede">{label}</span>
         {action}
       </div>
-      <div className="relative mt-14">
+      <div className="relative mt-10 sm:mt-14">
         <div className="h-2.5 overflow-hidden rounded-full bg-cement">
           <div
             className="h-full rounded-full bg-mesh transition-[width] duration-700 ease-out"
@@ -119,7 +119,7 @@ export function ProgressBar({
           style={{ left: `clamp(1.5rem, ${renderPct}%, calc(100% - 1.5rem))` }}
           aria-hidden
         >
-          <HeartMascot className="h-12 w-12 transition-transform duration-700 ease-out" />
+          <HeartMascot className="h-10 w-10 transition-transform duration-700 ease-out sm:h-12 sm:w-12" />
           <span className="mt-[5px] h-3.5 w-[2px] rounded-full bg-outsole" />
         </div>
       </div>
@@ -134,6 +134,7 @@ export function StepShell({
   children,
   actions,
   actionsClassName,
+  titleAction,
   contentClassName,
 }: {
   eyebrow: ReactNode;
@@ -142,25 +143,40 @@ export function StepShell({
   children: ReactNode;
   actions?: ReactNode;
   actionsClassName?: string;
+  titleAction?: ReactNode;
   contentClassName?: string;
 }) {
   return (
-    <div className="flex min-h-dvh flex-col overflow-x-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-6 md:py-5 xl:px-8">
-      <div className="mx-auto flex min-h-[calc(100dvh-1.5rem)] w-full max-w-[1400px] flex-col gap-3 sm:min-h-[calc(100dvh-2rem)] md:min-h-[calc(100dvh-2.5rem)] md:gap-4">
-        <div className="min-h-0">{eyebrow}</div>
-        <div className="min-w-0 animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out">
-          <h1 className="max-w-4xl font-display text-2xl font-bold leading-[1.05] text-balance text-outsole sm:text-3xl md:text-4xl">
-            {title}
-          </h1>
-          {subtitle && (
-            <p className="mt-1.5 max-w-2xl text-sm leading-snug text-suede sm:text-base">
-              {subtitle}
-            </p>
+    <div className="flex h-dvh flex-col overflow-hidden px-4 py-4 md:px-6 md:py-5 xl:px-8">
+      <div className="mx-auto flex h-full w-full max-w-[1400px] flex-col gap-3 md:gap-4">
+        <div className="shrink-0">{eyebrow}</div>
+        <div
+          className={cn(
+            "min-w-0 shrink-0 animate-in fade-in slide-in-from-bottom-2 duration-500 ease-out lg:flex lg:items-start lg:justify-between lg:gap-5",
           )}
+        >
+          <div className="min-w-0">
+            <h1 className="max-w-4xl font-display text-2xl font-bold leading-[1.05] text-balance text-outsole sm:text-3xl md:text-4xl">
+              {title}
+            </h1>
+            {subtitle && (
+              <p className="mt-1.5 max-w-2xl text-sm leading-snug text-suede sm:text-base">
+                {subtitle}
+              </p>
+            )}
+          </div>
+          {titleAction ? (
+            <div
+              data-slot="step-title-action"
+              className="hidden shrink-0 justify-end pt-0.5 lg:flex"
+            >
+              {titleAction}
+            </div>
+          ) : null}
         </div>
         <div
           className={cn(
-            "flex min-h-0 flex-1 flex-col animate-in fade-in slide-in-from-bottom-3 duration-500 ease-out",
+            "flex min-h-0 flex-1 flex-col overflow-y-auto animate-in fade-in slide-in-from-bottom-3 duration-500 ease-out",
             contentClassName,
           )}
         >
@@ -169,7 +185,7 @@ export function StepShell({
         {actions ? (
           <div
             className={cn(
-              "sticky bottom-0 z-30 -mx-3 mt-1 flex items-center justify-between gap-3 border-t-2 border-outsole bg-lace/95 px-3 py-3 backdrop-blur sm:-mx-4 sm:px-4 md:static md:mx-0 md:border-0 md:bg-transparent md:p-0 md:pt-1 md:backdrop-blur-none",
+              "z-30 mt-1 flex shrink-0 items-center justify-between gap-3 border-t-2 border-outsole bg-lace pt-3 md:static md:border-0 md:bg-transparent md:p-0 md:pt-1",
               actionsClassName,
             )}
           >

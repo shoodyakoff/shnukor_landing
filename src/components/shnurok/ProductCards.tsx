@@ -1,5 +1,12 @@
+import { useState } from "react";
+
+import { publicAsset } from "@/lib/assets";
+import { cn } from "@/lib/utils";
+
 import { Pill } from "./ui";
 import type { ProductItem } from "./data";
+
+const RESULT_PLACEHOLDER_SRC = publicAsset("result-placeholder.png");
 
 export function ProductShowcase({
   item,
@@ -47,17 +54,63 @@ export function ProductShowcase({
   );
 }
 
+export function ResultImageFrame({
+  src,
+  alt = "",
+  loading = "lazy",
+  placeholder = false,
+  className,
+}: {
+  src?: string;
+  alt?: string;
+  loading?: "eager" | "lazy";
+  placeholder?: boolean;
+  className?: string;
+}) {
+  const [loaded, setLoaded] = useState(false);
+  const showImage = Boolean(src && !placeholder);
+
+  return (
+    <div
+      data-slot={placeholder ? "result-preview-placeholder" : "result-image-frame"}
+      className={cn("relative aspect-[4/3] overflow-hidden bg-white", className)}
+    >
+      {/* Branded backdrop — the same pattern baked into the generated shots.
+          Shown only while the real photo is loading (or as a pure placeholder);
+          removed once the photo is in, so loaded photos never sit on a bg. */}
+      {(!showImage || !loaded) && (
+        <img
+          src={RESULT_PLACEHOLDER_SRC}
+          alt=""
+          aria-hidden="true"
+          data-slot="result-placeholder-bg"
+          className="absolute inset-0 h-full w-full object-cover"
+        />
+      )}
+
+      {showImage ? (
+        <img
+          data-slot="result-product-image"
+          src={src}
+          alt={alt}
+          loading={loading}
+          onLoad={() => setLoaded(true)}
+          className={cn(
+            "relative z-10 h-full w-full object-contain object-center p-2 transition-opacity duration-300 sm:p-3",
+            loaded ? "opacity-100" : "opacity-0",
+          )}
+        />
+      ) : (
+        <span className="sr-only">Загрузка изображения товара</span>
+      )}
+    </div>
+  );
+}
+
 export function ResultCard({ item }: { item: ProductItem }) {
   return (
     <div className="grid h-full grid-rows-[auto_1fr] overflow-hidden rounded-[1rem] border-2 border-cement bg-lace transition-all hover:border-outsole hover:shadow-[5px_5px_0_var(--mesh)] sm:rounded-[1.15rem]">
-      <div className="aspect-[4/3] overflow-hidden bg-white">
-        <img
-          src={item.img}
-          alt={item.name}
-          loading="lazy"
-          className="h-full w-full object-cover object-center"
-        />
-      </div>
+      <ResultImageFrame src={item.img} alt={item.name} loading="lazy" />
 
       <div className="grid content-between gap-2.5 p-3 sm:p-4">
         <div className="min-w-0">
@@ -82,7 +135,7 @@ export function ResultCard({ item }: { item: ProductItem }) {
             rel="noreferrer"
             className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-outsole bg-outsole px-4 py-2.5 text-sm font-black text-lace shadow-[3px_3px_0_var(--mesh)] transition-all hover:translate-x-[2px] hover:translate-y-[2px] hover:bg-suede hover:shadow-[1px_1px_0_var(--mesh)]"
           >
-            Перейти в магазин
+            В магазин
           </a>
         ) : (
           <span className="inline-flex min-h-11 items-center justify-center rounded-full border-2 border-cement bg-muted px-4 py-2.5 text-sm font-black text-suede">

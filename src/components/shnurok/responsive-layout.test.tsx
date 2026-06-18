@@ -25,7 +25,7 @@ const cards: SneakersCard[] = [
   },
 ];
 
-test("StepShell pins primary actions in a bottom bar (sticky on phones, in-flow on desktop)", () => {
+test("StepShell pins primary actions in a bottom bar (divider on phones, in-flow on desktop)", () => {
   const html = renderToStaticMarkup(
     <StepShell
       eyebrow={<div>eyebrow</div>}
@@ -36,8 +36,10 @@ test("StepShell pins primary actions in a bottom bar (sticky on phones, in-flow 
     </StepShell>,
   );
 
-  assert.match(html, /sticky/);
-  assert.match(html, /md:static/);
+  // The shell is locked to the viewport (h-dvh + overflow-hidden) so the action
+  // bar sits in-flow at the bottom — separated by a divider on phones, plain on desktop.
+  assert.match(html, /border-t-2/);
+  assert.match(html, /md:border-0/);
   assert.doesNotMatch(html, /xl:absolute/);
   assert.doesNotMatch(html, /xl:pr-\[430px\]/);
 });

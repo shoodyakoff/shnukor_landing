@@ -151,6 +151,11 @@ const DAILY_CARDS: SneakersCard[] = [
 
 const SPORT_CARD_IMAGE_OVERRIDES: Record<string, string> = {
   "basketball-rubber": publicAsset("tinder-sport/basketball-rubber.webp"),
+  "fitness-base": publicAsset("tinder-sport/fitness-base.webp"),
+  "fitness-crossfit": publicAsset("tinder-sport/fitness-crossfit.webp"),
+  "fitness-functional": publicAsset("tinder-sport/fitness-functional.webp"),
+  "fitness-group": publicAsset("tinder-sport/fitness-group.webp"),
+  "fitness-weightlifting": publicAsset("tinder-sport/fitness-weightlifting.webp"),
   "football-artificial": publicAsset("tinder-sport/football-artificial.webp"),
   "football-base": publicAsset("tinder-sport/football-base.webp"),
   "football-futsal": publicAsset("tinder-sport/football-futsal.webp"),

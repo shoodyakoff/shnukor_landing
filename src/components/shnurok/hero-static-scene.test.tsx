@@ -14,3 +14,16 @@ test("Hero renders the animated product-flow scene", () => {
   assert.match(html, /Идеально для тебя/);
   assert.doesNotMatch(html, /data-scene="static-podium"/);
 });
+
+test("Hero uses the updated picker copy", () => {
+  const html = renderToStaticMarkup(<Hero onStart={() => {}} />);
+
+  assert.match(html, /Подберем кроссовки/);
+  assert.match(html, /под твой стиль/);
+  assert.match(
+    html,
+    /Расскажите нам о своих предпочтениях, а мы найдем кроссовки, которые действительно попадают в сердечко\./,
+  );
+  assert.doesNotMatch(html, /Соберем подборку/);
+  assert.doesNotMatch(html, /Пара коротких шагов/);
+});
