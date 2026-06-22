@@ -150,7 +150,10 @@ const DAILY_CARDS: SneakersCard[] = [
 ];
 
 const SPORT_CARD_IMAGE_OVERRIDES: Record<string, string> = {
+  "basketball-base": publicAsset("tinder-sport/basketball-base.webp"),
+  "basketball-parquet": publicAsset("tinder-sport/basketball-parquet.webp"),
   "basketball-rubber": publicAsset("tinder-sport/basketball-rubber.webp"),
+  "basketball-street": publicAsset("tinder-sport/basketball-street.webp"),
   "fitness-base": publicAsset("tinder-sport/fitness-base.webp"),
   "fitness-crossfit": publicAsset("tinder-sport/fitness-crossfit.webp"),
   "fitness-functional": publicAsset("tinder-sport/fitness-functional.webp"),
@@ -160,9 +163,25 @@ const SPORT_CARD_IMAGE_OVERRIDES: Record<string, string> = {
   "football-base": publicAsset("tinder-sport/football-base.webp"),
   "football-futsal": publicAsset("tinder-sport/football-futsal.webp"),
   "football-natural": publicAsset("tinder-sport/football-natural.webp"),
-  "tennis-clay": publicAsset("tinder-sport/tennis-clay.webp"),
+  "run-long": publicAsset("tinder-sport/run-long.webp"),
+  "run-street": publicAsset("tinder-sport/run-street.webp"),
   "run-track": publicAsset("tinder-sport/run-track.webp"),
+  "run-trail": publicAsset("tinder-sport/run-trail.webp"),
+  "run-urban-trail": publicAsset("tinder-sport/run-urban-trail.webp"),
+  "run-winter": publicAsset("tinder-sport/run-winter.webp"),
+  "tennis-clay": publicAsset("tinder-sport/tennis-clay.webp"),
+  "tennis-grass": publicAsset("tinder-sport/tennis-grass.webp"),
+  "tennis-hard": publicAsset("tinder-sport/tennis-hard.webp"),
+  "tennis-padel": publicAsset("tinder-sport/tennis-padel.webp"),
+  "tennis-universal": publicAsset("tinder-sport/tennis-universal.webp"),
   "outdoor-hiking": publicAsset("tinder-sport/outdoor-hiking.webp"),
+  "outdoor-trail": publicAsset("tinder-sport/outdoor-trail.webp"),
+  "outdoor-trekking": publicAsset("tinder-sport/outdoor-trekking.webp"),
+  "skate-base": publicAsset("tinder-sport/skate-base.webp"),
+  "skate-cupsole": publicAsset("tinder-sport/skate-cupsole.webp"),
+  "skate-high": publicAsset("tinder-sport/skate-high.webp"),
+  "skate-low": publicAsset("tinder-sport/skate-low.webp"),
+  "skate-slipons": publicAsset("tinder-sport/skate-slipons.webp"),
 };
 
 const SPORT_CARDS: Record<string, SneakersCard[]> = {

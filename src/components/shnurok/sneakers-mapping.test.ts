@@ -199,9 +199,47 @@ test("selected sport cards use generated Tinder sport images", () => {
   );
   assert.equal(getSneakersCardById("football-base")?.image, "/tinder-sport/football-base.webp");
   assert.equal(getSneakersCardById("football-futsal")?.image, "/tinder-sport/football-futsal.webp");
+  assert.equal(getSneakersCardById("run-street")?.image, "/tinder-sport/run-street.webp");
+  assert.equal(getSneakersCardById("run-long")?.image, "/tinder-sport/run-long.webp");
+  assert.equal(getSneakersCardById("run-trail")?.image, "/tinder-sport/run-trail.webp");
+  assert.equal(
+    getSneakersCardById("run-urban-trail")?.image,
+    "/tinder-sport/run-urban-trail.webp",
+  );
   assert.equal(getSneakersCardById("tennis-clay")?.image, "/tinder-sport/tennis-clay.webp");
   assert.equal(getSneakersCardById("run-track")?.image, "/tinder-sport/run-track.webp");
+  assert.equal(getSneakersCardById("run-winter")?.image, "/tinder-sport/run-winter.webp");
+  assert.equal(getSneakersCardById("basketball-base")?.image, "/tinder-sport/basketball-base.webp");
+  assert.equal(
+    getSneakersCardById("basketball-street")?.image,
+    "/tinder-sport/basketball-street.webp",
+  );
+  assert.equal(
+    getSneakersCardById("basketball-rubber")?.image,
+    "/tinder-sport/basketball-rubber.webp",
+  );
+  assert.equal(
+    getSneakersCardById("basketball-parquet")?.image,
+    "/tinder-sport/basketball-parquet.webp",
+  );
+  assert.equal(getSneakersCardById("tennis-hard")?.image, "/tinder-sport/tennis-hard.webp");
+  assert.equal(getSneakersCardById("outdoor-trail")?.image, "/tinder-sport/outdoor-trail.webp");
   assert.equal(getSneakersCardById("outdoor-hiking")?.image, "/tinder-sport/outdoor-hiking.webp");
+  assert.equal(
+    getSneakersCardById("outdoor-trekking")?.image,
+    "/tinder-sport/outdoor-trekking.webp",
+  );
+  assert.equal(getSneakersCardById("tennis-grass")?.image, "/tinder-sport/tennis-grass.webp");
+  assert.equal(
+    getSneakersCardById("tennis-universal")?.image,
+    "/tinder-sport/tennis-universal.webp",
+  );
+  assert.equal(getSneakersCardById("tennis-padel")?.image, "/tinder-sport/tennis-padel.webp");
+  assert.equal(getSneakersCardById("skate-base")?.image, "/tinder-sport/skate-base.webp");
+  assert.equal(getSneakersCardById("skate-slipons")?.image, "/tinder-sport/skate-slipons.webp");
+  assert.equal(getSneakersCardById("skate-low")?.image, "/tinder-sport/skate-low.webp");
+  assert.equal(getSneakersCardById("skate-high")?.image, "/tinder-sport/skate-high.webp");
+  assert.equal(getSneakersCardById("skate-cupsole")?.image, "/tinder-sport/skate-cupsole.webp");
 });
 
 test("showPriceChipForStep hides default price before the price step", () => {
