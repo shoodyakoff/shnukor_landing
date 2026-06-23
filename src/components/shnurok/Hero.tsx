@@ -192,12 +192,12 @@ function HeroProductScene() {
 
         <div
           data-hero-animated
-          className="absolute left-[5%] top-[3%] grid w-[46%] grid-cols-1 gap-1.5 md:left-7 md:top-[15%] md:w-[42%] md:grid-cols-1 md:gap-1.5"
+          className="absolute left-[5%] top-[6%] grid w-[90%] grid-cols-2 gap-2 md:left-7 md:top-[15%] md:w-[42%] md:grid-cols-1 md:gap-1.5"
           style={{ animation: "heroSelected 10s ease-in-out infinite" }}
         >
           <p
             data-hero-animated
-            className="col-span-1 text-[0.58rem] font-semibold leading-tight tracking-[0.02em] text-suede sm:text-xs md:col-span-1"
+            className="col-span-2 text-[0.58rem] font-semibold leading-tight tracking-[0.02em] text-suede sm:text-xs md:col-span-1"
             style={{ animation: "heroIntroCopy 10s ease-in-out infinite" }}
           >
             1. Ответь на вопросы
@@ -213,10 +213,10 @@ function HeroProductScene() {
           ))}
         </div>
 
-        <div className="absolute left-[5%] top-[46%] h-[46%] w-[56%] md:left-auto md:right-8 md:top-[15%] md:h-[58%] md:w-[43%]">
+        <div className="absolute left-1/2 top-[40%] h-[54%] w-[64%] -translate-x-1/2 md:left-auto md:right-8 md:top-[15%] md:h-[58%] md:w-[43%] md:translate-x-0">
           <p
             data-hero-animated
-            className="absolute inset-x-0 -top-5 text-left text-[0.58rem] font-semibold leading-tight tracking-[0.02em] text-suede sm:-top-6 sm:text-xs md:top-0 md:text-center"
+            className="absolute inset-x-0 -top-5 text-center text-[0.58rem] font-semibold leading-tight tracking-[0.02em] text-suede sm:-top-6 sm:text-xs md:top-0 md:text-center"
             style={{ animation: "heroIntroCopy 10s ease-in-out infinite" }}
           >
             2. Свайпай карточки
@@ -300,7 +300,7 @@ function HeroProductScene() {
 
         <div
           data-hero-animated
-          className="absolute left-[16%] top-[66%] z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[#ff7d73]/30 bg-white text-lg font-black leading-none text-[#d84337] shadow-[0_12px_28px_rgba(216,67,55,0.16)] md:left-[48%] md:top-[43%] md:h-10 md:w-10 md:text-2xl"
+          className="absolute left-[28%] top-[64%] z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[#ff7d73]/30 bg-white text-lg font-black leading-none text-[#d84337] shadow-[0_12px_28px_rgba(216,67,55,0.16)] md:left-[48%] md:top-[43%] md:h-10 md:w-10 md:text-2xl"
           style={{ animation: "heroReject 10s ease-in-out infinite" }}
           aria-label="Отклонено"
         >
@@ -309,7 +309,7 @@ function HeroProductScene() {
 
         <div
           data-hero-animated
-          className="absolute left-[44%] top-[66%] z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[#45c782]/30 bg-white text-lg font-black leading-none text-[#17975b] shadow-[0_12px_28px_rgba(23,151,91,0.18)] md:left-auto md:right-[13%] md:top-[43%] md:h-10 md:w-10 md:text-2xl"
+          className="absolute left-[60%] top-[64%] z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[#45c782]/30 bg-white text-lg font-black leading-none text-[#17975b] shadow-[0_12px_28px_rgba(23,151,91,0.18)] md:left-auto md:right-[13%] md:top-[43%] md:h-10 md:w-10 md:text-2xl"
           style={{ animation: "heroApprove 10s ease-in-out infinite" }}
           aria-label="Подходит"
         >
@@ -318,7 +318,7 @@ function HeroProductScene() {
 
         <div
           data-hero-animated
-          className="absolute top-[3%] right-[4%] w-[44%] rounded-[0.9rem] border border-white/70 bg-white/75 p-2 shadow-[0_14px_34px_rgba(10,10,10,0.08)] backdrop-blur sm:rounded-[1rem] md:top-auto md:bottom-3 md:right-auto md:left-8 md:w-[28%] md:p-2"
+          className="absolute hidden top-[3%] right-[4%] w-[44%] rounded-[0.9rem] border border-white/70 bg-white/75 p-2 shadow-[0_14px_34px_rgba(10,10,10,0.08)] backdrop-blur sm:rounded-[1rem] md:block md:top-auto md:bottom-3 md:right-auto md:left-8 md:w-[28%] md:p-2"
           style={{ animation: "heroCounterPanel 10s steps(1,end) infinite" }}
         >
           <div className="whitespace-nowrap text-[0.56rem] font-bold tracking-[0] text-suede/60 sm:text-[0.68rem] sm:tracking-[0.04em]">

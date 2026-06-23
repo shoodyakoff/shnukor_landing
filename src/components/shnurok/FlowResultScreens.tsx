@@ -235,16 +235,19 @@ export function EmptyState({ onReset }: { onReset: () => void }) {
               По вашим параметрам ничего не найдено
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-suede sm:text-base">
-              По выбранным критериям ничего не найдено. Но мы всё равно хотим помочь вам с выбором —
-              напишите нам, и мы подберём подходящие варианты вручную.
+              Но мы всё равно хотим помочь вам с выбором — напишите нам, и мы подберём подходящие
+              варианты вручную.
             </p>
-            <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
+            <div className="mt-6 flex flex-col items-center gap-4">
+              <div className="flex justify-center [&_a]:size-14 [&_svg]:size-6">
+                <ContactLinks />
+              </div>
+              <p className="text-center text-sm leading-relaxed text-suede sm:text-base">
+                или вы можете
+              </p>
               <BigButton onClick={onReset} variant="primary">
                 Попробовать ещё раз
               </BigButton>
-              <div className="sm:ml-auto [&_a]:size-14 [&_svg]:size-6 md:[&_a]:size-16 md:[&_svg]:size-7">
-                <ContactLinks />
-              </div>
             </div>
           </div>
         </div>
