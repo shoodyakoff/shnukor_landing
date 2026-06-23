@@ -58,7 +58,7 @@ export default function Flow() {
   };
 
   // Single back handler routed through the header so every step shows the same
-  // "← Назад" link under the progress bar. `style` defers to its own handler
+  // "← назад" link under the progress bar. `style` defers to its own handler
   // (which steps back through the swipe deck before leaving the step).
   const goBack = () => {
     if (step === "size") setStep("hero");

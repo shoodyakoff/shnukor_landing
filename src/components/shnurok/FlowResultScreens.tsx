@@ -10,6 +10,7 @@ import {
 } from "@phosphor-icons/react";
 
 import { type ProductItem } from "./data";
+import { ContactLinks } from "./Contacts";
 import { ChipsBar, LogoMark, TextAction } from "./FlowNav";
 import { ResultCard, ResultImageFrame } from "./ProductCards";
 import { BigButton, Pill, StepShell } from "./ui";
@@ -232,12 +233,14 @@ export function EmptyState({ onReset }: { onReset: () => void }) {
               По вашим параметрам ничего не найдено
             </h1>
             <p className="mt-3 max-w-xl text-sm leading-relaxed text-suede sm:text-base">
-              Попробуйте изменить параметры — поищем другие модели.
+              По выбранным критериям ничего не найдено. Но мы всё равно хотим помочь вам с выбором —
+              напишите нам, и мы подберём подходящие варианты вручную.
             </p>
-            <div className="mt-6">
+            <div className="mt-6 flex flex-col items-start gap-3 sm:flex-row sm:items-center sm:gap-4">
               <BigButton onClick={onReset} variant="primary">
                 Попробовать ещё раз
               </BigButton>
+              <ContactLinks />
             </div>
           </div>
         </div>

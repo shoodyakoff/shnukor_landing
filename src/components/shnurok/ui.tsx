@@ -147,8 +147,8 @@ export function StepShell({
   contentClassName?: string;
 }) {
   return (
-    <div className="flex h-dvh flex-col overflow-hidden px-4 py-4 md:px-6 md:py-5 xl:px-8">
-      <div className="mx-auto flex h-full w-full max-w-[1400px] flex-col gap-3 md:gap-4">
+    <div className="flex h-dvh flex-col overflow-hidden px-4 py-3 md:px-6 md:py-5 xl:px-8">
+      <div className="mx-auto flex h-full w-full max-w-[1400px] flex-col gap-2 md:gap-4">
         <div className="shrink-0">{eyebrow}</div>
         <div
           className={cn(
@@ -176,7 +176,7 @@ export function StepShell({
         </div>
         <div
           className={cn(
-            "flex min-h-0 flex-1 flex-col overflow-y-auto animate-in fade-in slide-in-from-bottom-3 duration-500 ease-out",
+            "flex min-h-0 flex-1 flex-col overflow-x-hidden overflow-y-auto animate-in fade-in slide-in-from-bottom-3 duration-500 ease-out",
             contentClassName,
           )}
         >
@@ -216,7 +216,7 @@ export function ChoiceLayout({
   return (
     <div className="grid min-h-0 w-full flex-1 gap-4 md:gap-6 lg:grid-cols-[minmax(0,1fr)_clamp(300px,25vw,340px)] lg:items-stretch">
       <div className="flex min-h-0 flex-col">
-        <div className={cn("grid content-start gap-2.5 lg:flex-1 lg:content-center", columns)}>
+        <div className={cn("grid content-start gap-2 sm:gap-2.5 lg:flex-1 lg:content-center", columns)}>
           {children}
         </div>
         {action ? <div className="mt-4 hidden lg:flex">{action}</div> : null}
@@ -248,7 +248,7 @@ export function ChoiceTile({
       aria-pressed={ariaPressed}
       className={cn(
         choiceCardClass(active),
-        "flex h-20 flex-col items-center justify-center gap-1.5 text-center disabled:cursor-not-allowed disabled:opacity-35 sm:h-24",
+        "flex min-h-16 flex-col items-center justify-center gap-1.5 text-center disabled:cursor-not-allowed disabled:opacity-35 sm:min-h-24",
       )}
     >
       {children}
@@ -271,7 +271,7 @@ export function SelectionAside({
   footer?: string;
 }) {
   return (
-    <aside className="hidden h-full flex-col overflow-hidden rounded-panel border-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#f7fbff_58%,#ffffff_100%)] p-5 shadow-pop-lg lg:flex">
+    <aside className="hidden h-full flex-col overflow-hidden rounded-panel border-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#f7fbff_58%,#ffffff_100%)] p-5 lg:flex">
       <div className="flex items-start justify-between gap-3">
         <div className="max-w-[12rem] text-2xl font-black leading-[1.1] text-outsole">{title}</div>
         <div className="flex size-11 shrink-0 items-center justify-center rounded-full border-2 border-outsole bg-lace shadow-pop-sm">

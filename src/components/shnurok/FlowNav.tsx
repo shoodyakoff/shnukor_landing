@@ -78,7 +78,7 @@ export function FlowHeader({
   // width and packs two chips per line instead of stacking one per row.
   const headerActions = (
     <div className="flex items-center gap-3">
-      {onBack ? <TextAction onClick={onBack}>← Назад</TextAction> : null}
+      {onBack ? <TextAction onClick={onBack}>← назад</TextAction> : null}
       {showReset ? <TextAction onClick={onReset}>начать заново</TextAction> : null}
     </div>
   );
@@ -124,7 +124,7 @@ export function StepActions({
     <>
       {back ? (
         <TextAction onClick={back} className="text-base md:text-lg">
-          Назад
+          назад
         </TextAction>
       ) : null}
       {next ? (

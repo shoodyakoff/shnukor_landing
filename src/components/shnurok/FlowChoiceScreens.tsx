@@ -76,7 +76,7 @@ export function SizeScreen({
               ].map(([eu, cm]) => (
                 <div
                   key={eu}
-                  className="flex items-center justify-between rounded-tile border-2 border-outsole bg-lace px-3 py-2 shadow-pop-xs"
+                  className="flex items-center justify-between rounded-tile border-2 border-outsole bg-lace px-3 py-2"
                 >
                   <span className="text-sm font-black text-outsole">{eu}</span>
                   <span className="text-xs font-bold text-suede">{cm}</span>
@@ -148,7 +148,7 @@ export function ColorScreen({
               ].map(([label, base, accent, light]) => (
                 <div
                   key={label as string}
-                  className="relative min-h-[84px] overflow-hidden rounded-card border-2 border-outsole bg-lace p-3 shadow-pop-sm"
+                  className="relative min-h-[84px] overflow-hidden rounded-card border-2 border-outsole bg-lace p-3 will-change-transform"
                 >
                   <div
                     className="absolute inset-0"
@@ -188,7 +188,7 @@ export function ColorScreen({
               onClick={() => onToggle(color.id)}
             >
               <span
-                className="size-10 rounded-full border-2 border-outsole/15 sm:size-11"
+                className="size-10 shrink-0 rounded-full border-2 border-outsole/15 sm:size-11"
                 style={{
                   background: isAny
                     ? "repeating-linear-gradient(45deg,#fff,#fff 8px,#dddddd 8px,#dddddd 16px)"
@@ -284,7 +284,7 @@ export function TaskScreen({
           <button
             key={card.id}
             onClick={() => onSelect(card.id)}
-            className="grid min-h-[8.5rem] grid-cols-[minmax(0,1fr)_38%] overflow-hidden rounded-card border-2 border-cement bg-lace text-left transition-all hover:border-outsole hover:shadow-pop-mesh-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh sm:min-h-[12rem] sm:rounded-panel"
+            className="grid min-h-[8.5rem] grid-cols-[minmax(0,1fr)_38%] overflow-hidden rounded-card border-2 border-cement bg-lace text-left transition-all will-change-transform hover:border-outsole hover:shadow-pop-mesh-md focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-mesh sm:min-h-[12rem] sm:rounded-panel"
           >
             <div className="flex flex-col justify-center gap-1.5 p-4 sm:p-5">
               <div className="text-xl font-bold leading-tight text-outsole sm:text-2xl md:text-3xl">
@@ -385,7 +385,7 @@ export function SportScreen({
                 </div>
                 <div className="text-xs font-bold leading-tight text-suede">{card.sub}</div>
               </div>
-              <div className="hidden h-full min-h-[72px] overflow-hidden rounded-xl bg-muted sm:block">
+              <div className="hidden h-full min-h-[72px] overflow-hidden rounded-xl bg-muted will-change-transform sm:block">
                 <img src={card.image} alt={card.sport} className="h-full w-full object-cover" />
               </div>
             </button>
@@ -491,7 +491,6 @@ export function SummaryScreen({
 function PriceAside({ priceId }: { priceId?: string }) {
   const defaultPriceId = priceId ?? DEFAULT_PRICE_ID;
   const item = PRICE_PREVIEW_ITEMS[defaultPriceId] ?? PRICE_PREVIEW_ITEMS[DEFAULT_PRICE_ID];
-  const priceLabel = PRICES.find((price) => price.id === defaultPriceId)?.label;
 
   return (
     <SelectionAside
@@ -499,17 +498,16 @@ function PriceAside({ priceId }: { priceId?: string }) {
       icon={<CurrencyRub size={26} weight="bold" />}
     >
       <div className="flex min-h-0 flex-1 flex-col gap-3">
-        <div className="min-h-0 flex-1 overflow-hidden rounded-card border-2 border-outsole bg-muted shadow-pop-sm">
+        <div className="min-h-0 flex-1 overflow-hidden rounded-card border-2 border-outsole bg-muted will-change-transform">
           <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
         </div>
         <div
           data-slot="price-preview-meta"
-          className="grid grid-cols-[minmax(0,1fr)_auto] items-end gap-2 rounded-card border-2 border-outsole bg-lace p-3 shadow-pop-sm"
+          className="rounded-card border-2 border-outsole bg-lace p-3 shadow-pop-sm"
         >
           <div className="min-w-0 line-clamp-2 text-lg font-black leading-tight text-outsole">
             {item.name}
           </div>
-          {priceLabel ? <Pill size="sm">{priceLabel}</Pill> : null}
         </div>
       </div>
     </SelectionAside>
