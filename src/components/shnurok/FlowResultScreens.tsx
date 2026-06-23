@@ -192,7 +192,9 @@ export function Results({
             </p>
           </div>
           <div className="flex flex-wrap gap-2 lg:justify-end">
-            {sel.sizes.length ? <Pill>Размер: {sel.sizes.join(", ")}</Pill> : null}
+            {sel.sizes.length ? (
+              <Pill>Размер: {sel.sizes.map((s) => s.replace("EU ", "")).join(", ")}</Pill>
+            ) : null}
             {sel.colors.length ? (
               <Pill>
                 <span className="text-suede">Цвет:</span> {selectedNames(sel.colors)}

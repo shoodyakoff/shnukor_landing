@@ -99,9 +99,6 @@ export function SizeScreen({
               <div className="text-2xl font-black leading-none text-outsole sm:text-3xl">
                 {size.replace("EU ", "")}
               </div>
-              <div className="text-[11px] font-bold uppercase tracking-wide text-suede sm:text-xs">
-                EU
-              </div>
             </ChoiceTile>
           );
         })}
@@ -417,6 +414,7 @@ export function StyleScreen({
       eyebrow={eyebrow}
       title="Что нравится визуально?"
       subtitle="Свайпай карточки или жми кнопки, чтобы собрать подборку."
+      subtitleClassName="hidden sm:block"
       contentClassName="min-h-0 gap-2"
     >
       <div className="flex min-h-0 flex-1 flex-col lg:justify-center">

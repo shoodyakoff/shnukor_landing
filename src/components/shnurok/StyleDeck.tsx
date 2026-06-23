@@ -83,7 +83,7 @@ export function StyleDeck({
   };
 
   return (
-    <div className="mx-auto grid w-full max-w-[1400px] items-center gap-3 pb-16 sm:gap-6 lg:grid-cols-[minmax(0,1fr)_minmax(360px,500px)_minmax(0,1fr)] lg:gap-12 lg:pb-0 xl:gap-16">
+    <div className="mx-auto flex min-h-0 w-full max-w-[1400px] flex-1 flex-col gap-3 pb-16 sm:gap-6 lg:grid lg:flex-none lg:grid-cols-[minmax(0,1fr)_minmax(360px,500px)_minmax(0,1fr)] lg:items-center lg:gap-12 lg:pb-0 xl:gap-16">
       <div className="fixed inset-x-3 bottom-3 z-40 order-2 grid grid-cols-2 gap-3 sm:inset-x-4 md:inset-x-6 lg:static lg:contents">
         <div className="flex min-w-0 justify-stretch lg:order-1 lg:justify-end">
           <SwipeButton tone="quiet" disabled={swiping} onClick={() => completeSwipe("dislike")}>
@@ -97,8 +97,8 @@ export function StyleDeck({
         </div>
       </div>
 
-      <div className="order-1 mx-auto flex w-full max-w-[min(440px,94vw)] flex-col sm:max-w-[440px] lg:order-2 lg:max-w-[min(480px,34vw)]">
-        <div className="relative h-[clamp(190px,32svh,420px)] md:h-[clamp(320px,44svh,460px)] xl:h-[clamp(360px,50dvh,500px)]">
+      <div className="order-1 mx-auto flex min-h-0 w-full max-w-[min(440px,94vw)] flex-1 flex-col sm:max-w-[440px] lg:order-2 lg:max-w-[min(480px,34vw)] lg:flex-none">
+        <div className="relative min-h-0 flex-1 lg:h-[clamp(320px,44svh,460px)] lg:flex-none xl:h-[clamp(360px,50dvh,500px)]">
           {upcoming
             .slice(0, 3)
             .map((style, index) => ({ style, index }))

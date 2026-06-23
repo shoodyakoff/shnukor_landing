@@ -136,6 +136,7 @@ export function StepShell({
   actionsClassName,
   titleAction,
   contentClassName,
+  subtitleClassName,
 }: {
   eyebrow: ReactNode;
   title: ReactNode;
@@ -145,6 +146,7 @@ export function StepShell({
   actionsClassName?: string;
   titleAction?: ReactNode;
   contentClassName?: string;
+  subtitleClassName?: string;
 }) {
   return (
     <div className="flex h-dvh flex-col overflow-hidden px-4 py-3 md:px-6 md:py-5 xl:px-8">
@@ -160,7 +162,12 @@ export function StepShell({
               {title}
             </h1>
             {subtitle && (
-              <p className="mt-1.5 max-w-2xl text-sm leading-snug text-suede sm:text-base">
+              <p
+                className={cn(
+                  "mt-1.5 max-w-2xl text-sm leading-snug text-suede sm:text-base",
+                  subtitleClassName,
+                )}
+              >
                 {subtitle}
               </p>
             )}

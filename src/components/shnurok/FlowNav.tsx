@@ -138,7 +138,8 @@ export function StepActions({
 
 export function ChipsBar({ sel, showPrice = true }: { sel: Selections; showPrice?: boolean }) {
   const items: Array<{ k: string; v: string; tone?: "default" | "active" | "dark" }> = [];
-  if (sel.sizes.length) items.push({ k: "Размер", v: sel.sizes.join(", ") });
+  if (sel.sizes.length)
+    items.push({ k: "Размер", v: sel.sizes.map((s) => s.replace("EU ", "")).join(", ") });
   if (sel.colors.length) items.push({ k: "Цвет", v: selectedNames(sel.colors) });
   if (showPrice && sel.price)
     items.push({
@@ -153,17 +154,18 @@ export function ChipsBar({ sel, showPrice = true }: { sel: Selections; showPrice
   // (e.g. size on step 1) doesn't shift the content below the progress bar.
   if (!items.length) return <div className="min-h-8" aria-hidden />;
 
-  // Two per row so the chip list stays compact and never pushes the content
-  // (e.g. the style-swipe card) off-screen on short phones.
+  // Content-width chips that wrap: short ones (e.g. size, price) pack two per
+  // row, while a long one (e.g. several colours) stays on a single line and
+  // takes its own full-width row instead of wrapping to 3 lines inside a cell.
   return (
-    <div className="grid min-h-8 min-w-0 grid-cols-2 items-start gap-1.5 sm:flex sm:flex-wrap">
+    <div className="flex min-h-8 min-w-0 flex-wrap items-start gap-1.5">
       {items.map((item) => (
         <span
           key={item.k}
-          className="inline-flex w-full items-center gap-1 rounded-[0.85rem] border-2 border-outsole bg-mesh px-2.5 py-1 text-[0.7rem] font-extrabold leading-tight text-outsole shadow-pop-xs sm:w-auto sm:rounded-full sm:px-3.5 sm:py-1.5 sm:text-sm"
+          className="inline-flex max-w-full items-center gap-1 truncate rounded-[0.85rem] border-2 border-outsole bg-mesh px-2.5 py-1 text-[0.7rem] font-extrabold leading-tight whitespace-nowrap text-outsole shadow-pop-xs sm:rounded-full sm:px-3.5 sm:py-1.5 sm:text-sm"
         >
           <span className="shrink-0 text-suede">{item.k}:</span>
-          <span className="min-w-0 break-words">{item.v}</span>
+          <span className="min-w-0 truncate">{item.v}</span>
         </span>
       ))}
     </div>
