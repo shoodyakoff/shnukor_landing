@@ -20,11 +20,11 @@ export function Hero({ onStart }: { onStart: () => void }) {
 
         <main className="flex min-h-0 flex-1 flex-col justify-center gap-8 sm:gap-6 lg:grid lg:grid-cols-[0.9fr_1.1fr] lg:items-center lg:gap-8">
           <div className="flex min-w-0 max-w-3xl flex-col items-start">
-            <Pill>умный подбор кроссовок</Pill>
-            <h1 className="mt-3 max-w-full break-words font-display text-[1.8rem] font-bold leading-[1.05] text-outsole sm:mt-6 sm:text-5xl sm:leading-[0.98] md:text-6xl xl:text-7xl">
-              <span className="block sm:inline">Подберем кроссовки</span>{" "}
-              <span className="block sm:inline">под твой стиль,</span>{" "}
-              <span className="block sm:inline">задачу и ритм</span>
+            <div className="hidden sm:block">
+              <Pill>умный подбор кроссовок</Pill>
+            </div>
+            <h1 className="max-w-full break-words font-display text-[1.5rem] font-bold leading-[1.12] text-outsole sm:mt-6 sm:text-5xl sm:leading-[0.98] md:text-6xl xl:text-7xl">
+              Подберем кроссовки под твой стиль, задачу и ритм
             </h1>
 
             <p className="mt-3 max-w-[36ch] text-sm leading-relaxed text-suede sm:mt-5 sm:max-w-2xl sm:text-lg">
@@ -184,7 +184,7 @@ function HeroProductScene() {
 
         <div
           data-hero-animated
-          className="absolute inset-x-6 top-5 flex items-center text-[0.62rem] font-bold uppercase tracking-[0.16em] text-suede/60 sm:inset-x-8 sm:top-7 sm:text-xs"
+          className="absolute inset-x-6 top-5 hidden items-center text-[0.62rem] font-bold uppercase tracking-[0.16em] text-suede/60 sm:inset-x-8 sm:top-7 sm:text-xs md:flex"
           style={{ animation: "heroSceneHeader 10s ease-in-out infinite" }}
         >
           <span>SHNUROK AI</span>
@@ -192,12 +192,12 @@ function HeroProductScene() {
 
         <div
           data-hero-animated
-          className="absolute left-[5%] top-[4.75rem] grid w-[90%] grid-cols-2 gap-2 md:left-7 md:top-[15%] md:w-[42%] md:grid-cols-1 md:gap-1.5"
+          className="absolute left-[5%] top-[3%] grid w-[46%] grid-cols-1 gap-1.5 md:left-7 md:top-[15%] md:w-[42%] md:grid-cols-1 md:gap-1.5"
           style={{ animation: "heroSelected 10s ease-in-out infinite" }}
         >
           <p
             data-hero-animated
-            className="col-span-2 text-[0.58rem] font-semibold leading-tight tracking-[0.02em] text-suede sm:text-xs md:col-span-1"
+            className="col-span-1 text-[0.58rem] font-semibold leading-tight tracking-[0.02em] text-suede sm:text-xs md:col-span-1"
             style={{ animation: "heroIntroCopy 10s ease-in-out infinite" }}
           >
             1. Ответь на вопросы
@@ -213,7 +213,7 @@ function HeroProductScene() {
           ))}
         </div>
 
-        <div className="absolute left-[5%] top-[52%] h-[42%] w-[50%] md:left-auto md:right-8 md:top-[15%] md:h-[58%] md:w-[43%]">
+        <div className="absolute left-[5%] top-[46%] h-[46%] w-[56%] md:left-auto md:right-8 md:top-[15%] md:h-[58%] md:w-[43%]">
           <p
             data-hero-animated
             className="absolute inset-x-0 -top-5 text-left text-[0.58rem] font-semibold leading-tight tracking-[0.02em] text-suede sm:-top-6 sm:text-xs md:top-0 md:text-center"
@@ -300,7 +300,7 @@ function HeroProductScene() {
 
         <div
           data-hero-animated
-          className="absolute left-[14%] top-[68%] z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[#ff7d73]/30 bg-white text-lg font-black leading-none text-[#d84337] shadow-[0_12px_28px_rgba(216,67,55,0.16)] md:left-[48%] md:top-[43%] md:h-10 md:w-10 md:text-2xl"
+          className="absolute left-[16%] top-[66%] z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[#ff7d73]/30 bg-white text-lg font-black leading-none text-[#d84337] shadow-[0_12px_28px_rgba(216,67,55,0.16)] md:left-[48%] md:top-[43%] md:h-10 md:w-10 md:text-2xl"
           style={{ animation: "heroReject 10s ease-in-out infinite" }}
           aria-label="Отклонено"
         >
@@ -309,7 +309,7 @@ function HeroProductScene() {
 
         <div
           data-hero-animated
-          className="absolute left-[42%] top-[68%] z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[#45c782]/30 bg-white text-lg font-black leading-none text-[#17975b] shadow-[0_12px_28px_rgba(23,151,91,0.18)] md:left-auto md:right-[13%] md:top-[43%] md:h-10 md:w-10 md:text-2xl"
+          className="absolute left-[44%] top-[66%] z-20 flex h-8 w-8 items-center justify-center rounded-full border border-[#45c782]/30 bg-white text-lg font-black leading-none text-[#17975b] shadow-[0_12px_28px_rgba(23,151,91,0.18)] md:left-auto md:right-[13%] md:top-[43%] md:h-10 md:w-10 md:text-2xl"
           style={{ animation: "heroApprove 10s ease-in-out infinite" }}
           aria-label="Подходит"
         >
@@ -318,24 +318,11 @@ function HeroProductScene() {
 
         <div
           data-hero-animated
-          className="absolute top-2 right-[3%] w-[40%] rounded-[0.9rem] border border-white/70 bg-white/75 p-2 shadow-[0_14px_34px_rgba(10,10,10,0.08)] backdrop-blur sm:rounded-[1rem] md:top-auto md:bottom-3 md:right-auto md:left-8 md:w-[28%] md:p-2"
+          className="absolute top-[3%] right-[4%] w-[44%] rounded-[0.9rem] border border-white/70 bg-white/75 p-2 shadow-[0_14px_34px_rgba(10,10,10,0.08)] backdrop-blur sm:rounded-[1rem] md:top-auto md:bottom-3 md:right-auto md:left-8 md:w-[28%] md:p-2"
           style={{ animation: "heroCounterPanel 10s steps(1,end) infinite" }}
         >
-          <div className="relative h-4 overflow-hidden text-[0.56rem] font-bold tracking-[0] text-suede/60 sm:h-5 sm:text-[0.68rem] sm:tracking-[0.04em]">
-            <span
-              data-hero-animated
-              className="absolute inset-0 whitespace-nowrap"
-              style={{ animation: "heroCounterLabelStart 10s steps(1,end) infinite" }}
-            >
-              Всего товаров
-            </span>
-            <span
-              data-hero-animated
-              className="absolute inset-0 whitespace-nowrap"
-              style={{ animation: "heroCounterLabelFilter 10s steps(1,end) infinite" }}
-            >
-              Фильтруем каталог
-            </span>
+          <div className="whitespace-nowrap text-[0.56rem] font-bold tracking-[0] text-suede/60 sm:text-[0.68rem] sm:tracking-[0.04em]">
+            Всего товаров
           </div>
           <div className="relative mt-0.5 h-7 overflow-hidden font-display text-2xl font-bold leading-none text-outsole sm:mt-1 sm:h-11 sm:text-4xl md:h-9 md:text-3xl">
             <div

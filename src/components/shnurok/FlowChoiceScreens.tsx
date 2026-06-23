@@ -290,7 +290,9 @@ export function TaskScreen({
               <div className="text-xl font-bold leading-tight text-outsole sm:text-2xl md:text-3xl">
                 {card.title}
               </div>
-              <p className="text-sm leading-snug text-suede sm:text-base">{card.sub}</p>
+              <p className="min-h-[3.6rem] text-sm leading-snug text-suede sm:min-h-[4.1rem] sm:text-base">
+                {card.sub}
+              </p>
               <div className="mt-1.5 text-sm font-bold text-outsole">Выбрать →</div>
             </div>
             <div className="overflow-hidden bg-muted">

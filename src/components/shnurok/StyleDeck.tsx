@@ -136,13 +136,10 @@ export function StyleDeck({
                   {isTop ? (
                     <>
                       <div className="pointer-events-none absolute inset-x-3 top-3 flex items-start justify-between gap-2 sm:inset-x-4 sm:top-4">
-                        <div className="max-w-[80%] rounded-tile border-2 border-outsole bg-mesh px-3.5 py-2 shadow-pop-sm">
-                          <div className="text-base font-black leading-tight text-outsole sm:text-lg">
+                        <div className="max-w-[78%] rounded-tile border-2 border-outsole bg-mesh px-3 py-1.5 shadow-pop-sm">
+                          <div className="text-sm font-black leading-tight text-outsole sm:text-base">
                             {style.title}
                           </div>
-                          <p className="mt-0.5 line-clamp-2 text-xs font-semibold leading-snug text-outsole/70">
-                            {style.desc}
-                          </p>
                         </div>
                         <span className="shrink-0 rounded-full border-2 border-outsole bg-outsole px-2.5 py-1 text-xs font-black text-lace">
                           {currentIndex + 1} / {cards.length}

@@ -240,7 +240,9 @@ export function EmptyState({ onReset }: { onReset: () => void }) {
               <BigButton onClick={onReset} variant="primary">
                 Попробовать ещё раз
               </BigButton>
-              <ContactLinks />
+              <div className="sm:ml-auto [&_a]:size-14 [&_svg]:size-6 md:[&_a]:size-16 md:[&_svg]:size-7">
+                <ContactLinks />
+              </div>
             </div>
           </div>
         </div>
