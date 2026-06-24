@@ -4,7 +4,7 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 import { renderToStaticMarkup } from "react-dom/server";
 
-import { Results } from "./FlowResultScreens";
+import { ErrorState, Results } from "./FlowResultScreens";
 import { ResultCard } from "./ProductCards";
 import type { ProductItem } from "./data";
 import type { Selections } from "./types";
@@ -60,4 +60,13 @@ test("Results renders all products without exact and other grouping", () => {
   for (const item of items) {
     assert.match(html, new RegExp(item.name));
   }
+});
+
+test("ErrorState surfaces a failure with a retry, distinct from the empty state", () => {
+  const html = renderToStaticMarkup(<ErrorState onRetry={() => {}} onReset={() => {}} />);
+
+  // A failed request reads as an error with a retry, not "nothing found".
+  assert.match(html, /Повторить/);
+  assert.match(html, /временно недоступен/);
+  assert.doesNotMatch(html, /ничего не найдено/);
 });

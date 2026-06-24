@@ -9,7 +9,8 @@ export type Step =
   | "summary"
   | "search"
   | "results"
-  | "empty";
+  | "empty"
+  | "error";
 
 export type Task = "daily" | "sport";
 export type StyleVote = "like" | "dislike";

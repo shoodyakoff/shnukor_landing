@@ -19,6 +19,11 @@ import type { SneakersPayload } from "./sneakers-mapping";
 import { fetchSneakers, type SneakersApiResult } from "./sneakers-api";
 import { PRICES, type Selections } from "./types";
 
+// How the search resolved: real results, a genuine empty catalog response, or a
+// request failure (network/timeout/non-2xx). The flow routes each differently —
+// an error must not masquerade as "nothing found".
+export type SearchOutcome = "results" | "empty" | "error";
+
 export function SearchScreen({
   sel,
   payload,
@@ -28,7 +33,7 @@ export function SearchScreen({
   sel: Selections;
   payload?: SneakersPayload | null;
   onHome: () => void;
-  onDone: (empty: boolean, items: ProductItem[]) => void;
+  onDone: (outcome: SearchOutcome, items: ProductItem[]) => void;
 }) {
   const statuses = [
     { label: "Сверяем размер", icon: <Ruler size={26} weight="bold" /> },
@@ -68,8 +73,13 @@ export function SearchScreen({
 
   useEffect(() => {
     if (idx >= statuses.length && apiResult) {
-      const empty = apiResult.items.length === 0;
-      const timer = window.setTimeout(() => onDone(empty, apiResult.items), 700);
+      const outcome: SearchOutcome =
+        apiResult.source === "fallback"
+          ? "error"
+          : apiResult.items.length === 0
+            ? "empty"
+            : "results";
+      const timer = window.setTimeout(() => onDone(outcome, apiResult.items), 700);
       return () => window.clearTimeout(timer);
     }
     return undefined;
@@ -213,6 +223,43 @@ export function Results({
               <ResultCard item={item} />
             </div>
           ))}
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export function ErrorState({ onRetry, onReset }: { onRetry: () => void; onReset: () => void }) {
+  return (
+    <div className="flex min-h-dvh flex-col overflow-x-hidden px-3 py-3 sm:px-4 sm:py-4 md:px-8 md:py-6">
+      <div className="mx-auto flex min-h-[calc(100dvh-1.5rem)] w-full max-w-[760px] flex-col gap-5">
+        <div className="flex items-center justify-between gap-4">
+          <LogoMark onClick={onReset} />
+          <TextAction onClick={onReset}>подобрать заново</TextAction>
+        </div>
+
+        <div className="flex flex-1 flex-col justify-center">
+          <div className="rounded-[1.5rem] border-2 border-outsole bg-lace p-5 shadow-[6px_6px_0_var(--mesh)] sm:rounded-[2rem] sm:p-7">
+            <Pill color="active">не удалось загрузить</Pill>
+            <h1 className="mt-5 text-2xl font-bold leading-[1.05] text-outsole sm:text-3xl md:text-4xl">
+              Не получилось получить подборку
+            </h1>
+            <p className="mt-3 max-w-xl text-sm leading-relaxed text-suede sm:text-base">
+              Сервис каталога временно недоступен. Ваши ответы сохранены — попробуйте ещё раз или
+              напишите нам, и мы подберём варианты вручную.
+            </p>
+            <div className="mt-6 flex flex-col items-center gap-4">
+              <BigButton onClick={onRetry} variant="primary">
+                Повторить
+              </BigButton>
+              <p className="text-center text-sm leading-relaxed text-suede sm:text-base">
+                или напишите нам
+              </p>
+              <div className="flex justify-center [&_a]:size-14 [&_svg]:size-6">
+                <ContactLinks />
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>

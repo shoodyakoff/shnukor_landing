@@ -10,7 +10,7 @@ import {
   TaskScreen,
 } from "./FlowChoiceScreens";
 import { FlowHeader } from "./FlowNav";
-import { EmptyState, Results, SearchScreen } from "./FlowResultScreens";
+import { EmptyState, ErrorState, Results, SearchScreen } from "./FlowResultScreens";
 import type { ProductItem } from "./data";
 import { getSneakersCardsForSelections } from "./sneakers-mapping";
 import { DEFAULT_PRICE_ID, type Selections, type Step, type StyleVote, type Task } from "./types";
@@ -209,9 +209,9 @@ export default function Flow() {
       <SearchScreen
         sel={sel}
         onHome={reset}
-        onDone={(empty, items) => {
+        onDone={(outcome, items) => {
           setResultItems(items);
-          setStep(empty ? "empty" : "results");
+          setStep(outcome);
         }}
       />
     );
@@ -225,6 +225,10 @@ export default function Flow() {
         onWiden={() => setStep("empty")}
       />
     );
+  if (step === "error")
+    // Retry re-enters the search step, which re-runs the request with the same
+    // selections (nothing is reset) — a failed catalog call must not look empty.
+    return <ErrorState onRetry={() => setStep("search")} onReset={reset} />;
   if (step === "empty") return <EmptyState onReset={reset} />;
 
   return null;
