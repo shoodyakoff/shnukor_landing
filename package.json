@@ -10,7 +10,11 @@
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",
-    "format": "prettier --write ."
+    "format": "prettier --write .",
+    "test": "tsx --test \"src/**/*.test.ts\" \"src/**/*.test.tsx\""
+  },
+  "engines": {
+    "node": ">=22 <23"
   },
   "dependencies": {
     "@cloudflare/vite-plugin": "^1.25.5",
@@ -84,6 +88,7 @@
     "globals": "^15.15.0",
     "nitro": "npm:nitro-nightly@^3.0.1-20260508-123613-d2e64906",
     "prettier": "^3.7.3",
+    "tsx": "^4.21.0",
     "typescript": "^5.8.3",
     "typescript-eslint": "^8.56.1",
     "vite": "^7.3.1"

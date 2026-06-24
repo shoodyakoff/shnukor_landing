@@ -24,7 +24,7 @@ const cards: SneakersCard[] = [
   },
 ];
 
-test("StyleDeck overlays style copy on the card and drops the duplicated counter", () => {
+test("StyleDeck overlays the style title and a position counter on the card", () => {
   const html = renderToStaticMarkup(
     <StyleDeck
       upcoming={cards}
@@ -35,9 +35,12 @@ test("StyleDeck overlays style copy on the card and drops the duplicated counter
     />,
   );
 
-  // Title/desc now live in a gradient overlay on the artwork, not in a block above it.
-  assert.match(html, /bg-gradient-to-t/);
-  // The redundant "стиль N из M" pill is removed — the header progress bar owns progress.
+  // The style title is overlaid on the artwork (top of the card), not in a block above it.
+  assert.match(html, /absolute inset-x-3 top-3/);
+  assert.match(html, /Трендовые кроссовки/);
+  // A compact "N / M" position counter rides on the top card, not the verbose
+  // "стиль N из M" pill the deck used to render.
+  assert.match(html, /1 \/ 2/);
   assert.doesNotMatch(html, /стиль 1 из 2/);
   // Card image must not hijack the pointer drag (native image DnD disabled).
   assert.match(html, /draggable="false"/);
