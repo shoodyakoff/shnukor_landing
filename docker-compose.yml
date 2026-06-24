@@ -1,0 +1,52 @@
+# Self-hosting stack for the Shnurok landing.
+#
+#   app   — the TanStack Start / Nitro node-server (SSR + static + /api proxy).
+#   nginx — public entrypoint: TLS termination, HSTS, gzip, asset caching,
+#           anti-spoof X-Forwarded-For, per-IP rate limit.
+#
+# Quick start:
+#   1. cp .env.example .env   and fill SNEAKERS_API_TOKEN (+ VITE_SITE_URL).
+#   2. docker compose up -d --build
+#   3. open http://localhost/  (or your server IP)
+#
+# VITE_SITE_URL is a BUILD arg (baked into SSR meta/robots/sitemap); the sneakers
+# token is a RUNTIME secret (never enters the image). See docs/SELF_HOSTING_DOCKER.md.
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        VITE_SITE_URL: ${VITE_SITE_URL:-}
+    image: shnurok-app
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "3000"
+    expose:
+      - "3000"
+    healthcheck:
+      test:
+        - CMD
+        - node
+        - -e
+        - fetch('http://127.0.0.1:3000/api/health').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  nginx:
+    image: nginx:1.27-alpine
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy
+    ports:
+      - "80:80"
+      # - "443:443"   # enable together with the HTTPS block in docker/nginx.conf
+    volumes:
+      - ./docker/nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      # - ./docker/certs:/etc/nginx/certs:ro   # mount Let's Encrypt certs here

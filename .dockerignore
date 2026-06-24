@@ -1,0 +1,36 @@
+# VCS / tooling
+.git
+.github
+.claude
+.superpowers
+.vscode
+.idea
+
+# Dependencies & build outputs (reinstalled/rebuilt inside the image)
+node_modules
+.output
+dist
+dist-ssr
+.vercel
+.wrangler
+.tanstack
+.nitro
+
+# Secrets — never bake into the image (token is injected at runtime)
+.env
+.env.*
+
+# Local-only heavy assets / contractor copies / scratch
+output
+frame.png
+Shnurok MVP Visual
+shnukor_landing*
+шнурок
+
+# Docs & specs not needed to build
+docs
+*-tz.md
+
+# Misc
+*.log
+.DS_Store

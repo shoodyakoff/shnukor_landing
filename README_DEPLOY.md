@@ -4,6 +4,10 @@ This project needs a server runtime because `/api/sneakers` proxies requests to
 `https://shnurok-shipping.ru/api/sneakers.php` and injects the private API token.
 Do not deploy the live API version as a static GitHub Pages site.
 
+> **Self-hosting on your own server?** See **[docs/SELF_HOSTING_DOCKER.md](docs/SELF_HOSTING_DOCKER.md)**
+> for the Docker stack (Nitro `node-server` + nginx with TLS, headers, gzip and
+> rate limiting). The instructions below cover Vercel specifically.
+
 ## Vercel setup
 
 1. Import the GitHub repository into Vercel.
