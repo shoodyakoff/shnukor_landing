@@ -24,5 +24,13 @@ export default tseslint.config(
       "@typescript-eslint/no-unused-vars": "off",
     },
   },
+  {
+    // shadcn/ui primitives intentionally co-locate variant helpers (e.g.
+    // buttonVariants) with their components; the fast-refresh warning is noise here.
+    files: ["src/components/ui/**/*.{ts,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
   eslintPluginPrettier,
 );

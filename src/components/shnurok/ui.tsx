@@ -223,7 +223,9 @@ export function ChoiceLayout({
   return (
     <div className="grid min-h-0 w-full flex-1 gap-4 md:gap-6 lg:grid-cols-[minmax(0,1fr)_clamp(300px,25vw,340px)] lg:items-stretch">
       <div className="flex min-h-0 flex-col">
-        <div className={cn("grid content-start gap-2 sm:gap-2.5 lg:flex-1 lg:content-center", columns)}>
+        <div
+          className={cn("grid content-start gap-2 sm:gap-2.5 lg:flex-1 lg:content-center", columns)}
+        >
           {children}
         </div>
         {action ? <div className="mt-4 hidden lg:flex">{action}</div> : null}

@@ -202,10 +202,7 @@ test("selected sport cards use generated Tinder sport images", () => {
   assert.equal(getSneakersCardById("run-street")?.image, "/tinder-sport/run-street.webp");
   assert.equal(getSneakersCardById("run-long")?.image, "/tinder-sport/run-long.webp");
   assert.equal(getSneakersCardById("run-trail")?.image, "/tinder-sport/run-trail.webp");
-  assert.equal(
-    getSneakersCardById("run-urban-trail")?.image,
-    "/tinder-sport/run-urban-trail.webp",
-  );
+  assert.equal(getSneakersCardById("run-urban-trail")?.image, "/tinder-sport/run-urban-trail.webp");
   assert.equal(getSneakersCardById("tennis-clay")?.image, "/tinder-sport/tennis-clay.webp");
   assert.equal(getSneakersCardById("run-track")?.image, "/tinder-sport/run-track.webp");
   assert.equal(getSneakersCardById("run-winter")?.image, "/tinder-sport/run-winter.webp");
