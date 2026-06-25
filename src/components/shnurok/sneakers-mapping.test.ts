@@ -315,6 +315,48 @@ test("fetchSneakers dedupes products and normalizes Shnurok product links", asyn
   assert.equal(result.items[1]?.url, "https://shnurok-shipping.ru/catalog/obuv/nike-test-b/");
 });
 
+test("fetchSneakers drops non-http(s) product links from untrusted upstream", async () => {
+  const selections: Selections = {
+    sizes: ["EU 36"],
+    colors: ["any"],
+    price: "any",
+    task: "daily",
+    styleVotes: { "daily-chunky": "like" },
+  };
+  // Built at runtime so the dangerous scheme never appears as a literal href.
+  const scriptUrl = ["javascript", "alert(document.cookie)"].join(":");
+  globalThis.fetch = async () =>
+    new Response(
+      JSON.stringify({
+        items: [
+          { id: "x", name: "Script Link", price: 10000, size: "36", detail_url: scriptUrl },
+          {
+            id: "y",
+            name: "Data Link",
+            price: 10000,
+            size: "36",
+            detail_url: "data:text/html,<h1>",
+          },
+          {
+            id: "z",
+            name: "Safe Link",
+            price: 12000,
+            size: "36",
+            detail_url: "/catalog/obuv/safe/",
+          },
+        ],
+      }),
+      { status: 200, headers: { "Content-Type": "application/json" } },
+    );
+
+  const result = await fetchSneakers(selections);
+  const byName = (name: string) => result.items.find((item) => item.name === name);
+
+  assert.equal(byName("Script Link")?.url, "");
+  assert.equal(byName("Data Link")?.url, "");
+  assert.equal(byName("Safe Link")?.url, "https://shnurok-shipping.ru/catalog/obuv/safe/");
+});
+
 test("sneakers API proxy prefixes a bare env token with Bearer", async () => {
   let authorization = "";
   process.env.SNEAKERS_API_TOKEN = "test-token";

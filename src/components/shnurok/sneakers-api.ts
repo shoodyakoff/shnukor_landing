@@ -130,9 +130,14 @@ function normalizeProductUrl(link: string) {
   if (!link) return "";
 
   try {
-    return new URL(link, SHNUROK_ORIGIN).toString();
+    const url = new URL(link, SHNUROK_ORIGIN);
+    // Only allow web links. Upstream is untrusted, so drop javascript:, data:,
+    // and any other scheme that would become an XSS vector once rendered as an
+    // <a href>. Unparseable links are dropped too rather than passed through raw.
+    if (url.protocol !== "http:" && url.protocol !== "https:") return "";
+    return url.toString();
   } catch {
-    return link;
+    return "";
   }
 }
 
