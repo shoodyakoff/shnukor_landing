@@ -15,6 +15,16 @@ test("Hero renders the animated product-flow scene", () => {
   assert.doesNotMatch(html, /data-scene="static-podium"/);
 });
 
+test("Hero raises the mobile card stack so the next card stays visible", () => {
+  const html = renderToStaticMarkup(<Hero onStart={() => {}} />);
+
+  assert.match(html, /--hero-card-approve-y: 8px/);
+  assert.match(html, /--hero-card-hold-one-y: 18px/);
+  assert.match(html, /--hero-card-hold-two-y: 28px/);
+  assert.match(html, /@media \(min-width: 768px\)/);
+  assert.match(html, /--hero-card-approve-y: 16px/);
+});
+
 test("Hero uses the updated picker copy", () => {
   const html = renderToStaticMarkup(<Hero onStart={() => {}} />);
 

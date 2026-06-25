@@ -94,6 +94,30 @@ function HeroProductScene() {
         className="relative mx-auto block h-[clamp(380px,54svh,440px)] w-full min-w-0 max-w-[440px] overflow-hidden rounded-[1.5rem] border border-cement bg-[radial-gradient(circle_at_18%_18%,#ffffff_0%,#f5fbff_28%,#e6f7ff_58%,#f7efe8_100%)] shadow-[0_18px_55px_rgba(10,10,10,0.10)] md:block md:h-auto md:max-w-none md:aspect-[16/10] xl:shadow-[0_24px_80px_rgba(10,10,10,0.10)]"
       >
         <style>{`
+        [data-scene="hero-loop"] {
+          --hero-card-approve-y: 8px;
+          --hero-card-approve-out-y: 2px;
+          --hero-card-approve-gone-y: 0px;
+          --hero-card-hold-one-y: 18px;
+          --hero-card-hold-one-out-y: 20px;
+          --hero-card-hold-one-gone-y: 22px;
+          --hero-card-hold-two-y: 28px;
+          --hero-card-hold-two-out-y: 30px;
+          --hero-card-hold-two-gone-y: 32px;
+        }
+        @media (min-width: 768px) {
+          [data-scene="hero-loop"] {
+            --hero-card-approve-y: 16px;
+            --hero-card-approve-out-y: 6px;
+            --hero-card-approve-gone-y: 4px;
+            --hero-card-hold-one-y: 32px;
+            --hero-card-hold-one-out-y: 34px;
+            --hero-card-hold-one-gone-y: 36px;
+            --hero-card-hold-two-y: 48px;
+            --hero-card-hold-two-out-y: 50px;
+            --hero-card-hold-two-gone-y: 52px;
+          }
+        }
         @keyframes heroIntroCopy {
           0%, 68% { opacity: 1; transform: translateY(0); }
           72%, 100% { opacity: 0; transform: translateY(-6px); }
@@ -116,20 +140,20 @@ function HeroProductScene() {
           28%, 100% { opacity: 0; transform: translate(-138px, 12px) rotate(-16deg) scale(.94); }
         }
         @keyframes heroCardApprove {
-          0%, 28% { opacity: .82; transform: translate(0, 16px) rotate(1deg) scale(.96); }
-          32%, 42% { opacity: 1; transform: translate(0, 16px) rotate(1deg) scale(1); }
-          54% { opacity: 1; transform: translate(116px, 6px) rotate(13deg) scale(.98); }
-          58%, 100% { opacity: 0; transform: translate(140px, 4px) rotate(15deg) scale(.94); }
+          0%, 28% { opacity: .82; transform: translate(0, var(--hero-card-approve-y)) rotate(1deg) scale(.96); }
+          32%, 42% { opacity: 1; transform: translate(0, var(--hero-card-approve-y)) rotate(1deg) scale(1); }
+          54% { opacity: 1; transform: translate(116px, var(--hero-card-approve-out-y)) rotate(13deg) scale(.98); }
+          58%, 100% { opacity: 0; transform: translate(140px, var(--hero-card-approve-gone-y)) rotate(15deg) scale(.94); }
         }
         @keyframes heroCardHoldOne {
-          0%, 50% { opacity: .42; transform: translate(0, 32px) rotate(-3deg) scale(.92); }
-          54% { opacity: .18; transform: translate(4px, 34px) rotate(-3deg) scale(.86); }
-          58%, 100% { opacity: 0; transform: translate(8px, 36px) rotate(-4deg) scale(.84); }
+          0%, 50% { opacity: .42; transform: translate(0, var(--hero-card-hold-one-y)) rotate(-3deg) scale(.92); }
+          54% { opacity: .18; transform: translate(4px, var(--hero-card-hold-one-out-y)) rotate(-3deg) scale(.86); }
+          58%, 100% { opacity: 0; transform: translate(8px, var(--hero-card-hold-one-gone-y)) rotate(-4deg) scale(.84); }
         }
         @keyframes heroCardHoldTwo {
-          0%, 50% { opacity: .28; transform: translate(0, 48px) rotate(3deg) scale(.88); }
-          54% { opacity: .1; transform: translate(6px, 50px) rotate(3deg) scale(.82); }
-          58%, 100% { opacity: 0; transform: translate(10px, 52px) rotate(2deg) scale(.8); }
+          0%, 50% { opacity: .28; transform: translate(0, var(--hero-card-hold-two-y)) rotate(3deg) scale(.88); }
+          54% { opacity: .1; transform: translate(6px, var(--hero-card-hold-two-out-y)) rotate(3deg) scale(.82); }
+          58%, 100% { opacity: 0; transform: translate(10px, var(--hero-card-hold-two-gone-y)) rotate(2deg) scale(.8); }
         }
         @keyframes heroReject {
           0%, 14% { opacity: 0; transform: translate(24px, -6px) scale(.8); }
