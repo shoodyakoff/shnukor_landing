@@ -131,7 +131,7 @@ export function StyleDeck({
                     src={style.image}
                     alt={style.title}
                     draggable={false}
-                    className="pointer-events-none h-full w-full object-cover"
+                    className="pointer-events-none h-full w-full object-contain"
                   />
                   {isTop ? (
                     <>
