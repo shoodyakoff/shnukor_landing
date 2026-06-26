@@ -65,8 +65,8 @@ test("StyleDeck pins the compact mobile action row and restores desktop side con
   assert.match(html, /grid-cols-2/);
   assert.match(html, /fixed/);
   assert.match(html, /lg:contents/);
-  // Wrapper clears the fixed mobile action bar; the card area fills the phone
-  // viewport (flex-1) and switches to a clamped height on desktop.
+  // Wrapper clears the fixed mobile action bar; the card area is a square so the
+  // square product photos fill it edge-to-edge with no crop and no letterbox.
   assert.match(html, /pb-16/);
-  assert.match(html, /lg:h-\[clamp\(320px,44svh,460px\)\]/);
+  assert.match(html, /aspect-square/);
 });

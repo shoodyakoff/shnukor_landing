@@ -98,7 +98,7 @@ export function StyleDeck({
       </div>
 
       <div className="order-1 mx-auto flex min-h-0 w-full max-w-[min(440px,94vw)] flex-1 flex-col sm:max-w-[440px] lg:order-2 lg:max-w-[min(480px,34vw)] lg:flex-none">
-        <div className="relative min-h-0 flex-1 lg:h-[clamp(320px,44svh,460px)] lg:flex-none xl:h-[clamp(360px,50dvh,500px)]">
+        <div className="relative aspect-square w-full">
           {upcoming
             .slice(0, 3)
             .map((style, index) => ({ style, index }))
@@ -131,7 +131,7 @@ export function StyleDeck({
                     src={style.image}
                     alt={style.title}
                     draggable={false}
-                    className="pointer-events-none h-full w-full object-contain"
+                    className="pointer-events-none h-full w-full object-cover"
                   />
                   {isTop ? (
                     <>
