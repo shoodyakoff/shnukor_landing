@@ -7,7 +7,7 @@
 ## Стек
 
 - **TanStack Start** (React 19, file-based routing, SSR + prerender)
-- **Vite 7** + **Tailwind CSS v4** + **shadcn/ui** (Radix)
+- **Vite 7** + **Tailwind CSS v4** (собственные UI-примитивы в `src/components/shnurok/ui.tsx`)
 - **Zod** — валидация входных данных серверного прокси
 - Рантайм деплоя: **Nitro** (preset `vercel`)
 
@@ -21,23 +21,23 @@ npm run dev               # http://localhost:8080  (base path "/")
 
 ### Переменные окружения
 
-| Переменная            | Назначение                                              |
-| --------------------- | ------------------------------------------------------- |
-| `SNEAKERS_API_TOKEN`  | Приватный токен апстрим-API (только на сервере)         |
-| `SNEAKERS_API_URL`    | URL апстрима (по умолчанию `…/api/sneakers.php`)         |
-| `VITE_BASE_PATH`      | Base path, если хостинг под суб-путём (по умолчанию `/`) |
+| Переменная           | Назначение                                               |
+| -------------------- | -------------------------------------------------------- |
+| `SNEAKERS_API_TOKEN` | Приватный токен апстрим-API (только на сервере)          |
+| `SNEAKERS_API_URL`   | URL апстрима (по умолчанию `…/api/sneakers.php`)         |
+| `VITE_BASE_PATH`     | Base path, если хостинг под суб-путём (по умолчанию `/`) |
 
 `.env` в `.gitignore` — токен никогда не попадает в репозиторий и в клиентский бандл.
 
 ## Скрипты
 
-| Команда            | Что делает                          |
-| ------------------ | ----------------------------------- |
-| `npm run dev`      | Дев-сервер (Vite)                   |
-| `npm run build`    | Прод-сборка (+ prerender главной)   |
-| `npm run preview`  | Локальный предпросмотр сборки       |
-| `npm run lint`     | ESLint                              |
-| `npm run format`   | Prettier                            |
+| Команда           | Что делает                        |
+| ----------------- | --------------------------------- |
+| `npm run dev`     | Дев-сервер (Vite)                 |
+| `npm run build`   | Прод-сборка (+ prerender главной) |
+| `npm run preview` | Локальный предпросмотр сборки     |
+| `npm run lint`    | ESLint                            |
+| `npm run format`  | Prettier                          |
 
 ## Структура
 
@@ -47,9 +47,8 @@ src/
 │  ├─ __root.tsx          # html-оболочка, мета/OG, favicon, canonical
 │  ├─ index.tsx           # главная (рендерит Flow)
 │  └─ api/sneakers.ts     # серверный прокси к апстрим-API (токен + валидация)
-├─ components/shnurok/    # экраны квиза, свайп-дек стилей, результаты, маппинг UI→API
-├─ components/ui/          # shadcn/ui примитивы
-├─ hooks/ lib/ assets/
+├─ components/shnurok/    # экраны квиза, свайп-дек стилей, результаты, UI-примитивы (ui.tsx), маппинг UI→API
+├─ lib/ assets/
 └─ styles.css             # тема (токены --lace / --outsole / --mesh)
 ```
 
