@@ -13,14 +13,20 @@ const cards: SneakersCard[] = [
     title: "Трендовые кроссовки",
     desc: "Свежие силуэты на стыке баскетбола, бега, хайкинга и ретро.",
     image: "/tinder-daily/daily-trending.webp",
-    categoryId: "569",
+    bg: "#ccff00",
+    fg: "#111",
+    categoryId: 569,
+    scenario: "daily",
   },
   {
     id: "daily-minimal",
     title: "Минималистичные кроссовки",
     desc: "Чистые пары без лишнего визуального шума.",
     image: "/tinder-daily/daily-minimal.webp",
-    categoryId: "570",
+    bg: "#b0ddff",
+    fg: "#111",
+    categoryId: 570,
+    scenario: "daily",
   },
 ];
 
