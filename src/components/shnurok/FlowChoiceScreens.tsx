@@ -8,16 +8,14 @@ import {
   TennisBall,
   PersonSimpleRun,
   Barbell,
-  Sparkle,
   Target,
 } from "@phosphor-icons/react";
 
-import { PRICE_PREVIEW_ITEMS, RESULT_GROUPS } from "./data";
+import { PRICE_PREVIEW_ITEMS } from "./data";
 import { StepActions } from "./FlowNav";
-import { ProductShowcase } from "./ProductCards";
 import { StyleDeck } from "./StyleDeck";
-import { ChoiceLayout, ChoiceTile, Pill, SelectionAside, StepShell } from "./ui";
-import { choiceCardClass, useFlowSummary, voteSummary } from "./flow-utils";
+import { ChoiceLayout, ChoiceTile, SelectionAside, StepShell } from "./ui";
+import { choiceCardClass } from "./flow-utils";
 import { publicAsset } from "@/lib/assets";
 import type { SneakersCard } from "./sneakers-mapping";
 import {
@@ -431,63 +429,6 @@ export function StyleScreen({
   );
 }
 
-export function SummaryScreen({
-  eyebrow,
-  selections,
-  onBack,
-  onNext,
-}: {
-  eyebrow: React.ReactNode;
-  selections: Selections;
-  onBack: () => void;
-  onNext: () => void;
-}) {
-  const style = voteSummary(selections.styleVotes);
-  const summaryLines = useFlowSummary(selections);
-
-  return (
-    <StepShell
-      eyebrow={eyebrow}
-      title="Профиль подбора готов"
-      subtitle="Проверь параметры. Если все хорошо, запускаем поиск по подходящим моделям."
-      actions={<StepActions back={onBack} next={onNext} nextLabel="Показать подборку" />}
-      contentClassName="flex items-center"
-    >
-      <div className="grid w-full items-center gap-4 md:gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(320px,0.66fr)]">
-        <div className="overflow-hidden rounded-panel border-2 border-outsole bg-lace shadow-pop-mesh-md md:shadow-pop-mesh-lg">
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b-2 border-outsole bg-[linear-gradient(135deg,#b0ddff_0%,#ffffff_76%)] p-4 sm:p-5">
-            <div>
-              <div className="text-sm font-bold text-suede">Ваш профиль</div>
-              <div className="mt-1 text-2xl font-black leading-none text-outsole sm:text-3xl">
-                готов к поиску
-              </div>
-            </div>
-            <div className="flex flex-wrap gap-2">
-              <Pill>
-                <span className="text-suede">Статус:</span> готов
-              </Pill>
-              {style.liked.length ? (
-                <Pill>
-                  <span className="text-suede">Стиль:</span> {style.liked.slice(0, 2).join(", ")}
-                </Pill>
-              ) : null}
-            </div>
-          </div>
-          <div className="grid gap-3 p-4 sm:grid-cols-2 sm:p-5">
-            {summaryLines.map((line) => (
-              <SummaryTile key={line.k} label={line.k} value={line.v || "—"} />
-            ))}
-          </div>
-        </div>
-
-        <div className="grid">
-          <ProductShowcase item={RESULT_GROUPS[0].items[0]} compact accent />
-        </div>
-      </div>
-    </StepShell>
-  );
-}
-
 function PriceAside({ priceId }: { priceId?: string }) {
   const defaultPriceId = priceId ?? DEFAULT_PRICE_ID;
   const item = PRICE_PREVIEW_ITEMS[defaultPriceId] ?? PRICE_PREVIEW_ITEMS[DEFAULT_PRICE_ID];
@@ -511,36 +452,5 @@ function PriceAside({ priceId }: { priceId?: string }) {
         </div>
       </div>
     </SelectionAside>
-  );
-}
-
-function SummaryTile({ label, value }: { label: string; value: string }) {
-  const iconMap: Record<string, React.ReactNode> = {
-    Размер: <Ruler size={22} weight="bold" />,
-    Цвет: <Palette size={22} weight="bold" />,
-    Цена: <CurrencyRub size={22} weight="bold" />,
-    Задача: <Target size={22} weight="bold" />,
-    Спорт: <Basketball size={22} weight="bold" />,
-    Стиль: <Sparkle size={22} weight="bold" />,
-  };
-  const accentMap: Record<string, string> = {
-    Размер: "bg-mesh",
-    Цвет: "bg-[#ffe1f0]",
-    Цена: "bg-[#d8f7c8]",
-    Задача: "bg-[#fff1ad]",
-    Спорт: "bg-[#e6ddff]",
-    Стиль: "bg-[#ffd9c7]",
-  };
-
-  return (
-    <div
-      className={`rounded-card border-2 border-outsole p-4 shadow-pop-sm sm:shadow-pop-md ${accentMap[label] ?? "bg-lace"}`}
-    >
-      <div className="flex items-center gap-2 text-sm font-black text-outsole/70">
-        {iconMap[label]}
-        {label}
-      </div>
-      <div className="mt-3 text-xl font-black leading-tight text-outsole">{value}</div>
-    </div>
   );
 }

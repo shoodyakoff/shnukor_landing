@@ -25,12 +25,6 @@ export type SneakersCard = {
   sport?: string;
 };
 
-export const SNEAKERS_API_CONTRACT = {
-  request: ["size", "color", "categories", "price_from", "price_to", "limit", "offset"],
-  response: ["id", "offer_id", "name", "price", "currency", "size", "image", "detail_url"],
-  note: "Product description is not returned by the current API.",
-} as const;
-
 export const SNEAKERS_COLOR_MAPPING = [
   { uiId: "beige", apiNames: ["бежевый"] },
   { uiId: "white", apiNames: ["белый"] },

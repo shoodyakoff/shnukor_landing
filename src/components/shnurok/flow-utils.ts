@@ -13,9 +13,7 @@ export function stepIndex(step: Step): { current: number; total: number; label: 
 }
 
 export function showPriceChipForStep(step: Step) {
-  return ["price", "task", "sport", "style", "summary", "search", "results", "empty"].includes(
-    step,
-  );
+  return ["price", "task", "sport", "style", "search", "results", "empty"].includes(step);
 }
 
 export function choiceCardClass(active: boolean) {

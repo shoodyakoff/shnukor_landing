@@ -3,56 +3,9 @@ import { useState } from "react";
 import { publicAsset } from "@/lib/assets";
 import { cn } from "@/lib/utils";
 
-import { Pill } from "./ui";
 import type { ProductItem } from "./data";
 
 const RESULT_PLACEHOLDER_SRC = publicAsset("result-placeholder.png");
-
-export function ProductShowcase({
-  item,
-  accent = false,
-  label,
-  compact = false,
-}: {
-  item: ProductItem;
-  accent?: boolean;
-  label?: string;
-  compact?: boolean;
-}) {
-  return (
-    <div
-      className={`overflow-hidden rounded-[1.5rem] border-2 sm:rounded-[2rem] ${
-        accent
-          ? "border-outsole bg-mesh shadow-[8px_8px_0_var(--outsole)]"
-          : "border-cement bg-lace"
-      }`}
-    >
-      <div
-        className={`relative overflow-hidden bg-muted ${compact ? "aspect-[16/8.4]" : "aspect-[16/11]"}`}
-      >
-        <img src={item.img} alt={item.name} className="h-full w-full object-cover" />
-        {label ? (
-          <div className="absolute left-4 top-4">
-            <Pill color="white">{label}</Pill>
-          </div>
-        ) : null}
-      </div>
-      <div className={`grid gap-3 bg-lace ${compact ? "p-4" : "p-4 sm:p-5"}`}>
-        <div className="flex flex-wrap items-start justify-between gap-3">
-          <div>
-            {item.brand ? <div className="text-xs font-bold text-suede">{item.brand}</div> : null}
-            <div
-              className={`${compact ? "text-xl" : "text-xl sm:text-2xl"} mt-1 font-bold leading-tight text-outsole`}
-            >
-              {item.name}
-            </div>
-          </div>
-          <div className="text-lg font-bold text-outsole">{item.price}</div>
-        </div>
-      </div>
-    </div>
-  );
-}
 
 export function ResultImageFrame({
   src,

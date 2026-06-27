@@ -6,7 +6,6 @@ export type Step =
   | "task"
   | "sport"
   | "style"
-  | "summary"
   | "search"
   | "results"
   | "empty"
